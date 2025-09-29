@@ -41,6 +41,36 @@ body.login-page {
 }
 /***End login page****/
 
+/* Navigation active state styling */
+.header-wrapper .navbar-nav .nav-link.active {
+    color: var(--primary-theme) !important;
+    font-weight: 600;
+}
+
+.header-wrapper .navbar-nav .nav-link.active:hover {
+    color: var(--primary-theme) !important;
+}
+
+/* Additional specificity for navbar-light */
+.navbar-light .navbar-nav .nav-link.active {
+    color: var(--primary-theme) !important;
+    font-weight: 600;
+}
+
+.navbar-light .navbar-nav .nav-link.active:hover {
+    color: var(--primary-theme) !important;
+}
+
+/* Ensure all active nav links are green */
+.navbar .nav-link.active {
+    color: var(--primary-theme) !important;
+    font-weight: 600;
+}
+
+.navbar .nav-link.active:hover {
+    color: var(--primary-theme) !important;
+}
+
 /* Banner slider styles */
 .wrapper-slider-banner {
     display: block !important;
