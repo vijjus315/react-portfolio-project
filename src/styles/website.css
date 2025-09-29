@@ -71,6 +71,31 @@ body.login-page {
     color: var(--primary-theme) !important;
 }
 
+/* Address card styling */
+.address-inner {
+    border-radius: 15px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    border: 1px solid #e9ecef !important;
+    min-height: 140px;
+    transition: box-shadow 0.3s ease;
+}
+
+.address-inner:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.address-inner .dropdown-toggle::after {
+    display: none !important;
+}
+
+.drop-address img {
+    max-width: 78% !important;
+}
+
+.address-inner ul.dropdown-menu.show {
+    padding: 0 !important;
+}
+
 /* Banner slider styles */
 .wrapper-slider-banner {
     display: block !important;

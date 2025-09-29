@@ -346,8 +346,9 @@ const Address = () => {
                                                     data-bs-toggle="dropdown" 
                                                     aria-expanded="false"
                                                     onClick={(e) => handleDropdownToggle(e, address.id)}
+                                                    style={{ border: 'none', background: 'transparent', padding: '5px' }}
                                                 >
-                                                    <img src="/webassets/img/hori-dots.svg" alt="Menu" />
+                                                    <img src="/webassets/img/hori-dots.svg" alt="Menu" style={{ width: '20px', height: '20px' }} />
                                                 </button>
                                                 <ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton${address.id}`}>
                                                     <li>
@@ -372,7 +373,7 @@ const Address = () => {
                                             </div>
                                             <div className="">
                                                 <span className="primary-theme light light-green border-0 d-inline-block rounded-pill px-3 py-1 d-flex align-items-center gap-1">
-                                                    <img src={`/webassets/img/${address.address_type === 'home' ? 'home' : address.address_type === 'work' ? 'building' : address.address_type === 'hotel' ? 'hotel' : 'location'}-icon.svg`} alt={address.address_type} />
+                                                    <img src={`/public/webassets/img/${address.address_type === 'home' ? 'home' : address.address_type === 'work' ? 'building' : address.address_type === 'hotel' ? 'hotel' : 'location'}-icon.svg`} alt={address.address_type} style={{ width: '16px', height: '16px', display: 'block' }} />
                                                     {address.address_type === 'home' ? 'Home' : address.address_type === 'work' ? 'Work' : address.address_type === 'hotel' ? 'Hotel' : address.address_type}
                                                 </span>
                                             </div>
