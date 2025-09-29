@@ -28,7 +28,7 @@ const ProductsPage = () => {
     useEffect(() => {
         async function load() {
             try {
-                const res = await getProducts(34);
+                const res = await getProducts(); // Will automatically use current user ID
                 const apiProducts = res.body || [];
 
 

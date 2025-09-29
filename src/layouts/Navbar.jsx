@@ -70,7 +70,7 @@ const Header = () => {
     // Function to fetch and update wishlist count
     const updateWishlistCount = async () => {
         try {
-            const response = await getWishlistItems(34); // Using default user ID
+            const response = await getWishlistItems(); // Will automatically use current user ID
             if (response.success && response.body && Array.isArray(response.body)) {
                 const count = response.body.length;
                 setWishlistCount(count);

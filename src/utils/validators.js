@@ -3,6 +3,37 @@
  */
 
 /**
+ * Get current user ID from session/token
+ * @returns {number} User ID from localStorage or default fallback
+ */
+export const getCurrentUserId = () => {
+  try {
+    // Try to get user ID from localStorage user_data
+    const userData = localStorage.getItem('user_data');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      const userId = parsed.id || parsed.user_id;
+      if (userId) {
+        return parseInt(userId);
+      }
+    }
+    
+    // Try to get from auth token (if it contains user info)
+    const authToken = localStorage.getItem('auth_token');
+    if (authToken && !authToken.startsWith('dummy_token_')) {
+      // If token is not dummy, we can try to decode it or use a default
+      // For now, we'll return null to indicate no valid user
+      return null;
+    }
+  } catch (error) {
+    console.error('Error getting user ID:', error);
+  }
+  
+  // Return null if no valid user ID found
+  return null;
+}
+
+/**
  * Validate email format
  * @param {string} email - Email to validate
  * @returns {boolean} True if email is valid
