@@ -2,23 +2,20 @@ import apiClient from "./client.js";
 import { getCurrentUserId } from "../utils/validators.js";
 
 /**
- * Get wishlist items for the current user using the products API with is_fav filter
+ * Get wishlist items for the current user using the dedicated wishlist API
  */
 export const getWishlistItems = async (userId = null) => {
     try {
-        // Use provided userId or get from session
-        const actualUserId = userId || getCurrentUserId() || 34;
-        console.log('🔍 API: Fetching wishlist items');
-        const response = await apiClient.get(`/product/get-products?user_id=${actualUserId}`);
-        console.log('✅ API: All products fetched successfully', response.data);
+        console.log('🔍 API: Fetching wishlist items from /product/my-wishlist');
+        const response = await apiClient.get('/product/my-wishlist');
+        console.log('✅ API: Wishlist items fetched successfully', response.data);
         
-        // Filter products where is_fav is true
+        // Return the response directly as it already has the correct structure
         if (response.data.success && response.data.body) {
-            const wishlistProducts = response.data.body.filter(product => product.is_fav === true);
             return {
                 success: true,
-                body: wishlistProducts,
-                message: 'Wishlist items fetched successfully'
+                body: response.data.body,
+                message: response.data.message || 'Wishlist items fetched successfully'
             };
         }
         
