@@ -394,7 +394,7 @@ const VerifyEmailModal = () => {
     return (
         <div className="modal fade" id="verifyemail" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel">
             <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content modal-content-width">
+                <div className="modal-content modal-content-width" style={{ borderRadius: "40px" }}>
                     <div className="modal-header border-0">
                         <button 
                             type="button" 
@@ -440,6 +440,7 @@ const VerifyEmailModal = () => {
                                 <button 
                                     type="submit" 
                                     className="btn green-btn w-100 box-shadow"
+                                    style={{ backgroundColor: "var(--primary-theme)", color: "#fff" }}
                                     disabled={isLoading || otp.join('').length !== 5}
                                 >
                                     {isLoading ? (

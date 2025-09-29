@@ -5,7 +5,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
-// import { getCartItems, updateCartItemQuantity, removeCartItem } from '../services/cart.js';
+import { getCartItems, updateCartItemQuantity, removeCartItem } from '../services/cart.js';
 import { getImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
 
@@ -43,13 +43,13 @@ const Cart = () => {
       try {
         setIsLoading(true);
         setError(null);
-        const res = await window.axios.get('/cart-items'); // Adjust API endpoint as needed
-        if (res.data.success) {
-          const items = res.data.body.cartItems || [];
+        const response = await getCartItems();
+        if (response.success) {
+          const items = response.body.cartItems || [];
           setCartItems(items);
           updateCartCountInStorage(items);
         } else {
-          setError(res.data.message || 'Failed to fetch cart items');
+          setError(response.message || 'Failed to fetch cart items');
         }
       } catch (err) {
         console.error('Error fetching cart items:', err);
@@ -74,11 +74,7 @@ const Cart = () => {
     setUpdatingItems((prev) => new Map(prev).set(cartItemId, type));
 
     try {
-      await window.axios.put('/cart-item-update', {
-        product_id: item.product_id,
-        variant_id: item.variant_id,
-        quantity: newQuantity,
-      });
+      await updateCartItemQuantity(item.product_id, newQuantity, item.variant_id);
 
       const updatedItems = cartItems.map((i) =>
         i.id === cartItemId ? { ...i, quantity: newQuantity } : i
@@ -103,7 +99,7 @@ const Cart = () => {
     if (!item) return;
 
     try {
-      await window.axios.delete(`/cart-item-remove/${item.variant_id}`);
+      await removeCartItem(item.variant_id);
 
       const updatedItems = cartItems.filter((i) => i.id !== cartItemId);
       setCartItems(updatedItems);
