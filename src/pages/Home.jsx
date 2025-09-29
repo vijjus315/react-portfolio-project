@@ -63,10 +63,8 @@ const Home = () => {
 
     // Fallback slides if no banners are configured in DB
     const fallbackSlides = [
+        'https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg',
         fallBackHero
-        //'https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg',
-        // 'http://192.168.1.4:3000/resources/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg',
-        // 'http://192.168.1.4:3000/resources/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg',
     ];
 
     return (
@@ -84,11 +82,11 @@ const Home = () => {
                     <div id="owl-carousel-banner" className="owl-carousel owl-theme">
                         {(banner.length ? banner.map(b => (
                             <div className="item" key={b.id}>
-                                <img src={`https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg`} className="img-fluid  img-banner-slider" />
+                                <img src={`https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg`} className="img-fluid img-banner-slider" alt="PortaCourts Home Banner" />
                             </div>
                         )) : fallbackSlides.map((src, idx) => (
                             <div className="item" key={`fb-${idx}`}>
-                                <img src={src} className="img-fluid  img-banner-slider" />
+                                <img src={src} className="img-fluid img-banner-slider" alt="PortaCourts Home Banner" />
                             </div>
                         )))}
                     </div>
