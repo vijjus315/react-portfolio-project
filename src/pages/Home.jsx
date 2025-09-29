@@ -69,8 +69,7 @@ const Home = () => {
 
     // Fallback slides if no banners are configured in DB
     const fallbackSlides = [
-        'https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg',
-        fallBackHero
+        'https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg'
     ];
 
     return (

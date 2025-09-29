@@ -45,17 +45,95 @@ body.login-page {
 .wrapper-slider-banner {
     display: block !important;
     min-height: 400px;
+    overflow: hidden;
 }
 
 .wrapper-slider-banner .owl-carousel {
     display: block !important;
 }
 
+.wrapper-slider-banner .owl-stage {
+    display: flex;
+}
+
+.wrapper-slider-banner .owl-item {
+    width: 100% !important;
+}
+
 .wrapper-slider-banner .img-banner-slider {
     width: 100%;
     height: auto;
-    max-height: 500px;
-    object-fit: cover;
+    object-fit: contain;
+    display: block;
+}
+
+/* Testimonials section styles */
+.testimonials-wrapper {
+    background-color: #f8f9fa;
+    color: white;
+    padding: 60px 0;
+}
+
+.testimonials-wrapper .owl-carousel {
+    display: block !important;
+}
+
+.testimonials-wrapper .owl-stage {
+    display: flex;
+}
+
+.testimonials-wrapper .owl-item {
+    width: 100% !important;
+}
+
+.testimonials-wrapper .item {
+    background-color: #2c2c2c;
+    border-radius: 10px;
+    padding: 40px;
+    margin: 20px;
+}
+
+.testimonial-image {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.testimonial-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.name-testi {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.name-testi h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.testimonials-text h2 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.testimonials-text div {
+    color: #c4df16;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
 }
 img.user-image {
     object-fit: cover;
