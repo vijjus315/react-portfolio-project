@@ -35,12 +35,18 @@ const Home = () => {
                     try { $banner.trigger('destroy.owl.carousel'); } catch (_) {}
                     $banner.owlCarousel({
                         loop: true,
-                        margin: 30,
+                        margin: 0,
                         dots: true,
                         nav: false,
                         items: 1,
                         autoplay: true,
-                        autoplayTimeout: 4000
+                        autoplayTimeout: 4000,
+                        autoplayHoverPause: true,
+                        responsive: {
+                            0: { items: 1 },
+                            600: { items: 1 },
+                            1000: { items: 1 }
+                        }
                     });
                     // Testimonials carousel
                     window.$('#owl-carousel').owlCarousel({
@@ -80,15 +86,11 @@ const Home = () => {
             <section className="wrapper-slider-banner">
                 <div className="contain">
                     <div id="owl-carousel-banner" className="owl-carousel owl-theme">
-                        {(banner.length ? banner.map(b => (
-                            <div className="item" key={b.id}>
-                                <img src={`https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg`} className="img-fluid img-banner-slider" alt="PortaCourts Home Banner" />
-                            </div>
-                        )) : fallbackSlides.map((src, idx) => (
+                        {fallbackSlides.map((src, idx) => (
                             <div className="item" key={`fb-${idx}`}>
                                 <img src={src} className="img-fluid img-banner-slider" alt="PortaCourts Home Banner" />
                             </div>
-                        )))}
+                        ))}
                     </div>
                 </div>
             </section>

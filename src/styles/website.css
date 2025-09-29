@@ -40,6 +40,23 @@ body.login-page {
     border-bottom-left-radius: 10px !important;
 }
 /***End login page****/
+
+/* Banner slider styles */
+.wrapper-slider-banner {
+    display: block !important;
+    min-height: 400px;
+}
+
+.wrapper-slider-banner .owl-carousel {
+    display: block !important;
+}
+
+.wrapper-slider-banner .img-banner-slider {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+}
 img.user-image {
     object-fit: cover;
     border-radius: 100%;
