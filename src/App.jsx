@@ -46,23 +46,19 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 // Bootstrap CSS is loaded via CDN in index.html
 
 function App() {
-  const [loading, setLoading] = useState(false);
+  // Removed loading state to eliminate top-left corner loader
+  // const [loading, setLoading] = useState(false);
   
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
+  // }, []);
 
   return (
     <ErrorBoundary>
-      {loading ? (
-        <div className="loaderdiv">
-          <Loader />
-        </div>
-      ) : (
-        <Router>
+      <Router>
           <ScrollToTop>
             <Routes>
               {/* Main Home Page */}
@@ -176,7 +172,6 @@ function App() {
             </Routes>
           </ScrollToTop>
         </Router>
-      )}
     </ErrorBoundary>
   );
 }
