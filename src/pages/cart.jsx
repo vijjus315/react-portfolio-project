@@ -48,6 +48,8 @@ const Cart = () => {
           const items = response.body.cartItems || [];
           setCartItems(items);
           updateCartCountInStorage(items);
+          // Clear any previous errors if we successfully got data (even if empty)
+          setError(null);
         } else {
           setError(response.message || 'Failed to fetch cart items');
         }
@@ -120,13 +122,34 @@ const Cart = () => {
         {/* Integrated Cart Section */}
         <section className="py-5 mb-4">
           <div className="container">
-            <div className="row common-card-bg">
-              {/* Left Side - Cart Items */}
-              <div className="col-lg-8 mb-3 mb-lg-0 h-100">
-                <div className="add-cart-detail px-2" >
-                  <div className="table-responsive table-height"  
-                  style={{ backgroundColor: "#fff", height: "100%", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}>
-                    <table className="w-100 table cart-table">
+            {isLoading ? (
+              // Loading State
+              <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '500px' }}>
+                <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="mt-3 text-muted">Loading cart items...</p>
+              </div>
+            ) : cartItems.length === 0 ? (
+              // Empty Cart State - Original Design
+              <div className="row common-card-bg">
+                <div className="col-12">
+                  <div className="empty-cart text-center h-100 py-5">
+                    <img src={`${window.location.origin}/webassets/img/EmptyCart.svg`} className="img-fluid" alt="Empty cart" />
+                    <h4 className="fw-400">Hey, it's feel so light</h4>
+                    <p className="fw-400 pb-2">There is nothing in your cart. Let's add some items.</p>
+                    <a href="/wishlist" className="green-btn py-3">Add Items From Wishlist</a>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="row common-card-bg">
+                {/* Left Side - Cart Items */}
+                <div className="col-lg-8 mb-3 mb-lg-0 h-100">
+                  <div className="add-cart-detail px-2" >
+                    <div className="table-responsive table-height"  
+                    style={{ backgroundColor: "#fff", height: "100%", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}>
+                      <table className="w-100 table cart-table">
                       <thead
                         style={{ verticalAlign: 'middle', height: '70px' }}
                         className="border-grey"
@@ -212,21 +235,6 @@ const Cart = () => {
                                 >
                                   Retry
                                 </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ) : cartItems.length === 0 ? (
-                          <tr>
-                            <td colSpan="5" className="text-center py-5">
-                              <div className="d-flex flex-column align-items-center">
-                                <img 
-                                  src={`${window.location.origin}/webassets/img/wishlist-empty.png`} 
-                                  className="no-data-found mb-3" 
-                                  alt="Empty cart"
-                                  style={{ width: '150px', height: '150px' }}
-                                />
-                                <p className="text-muted">Your cart is empty</p>
-                                <a href="/products" className="btn btn-primary">Continue Shopping</a>
                               </div>
                             </td>
                           </tr>
@@ -497,6 +505,7 @@ const Cart = () => {
                 </div>
               </div>
             </div>
+            )}
           </div>
         </section>
       </section>
