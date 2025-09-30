@@ -96,6 +96,80 @@ body.login-page {
     padding: 0 !important;
 }
 
+/* Toastr Success Styling - Green Color */
+#toast-container > .toast-success {
+    background-color: #7ab751 !important;
+    color: #fff !important;
+}
+
+#toast-container > .toast-success .toast-title {
+    color: #fff !important;
+}
+
+#toast-container > .toast-success .toast-message {
+    color: #fff !important;
+}
+
+#toast-container > .toast-success .toast-close-button {
+    color: #fff !important;
+    opacity: 0.8;
+}
+
+#toast-container > .toast-success .toast-close-button:hover {
+    opacity: 1;
+}
+
+/* Product Detail Description Text Styling - Dark/Black Text */
+.description-product .tab-pane p {
+    color: #000 !important;
+    font-weight: 400 !important;
+}
+
+.description-product .tab-pane h1,
+.description-product .tab-pane h2,
+.description-product .tab-pane h3,
+.description-product .tab-pane h4,
+.description-product .tab-pane h5,
+.description-product .tab-pane h6 {
+    color: #000 !important;
+    font-weight: 700 !important;
+}
+
+.description-product .tab-pane strong,
+.description-product .tab-pane b {
+    color: #000 !important;
+    font-weight: 700 !important;
+}
+
+.description-product .tab-pane ul li,
+.description-product .tab-pane ol li {
+    color: #000 !important;
+}
+
+.description-product .tab-pane p,
+.description-product .tab-pane div {
+    color: #000 !important;
+}
+
+/* Additional styling for HTML content in description */
+.description-product .tab-pane * {
+    color: #000 !important;
+}
+
+.description-product .tab-pane span {
+    color: #000 !important;
+}
+
+/* Ensure all text elements in description are black */
+.description-product .tab-pane {
+    color: #000 !important;
+}
+
+.description-product .tab-pane .fw-400 {
+    color: #000 !important;
+    font-weight: 400 !important;
+}
+
 /* Banner slider styles */
 .wrapper-slider-banner {
     display: block !important;
