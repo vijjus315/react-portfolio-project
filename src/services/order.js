@@ -26,4 +26,19 @@ export const getOrderDetail = async (orderId) => {
     }
 };
 
-export default { getMyOrders, getOrderDetail };
+// Checkout function to initiate payment
+export const checkout = async (userId) => {
+    try {
+        console.log('🔍 API: Initiating checkout for user ID:', userId);
+        const response = await apiClient.post('/order/checkout', {
+            user_id: userId
+        });
+        console.log('✅ API: Checkout initiated successfully', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('❌ API: Error during checkout:', error);
+        throw error;
+    }
+};
+
+export default { getMyOrders, getOrderDetail, checkout };

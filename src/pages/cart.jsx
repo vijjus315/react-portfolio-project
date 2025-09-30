@@ -6,6 +6,7 @@ import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import { getCartItems, updateCartItemQuantity, removeCartItem } from '../services/cart.js';
+import { checkout } from '../services/order.js';
 import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
 
@@ -15,6 +16,7 @@ const Cart = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [updatingItems, setUpdatingItems] = useState(new Map());
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   // Helper: update localStorage cart count
   const updateCartCountInStorage = (items) => {
@@ -28,6 +30,62 @@ const Cart = () => {
     }
     
     console.log('🛒 Updated cart count in storage and header:', totalItems);
+  };
+
+  // Checkout handler
+  const handleCheckout = async () => {
+    if (cartItems.length === 0) {
+      if (window.toastr) {
+        window.toastr.warning('Your cart is empty. Please add items before checkout.');
+      } else {
+        alert('Your cart is empty. Please add items before checkout.');
+      }
+      return;
+    }
+
+    setIsCheckoutLoading(true);
+    try {
+      // Get user ID from localStorage
+      let userId = null;
+      try {
+        const userData = localStorage.getItem('user_data');
+        if (userData) {
+          const parsed = JSON.parse(userData);
+          userId = parsed.id || parsed.user_id;
+        }
+      } catch (e) {
+        console.error('Error getting user ID from localStorage:', e);
+      }
+
+      if (!userId) {
+        if (window.toastr) {
+          window.toastr.error('Please log in to proceed with checkout.');
+        } else {
+          alert('Please log in to proceed with checkout.');
+        }
+        return;
+      }
+
+      console.log('🛒 Initiating checkout for user ID:', userId);
+      const response = await checkout(userId);
+      
+      if (response.success && response.redirect_url) {
+        console.log('✅ Checkout successful, redirecting to:', response.redirect_url);
+        // Redirect to Stripe checkout
+        window.location.href = response.redirect_url;
+      } else {
+        throw new Error('Invalid checkout response');
+      }
+    } catch (error) {
+      console.error('❌ Checkout failed:', error);
+      if (window.toastr) {
+        window.toastr.error('Checkout failed. Please try again.');
+      } else {
+        alert('Checkout failed. Please try again.');
+      }
+    } finally {
+      setIsCheckoutLoading(false);
+    }
   };
 
   // Calculate totals
@@ -504,10 +562,21 @@ const Cart = () => {
                                     border: "0",
                                     textTransform: "capitalize", 
                                     fontSize: "16px",
-                                    marginLeft: "20px"
+                                    marginLeft: "20px",
+                                    opacity: isCheckoutLoading ? 0.7 : 1,
+                                    cursor: isCheckoutLoading ? "not-allowed" : "pointer"
                                 }}
+                    onClick={handleCheckout}
+                    disabled={isCheckoutLoading}
                   >
-                    Place Order
+                    {isCheckoutLoading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Processing...
+                      </>
+                    ) : (
+                      'Place Order'
+                    )}
                   </button>
                 </div>
               </div>
