@@ -22,7 +22,7 @@ const CustomCourtModal = () => {
         style={{ display: "block", paddingLeft: 0 }}
       >
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content modal-content-width">
+          <div className="modal-content modal-content-width" style={{ borderRadius: '20px' }}>
             <div className="modal-header border-0">
               <button
               onClick={handleClose}
@@ -86,20 +86,45 @@ const CustomCourtModal = () => {
 
                   <div className="col-lg-6 mb-5">
                     <div className="form-group">
-                      <label className="primary-theme" htmlFor="phone">
-                        Phone Number
-                      </label>
-                      <input
-                        type="text"
-                        name="phone"
-                        id="phone"
-                        placeholder="Enter here"
-                        className="contact-input form-control"
-                      />
-                      <span
-                        className="text-danger error-message"
-                        id="cerror-phone"
-                      ></span>
+                      <label className="primary-theme">Phone Number</label>
+                      <div className="iti iti--allow-dropdown iti--separate-dial-code">
+                        <div className="iti__flag-container">
+                          <div className="iti__selected-flag" role="combobox" aria-controls="iti-0__country-listbox" aria-owns="iti-0__country-listbox" aria-expanded="false" tabIndex="0" title="India (भारत): +91" aria-activedescendant="iti-0__item-in">
+                            <div className="iti__flag iti__in"></div>
+                            <div className="iti__selected-dial-code">+91</div>
+                            <div className="iti__arrow"></div>
+                          </div>
+                          <ul className="iti__country-list iti__hide" id="iti-0__country-listbox" role="listbox" aria-label="List of countries">
+                            <li className="iti__country iti__preferred" tabIndex="-1" id="iti-0__item-us-preferred" role="option" data-dial-code="1" data-country-code="us" aria-selected="false">
+                              <div className="iti__flag-box"><div className="iti__flag iti__us"></div></div>
+                              <span className="iti__country-name">United States</span>
+                              <span className="iti__dial-code">+1</span>
+                            </li>
+                            <li className="iti__country iti__preferred" tabIndex="-1" id="iti-0__item-gb-preferred" role="option" data-dial-code="44" data-country-code="gb" aria-selected="false">
+                              <div className="iti__flag-box"><div className="iti__flag iti__gb"></div></div>
+                              <span className="iti__country-name">United Kingdom</span>
+                              <span className="iti__dial-code">+44</span>
+                            </li>
+                            <li className="iti__divider" role="separator" aria-disabled="true"></li>
+                            <li className="iti__country iti__standard iti__active iti__highlight" tabIndex="-1" id="iti-0__item-in" role="option" data-dial-code="91" data-country-code="in" aria-selected="true">
+                              <div className="iti__flag-box"><div className="iti__flag iti__in"></div></div>
+                              <span className="iti__country-name">India (भारत)</span>
+                              <span className="iti__dial-code">+91</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <input 
+                          type="tel" 
+                          id="phone" 
+                          name="phone" 
+                          placeholder="Enter here" 
+                          className="contact-input form-control" 
+                          autoComplete="off" 
+                          data-intl-tel-input-id="0" 
+                          style={{paddingLeft: '85px'}}
+                        />
+                      </div>
+                      <span className="text-danger error-message" id="cerror-phone"></span>
                     </div>
                   </div>
 

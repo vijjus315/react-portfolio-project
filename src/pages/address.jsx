@@ -31,6 +31,15 @@ const Address = () => {
 
     useEffect(() => {
         fetchAddresses();
+        
+        // Cleanup function to remove modal backdrops when component unmounts
+        return () => {
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        };
     }, []);
 
     // Initialize Bootstrap dropdowns whenever addresses change
@@ -133,11 +142,7 @@ const Address = () => {
             }
             
             if (response.success) {
-                // Show success message
-                if (window.toastr) {
-                    window.toastr.success(response.message);
-                }
-                // Close modal
+                // Close modal first
                 const modal = document.getElementById('addaddress');
                 if (modal) {
                     const bsModal = window.bootstrap.Modal.getInstance(modal);
@@ -145,6 +150,22 @@ const Address = () => {
                         bsModal.hide();
                     }
                 }
+                
+                // Remove any remaining modal backdrops
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => backdrop.remove());
+                    
+                    // Remove modal-open class from body
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                    
+                    // Show success message after modal is fully closed
+                    if (window.toastr) {
+                        window.toastr.success(response.message);
+                    }
+                }, 300);
                 
                 // Reset form and editing state
                 setFormData({
@@ -169,9 +190,19 @@ const Address = () => {
             }
         } catch (err) {
             console.error('Error saving address:', err);
-            if (window.toastr) {
-                window.toastr.error('An error occurred. Please try again.');
-            }
+            
+            // Clean up modal backdrop on error
+            setTimeout(() => {
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(backdrop => backdrop.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                
+                if (window.toastr) {
+                    window.toastr.error('An error occurred. Please try again.');
+                }
+            }, 100);
         } finally {
             setIsSubmitting(false);
         }
@@ -201,6 +232,15 @@ const Address = () => {
         if (modal) {
             const bsModal = new window.bootstrap.Modal(modal);
             bsModal.show();
+            
+            // Add event listener to clean up backdrop when modal is hidden
+            modal.addEventListener('hidden.bs.modal', () => {
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(backdrop => backdrop.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            });
         }
     };
 
@@ -302,6 +342,20 @@ const Address = () => {
                                         other_address_type: ''
                                     });
                                     setSelectedAddressType('home');
+                                    
+                                    // Add event listener to clean up backdrop when modal is hidden
+                                    setTimeout(() => {
+                                        const modal = document.getElementById('addaddress');
+                                        if (modal) {
+                                            modal.addEventListener('hidden.bs.modal', () => {
+                                                const backdrops = document.querySelectorAll('.modal-backdrop');
+                                                backdrops.forEach(backdrop => backdrop.remove());
+                                                document.body.classList.remove('modal-open');
+                                                document.body.style.overflow = '';
+                                                document.body.style.paddingRight = '';
+                                            });
+                                        }
+                                    }, 100);
                                 }}
                                 style={{ backgroundColor: "var(--primary-theme)",
                                     color: "#fff", 

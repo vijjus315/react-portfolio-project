@@ -587,6 +587,7 @@ import EditProfileModal from '../components/editProfile.jsx';
 import { getProductBySlug, getProductById } from '../services/product.js';
 import { getImageUrl, getVideoUrl } from '../utils/imageUtils.js';
 import { addToCart, getCartItems } from '../services/cart.js';
+import { addToWishlist, removeFromWishlist } from '../services/wishlist.js';
 
 //! import useLocalStorage
 import { useLocalStorage } from '../customHooks/useLocalStorage.jsx';
@@ -699,6 +700,7 @@ const ProductDetail = () => {
     const [showCourtModal, setShowCourtModal] = useState(false);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [cartItems, setCartItems] = useState([]);
+    const [isFavorited, setIsFavorited] = useState(false);
 
     // useLocalStorage
     // const { setItem } = useLocalStorage('value');
@@ -762,6 +764,8 @@ const ProductDetail = () => {
                     };
                     setProduct(transformedProduct);
                     setAllProducts([transformedProduct]);
+                    // Set initial wishlist status
+                    setIsFavorited(productData.is_fav === 1);
                 } else {
                     // Fallback to dummy data if product not found
                     const list = DUMMY_PRODUCTS;
@@ -881,6 +885,37 @@ const ProductDetail = () => {
             alert('Failed to add product to cart. Please try again.');
         } finally {
             setIsAddingToCart(false);
+        }
+    };
+
+    // Wishlist toggle handler
+    const handleWishlistToggle = async () => {
+        if (!product) return;
+
+        try {
+            if (isFavorited) {
+                // Remove from wishlist
+                await removeFromWishlist(product.id);
+                setIsFavorited(false);
+                if (window.toastr) {
+                    window.toastr.success('Removed from wishlist');
+                }
+            } else {
+                // Add to wishlist
+                await addToWishlist(product.id);
+                setIsFavorited(true);
+                if (window.toastr) {
+                    window.toastr.success('Added to wishlist');
+                }
+            }
+            
+            // Dispatch wishlist update event for header
+            window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+        } catch (error) {
+            console.error('Error toggling wishlist:', error);
+            if (window.toastr) {
+                window.toastr.error('Failed to update wishlist. Please try again.');
+            }
         }
     };
 
@@ -1049,8 +1084,19 @@ const ProductDetail = () => {
                                                 'Buy Now'
                                             )}
                                         </button>
-                                        <a className=" addwishlist topwish-list">
-                                            <img src={`${window.location.origin}/webassets/img/unfillwishlist.svg`} className="wishlist-icon" />
+                                        <a 
+                                            className={`addwishlist topwish-list ${isFavorited ? 'favorited' : ''}`}
+                                            onClick={handleWishlistToggle}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            <img 
+                                                src={isFavorited 
+                                                    ? `${window.location.origin}/webassets/img/wishlist.svg` 
+                                                    : `${window.location.origin}/webassets/img/unfillwishlist.svg`
+                                                } 
+                                                className={`wishlist-icon ${isFavorited ? 'favorited' : ''}`}
+                                                alt={isFavorited ? "Remove from wishlist" : "Add to wishlist"}
+                                            />
                                         </a>
                                     </div>
                                 </div>
