@@ -1010,18 +1010,12 @@ const ProductDetail = () => {
 
                                 <div className="d-flex align-items-center gap-4 mb-3">
                                     <div className="rating-product">
-                                        {/* {[...Array(5)].map((_, i) => (
-                                            <i key={i} className={i < Math.floor(product.average_rating || 0) ? 'fa fa-star': 'https://www.portacourts.com/webassets/img/grey-star.svg'} />
-                                        ))} */}
-                                        {[...Array(5)].map((_, i) => i < Math.floor(product.average_rating || 0) ? (
-                                            <i key={i} className="fa fa-star" />
-                                        ) : (
-                                        <img key={i} 
-                                        src="https://www.portacourts.com/webassets/img/grey-star.svg"
-                                        alt="grey star" className="star-icon"
-                                        />
-                                        )
-                                        )}
+                                        {[...Array(5)].map((_, i) => (
+                                            <i 
+                                                key={i} 
+                                                className={`fa fa-star ${i < Math.floor(product.average_rating || 0) ? 'filled-star' : 'empty-star'}`}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                                 <hr />

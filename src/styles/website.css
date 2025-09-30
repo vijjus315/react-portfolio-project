@@ -166,6 +166,26 @@ body.login-page {
     color: #fff !important;
 }
 
+/* Product Detail Star Rating Styling */
+.rating-product {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-product .fa-star {
+    font-size: 28px;
+    color: #ddd;
+    transition: color 0.2s ease;
+}
+
+.rating-product .fa-star.filled-star {
+    color: #ffc107;
+}
+
+.rating-product .fa-star.empty-star {
+    color: #ddd;
+}
+
 /* Product Detail Wishlist Icon Styling */
 .wishlist-icon.favorited {
     filter: brightness(0) invert(1) !important;
