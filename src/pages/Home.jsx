@@ -28,47 +28,56 @@ const Home = () => {
             setProduct(res.data.product || []);
             setTestimonail(res.data.testimonail || []);
             setPost(res.data.post || []);
-            // init after DOM paints
-            setTimeout(() => {
-                if (window.$ && typeof window.$.fn.owlCarousel === 'function') {
-                    const $banner = window.$('#owl-carousel-banner');
-                    try { $banner.trigger('destroy.owl.carousel'); } catch (_) {}
-                    $banner.owlCarousel({
-                        loop: true,
-                        margin: 0,
-                        dots: true,
-                        nav: false,
-                        items: 1,
-                        autoplay: true,
-                        autoplayTimeout: 4000,
-                        autoplayHoverPause: true,
-                        responsive: {
-                            0: { items: 1 },
-                            600: { items: 1 },
-                            1000: { items: 1 }
-                        }
-                    });
-                    // Testimonials carousel
-                    window.$('#owl-carousel').owlCarousel({
-                        loop: true,
-                        margin: 30,
-                        dots: false,
-                        nav: true,
-                        items: 1,
-                        navText: [
-                            `<img src='${window.location.origin}/webassets/img/left-arrow.svg' class='left-arrow'/>`,
-                            `<img src='${window.location.origin}/webassets/img/right-arrow.svg' class='right-arrow'/>`
-                        ]
-                    });
-                }
-            }, 0);
         }
         load();
     }, []);
+
+    // Initialize carousels after banner data is loaded
+    useEffect(() => {
+        if (window.$ && typeof window.$.fn.owlCarousel === 'function') {
+            // Destroy existing carousel if it exists
+            const $banner = window.$('#owl-carousel-banner');
+            try { $banner.trigger('destroy.owl.carousel'); } catch (_) {}
+            
+            // Initialize banner carousel
+            $banner.owlCarousel({
+                loop: true,
+                margin: 0,
+                dots: true,
+                nav: false,
+                items: 1,
+                autoplay: true,
+                autoplayTimeout: 4000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: { items: 1 },
+                    600: { items: 1 },
+                    1000: { items: 1 }
+                }
+            });
+            
+            // Initialize testimonials carousel
+            const $testimonials = window.$('#owl-carousel');
+            try { $testimonials.trigger('destroy.owl.carousel'); } catch (_) {}
+            $testimonials.owlCarousel({
+                loop: true,
+                margin: 30,
+                dots: false,
+                nav: true,
+                items: 1,
+                navText: [
+                    `<img src='${window.location.origin}/webassets/img/left-arrow.svg' class='left-arrow'/>`,
+                    `<img src='${window.location.origin}/webassets/img/right-arrow.svg' class='right-arrow'/>`
+                ]
+            });
+        }
+    }, [banner, testimonail]);
     console.log("Banner value:", banner);
 
     // Fallback slides if no banners are configured in DB
     const fallbackSlides = [
+        'https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg',
+        'https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg',
         'https://www.portacourts.com/storage/images/bzM09pT0Nlgp5pXMcrdkgt8WCMpyt3xcCSNLmWz5.jpg'
     ];
 
@@ -85,11 +94,14 @@ const Home = () => {
             <section className="wrapper-slider-banner">
                 <div className="contain">
                     <div id="owl-carousel-banner" className="owl-carousel owl-theme">
-                        {fallbackSlides.map((src, idx) => (
-                            <div className="item" key={`fb-${idx}`}>
-                                <img src={src} className="img-fluid img-banner-slider" alt="PortaCourts Home Banner" />
-                            </div>
-                        ))}
+                        {(banner.length > 0 ? banner : fallbackSlides).map((bannerItem, idx) => {
+                            const imageSrc = typeof bannerItem === 'string' ? bannerItem : bannerItem.image_url || bannerItem.image;
+                            return (
+                                <div className="item" key={`banner-${idx}`}>
+                                    <img src={imageSrc} className="img-fluid img-banner-slider" alt="PortaCourts Home Banner" />
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
