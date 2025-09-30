@@ -6,7 +6,7 @@ import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import { getCartItems, updateCartItemQuantity, removeCartItem } from '../services/cart.js';
-import { getImageUrl } from '../utils/imageUtils.js';
+import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
 
 
@@ -17,10 +17,17 @@ const Cart = () => {
   const [updatingItems, setUpdatingItems] = useState(new Map());
 
   // Helper: update localStorage cart count
-  // Helper: update localStorage cart count
   const updateCartCountInStorage = (items) => {
     const totalItems = items.reduce((total, item) => total + item.quantity, 0);
     localStorage.setItem('cart_count', totalItems.toString());
+    
+    // Also update the cart count in the header immediately
+    const cartCountElement = document.querySelector('.cart-count');
+    if (cartCountElement) {
+      cartCountElement.textContent = totalItems.toString();
+    }
+    
+    console.log('🛒 Updated cart count in storage and header:', totalItems);
   };
 
   // Calculate totals
@@ -39,6 +46,9 @@ const Cart = () => {
 
   // Fetch cart items on mount
   useEffect(() => {
+    // Test the getImageUrl function
+    testGetImageUrl();
+    
     const fetchCartItems = async () => {
       try {
         setIsLoading(true);
@@ -46,6 +56,24 @@ const Cart = () => {
         const response = await getCartItems();
         if (response.success) {
           const items = response.body.cartItems || [];
+          
+          // If API returns empty cart but we have items in localStorage, use localStorage
+          if (items.length === 0) {
+            const localCartItems = localStorage.getItem('cart_items');
+            if (localCartItems) {
+              try {
+                const parsedItems = JSON.parse(localCartItems);
+                console.log('📋 Using localStorage cart items:', parsedItems);
+                setCartItems(parsedItems);
+                updateCartCountInStorage(parsedItems);
+                setError(null);
+                return;
+              } catch (e) {
+                console.error('Error parsing localStorage cart items:', e);
+              }
+            }
+          }
+          
           setCartItems(items);
           updateCartCountInStorage(items);
           // Clear any previous errors if we successfully got data (even if empty)
@@ -55,13 +83,67 @@ const Cart = () => {
         }
       } catch (err) {
         console.error('Error fetching cart items:', err);
-        setError('Failed to load cart items. Please try again.');
+        
+        // Check if user is logged in
+        const authToken = localStorage.getItem('auth_token');
+        const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
+        
+        if (!isLoggedIn) {
+          // For guest users, check localStorage first, then show empty cart
+          console.log('👤 Guest user - checking localStorage for cart items');
+          const localCartItems = localStorage.getItem('cart_items');
+          if (localCartItems) {
+            try {
+              const parsedItems = JSON.parse(localCartItems);
+              console.log('📋 Using localStorage cart items for guest user:', parsedItems);
+              
+              // Debug each item's image data
+              parsedItems.forEach((item, index) => {
+                console.log(`📸 Item ${index} image data:`, {
+                  productTitle: item.products?.title,
+                  productImages: item.products?.product_images,
+                  hasImages: item.products?.product_images?.length > 0,
+                  firstImageUrl: item.products?.product_images?.[0]?.image_url
+                });
+              });
+              
+              setCartItems(parsedItems);
+              updateCartCountInStorage(parsedItems);
+              setError(null);
+            } catch (e) {
+              console.error('Error parsing localStorage cart items:', e);
+              setCartItems([]);
+              updateCartCountInStorage([]);
+              setError(null);
+            }
+          } else {
+            setCartItems([]);
+            updateCartCountInStorage([]);
+            setError(null);
+          }
+        } else {
+          setError('Failed to load cart items. Please try again.');
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchCartItems();
+  }, []);
+
+  // Listen for cart update events from other pages
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      console.log('📋 Cart update event received, refreshing cart');
+      fetchCartItems();
+    };
+
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+    };
   }, []);
 
   // Handle quantity increment/decrement
@@ -135,7 +217,7 @@ const Cart = () => {
               <div className="row common-card-bg">
                 <div className="col-12">
                   <div className="empty-cart text-center h-100 py-5">
-                    <img src={`${window.location.origin}/webassets/img/EmptyCart.svg`} className="img-fluid" alt="Empty cart" />
+                    <img src={`${window.location.origin}/public/webassets/img/EmptyCart.svg`} className="img-fluid" alt="Empty cart" />
                     <h4 className="fw-400">Hey, it's feel so light</h4>
                     <p className="fw-400 pb-2">There is nothing in your cart. Let's add some items.</p>
                     <a href="/wishlist" className="green-btn py-3">Add Items From Wishlist</a>
@@ -242,9 +324,24 @@ const Cart = () => {
                           cartItems.map((item) => {
                             const product = item.products;
                             const variant = item.product_variants;
-                            const imageUrl = product.product_images && product.product_images.length > 0 
-                              ? getImageUrl(product.product_images[0].image_url)
-                              : `${window.location.origin}/webassets/img/placeholder.jpg`;
+                            // Construct image URL with better fallback handling
+                            let imageUrl = `${window.location.origin}/webassets/img/placeholder.jpg`; // Default fallback
+                            
+                            if (product.product_images && product.product_images.length > 0) {
+                              const originalImageUrl = product.product_images[0].image_url;
+                              if (originalImageUrl) {
+                                imageUrl = getImageUrl(originalImageUrl);
+                              }
+                            }
+                            
+                            // Debug logging for image URLs
+                            console.log('🖼️ Cart Image Debug:', {
+                              originalUrl: product.product_images?.[0]?.image_url,
+                              processedUrl: imageUrl,
+                              productTitle: product.title,
+                              productImages: product.product_images,
+                              fullProduct: product
+                            });
                             const unitPrice = parseFloat(variant.discounted_price || variant.price);
                             const totalPrice = unitPrice * item.quantity;
 
@@ -259,12 +356,22 @@ const Cart = () => {
                                   }}
                                 >
                                   <div className="d-flex justify-content-start gap-3 align-items-center cilent-profile-column">
-                                    <img
-                                      src={imageUrl}
-                                      className="client-profile cart-client-profile"
-                                      alt={product.title}
-                                      style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-                                    />
+                            <img
+                              src={imageUrl}
+                              className="client-profile cart-client-profile"
+                              alt={product.title}
+                              style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                              onError={(e) => {
+                                console.error('🖼️ Image failed to load:', imageUrl);
+                                // Try fallback URL
+                                const fallbackUrl = `https://www.portacourts.com/storage/images/placeholder.jpg`;
+                                if (e.target.src !== fallbackUrl) {
+                                  e.target.src = fallbackUrl;
+                                } else {
+                                  e.target.src = `${window.location.origin}/webassets/img/placeholder.jpg`;
+                                }
+                              }}
+                            />
 
                                     <div>
                                       <p className="text-capitalize font-oswald f20 fw-400 one-line text-black mb-0 cart-item-title">

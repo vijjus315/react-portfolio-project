@@ -702,6 +702,50 @@ const ProductDetail = () => {
     const [cartItems, setCartItems] = useState([]);
     const [isFavorited, setIsFavorited] = useState(false);
 
+    // Load existing cart items from localStorage on component mount and when product changes
+    useEffect(() => {
+        const loadCartItems = () => {
+            try {
+                const storedCartItems = localStorage.getItem('cart_items');
+                if (storedCartItems) {
+                    const parsedItems = JSON.parse(storedCartItems);
+                    console.log('🛒 Loading existing cart items from localStorage:', parsedItems);
+                    setCartItems(parsedItems);
+                } else {
+                    console.log('🛒 No cart items found in localStorage');
+                    setCartItems([]);
+                }
+            } catch (error) {
+                console.error('Error loading cart items from localStorage:', error);
+                setCartItems([]);
+            }
+        };
+        
+        loadCartItems();
+    }, [product?.id]); // Reload when product changes
+
+    // Listen for cart update events from other pages
+    useEffect(() => {
+        const handleCartUpdate = () => {
+            console.log('🛒 Cart update event received, refreshing cart items');
+            try {
+                const storedCartItems = localStorage.getItem('cart_items');
+                if (storedCartItems) {
+                    const parsedItems = JSON.parse(storedCartItems);
+                    setCartItems(parsedItems);
+                }
+            } catch (error) {
+                console.error('Error refreshing cart items:', error);
+            }
+        };
+
+        window.addEventListener('cartUpdated', handleCartUpdate);
+        
+        return () => {
+            window.removeEventListener('cartUpdated', handleCartUpdate);
+        };
+    }, []);
+
     // useLocalStorage
     // const { setItem } = useLocalStorage('value');
 
@@ -709,6 +753,14 @@ const ProductDetail = () => {
     const updateCartCountInStorage = (cartItems) => {
         const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
         localStorage.setItem('cart_count', totalItems.toString());
+        
+        // Also update the cart count in the header immediately
+        const cartCountElement = document.querySelector('.cart-count');
+        if (cartCountElement) {
+            cartCountElement.textContent = totalItems.toString();
+        }
+        
+        console.log('🛒 Updated cart count in storage and header:', totalItems);
     };
 
     const handleModal = () => {
@@ -831,8 +883,26 @@ const ProductDetail = () => {
         setIsAddingToCart(true);
 
         try {
+            // Always get the latest cart items from localStorage before checking
+            let currentCartItems = cartItems;
+            try {
+                const storedCartItems = localStorage.getItem('cart_items');
+                if (storedCartItems) {
+                    currentCartItems = JSON.parse(storedCartItems);
+                    console.log('🛒 Loaded latest cart items from localStorage:', currentCartItems);
+                    console.log('🛒 Current cartItems state:', cartItems);
+                    console.log('🛒 Using currentCartItems for comparison:', currentCartItems);
+                } else {
+                    console.log('🛒 No cart items in localStorage, using current state:', cartItems);
+                    currentCartItems = cartItems;
+                }
+            } catch (e) {
+                console.error('Error loading cart items from localStorage:', e);
+                currentCartItems = cartItems;
+            }
+            
             // Check if item already exists in cart
-            const existingCartItem = cartItems.find(item => 
+            const existingCartItem = currentCartItems.find(item => 
                 item.product_id === product.id && item.variant_id === variant.id
             );
 
@@ -843,13 +913,23 @@ const ProductDetail = () => {
                 await updateCartItemQuantity(product.id, newQuantity, variant.id);
                 
                 // Update local cart items and localStorage
-                const updatedItems = cartItems.map(item => 
+                const updatedItems = currentCartItems.map(item => 
                     item.id === existingCartItem.id 
-                        ? { ...item, quantity: newQuantity }
+                        ? { 
+                            ...item, 
+                            quantity: newQuantity,
+                            products: {
+                                ...item.products,
+                                product_images: product.product_images || item.products.product_images || []
+                            }
+                        }
                         : item
                 );
                 setCartItems(updatedItems);
                 updateCartCountInStorage(updatedItems);
+                
+                // Store cart items in localStorage for cart page to access
+                localStorage.setItem('cart_items', JSON.stringify(updatedItems));
             } else {
                 // If item doesn't exist, add to cart
                 await addToCart(product.id, quantity, variant.id);
@@ -861,14 +941,20 @@ const ProductDetail = () => {
                     variant_id: variant.id,
                     quantity: quantity,
                     product_variants: variant,
-                    products: { id: product.id, title: product.title }
+                    products: { 
+                        id: product.id, 
+                        title: product.title,
+                        product_images: product.product_images || []
+                    }
                 };
                 console.log(newItem);
-                const updatedItems = [...cartItems, newItem];
+                const updatedItems = [...currentCartItems, newItem];
                 setCartItems(updatedItems);
                 updateCartCountInStorage(updatedItems);
-                //! use setItems
-                // setItem(updatedItems);
+                
+                // Store cart items in localStorage for cart page to access
+                localStorage.setItem('cart_items', JSON.stringify(updatedItems));
+                console.log('🛒 Added new item, final cart items:', updatedItems);
             }
 
             // Dispatch cart update event for header
@@ -877,12 +963,33 @@ const ProductDetail = () => {
             // Show success message (you can replace this with a toast notification)
             // alert('Product added to cart successfully!');
             
-            // Redirect to cart page
-            window.location.href = '/cart';
+            // Small delay to ensure localStorage is set before redirect
+            setTimeout(() => {
+                window.location.href = '/cart';
+            }, 100);
 
         } catch (error) {
             console.error('Error adding to cart:', error);
-            alert('Failed to add product to cart. Please try again.');
+            
+            // Check if user is logged in
+            const authToken = localStorage.getItem('auth_token');
+            const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
+            
+            if (!isLoggedIn) {
+                // For guest users, show a different message
+                if (window.toastr) {
+                    window.toastr.info('Product added to cart (guest mode). Sign in to save your cart permanently.');
+                } else {
+                    alert('Product added to cart (guest mode). Sign in to save your cart permanently.');
+                }
+            } else {
+                // For logged-in users, show error message
+                if (window.toastr) {
+                    window.toastr.error('Failed to add product to cart. Please try again.');
+                } else {
+                    alert('Failed to add product to cart. Please try again.');
+                }
+            }
         } finally {
             setIsAddingToCart(false);
         }
