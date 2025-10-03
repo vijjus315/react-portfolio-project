@@ -352,7 +352,31 @@ const LoginModal = () => {
                             </div>
                             <div className="text-center">
                                 <p className="font-Yantramanav light-grey"> Don't have any account? 
-                                    <a className="theme_color text-decoration-underline fw-500" href="#" data-bs-toggle="modal" data-bs-target="#signupmodal" onClick={() => {
+                                    <a className="theme_color text-decoration-underline fw-500" href="#" onClick={(e) => {
+                                    e.preventDefault();
+                                    
+                                    // Close login modal first
+                                    const loginModal = document.getElementById('loginmodal');
+                                    if (loginModal) {
+                                        const bootstrapModal = window.bootstrap.Modal.getInstance(loginModal);
+                                        if (bootstrapModal) {
+                                            bootstrapModal.hide();
+                                        }
+                                    }
+                                    
+                                    // Wait for login modal to close, then open signup modal
+                                    setTimeout(() => {
+                                        const signupModalElement = document.getElementById('signupmodal');
+                                        if (signupModalElement) {
+                                            // Initialize Bootstrap modal if not already initialized
+                                            let signupModal = window.bootstrap.Modal.getInstance(signupModalElement);
+                                            if (!signupModal) {
+                                                signupModal = new window.bootstrap.Modal(signupModalElement);
+                                            }
+                                            signupModal.show();
+                                        }
+                                    }, 300); // Wait for modal close animation
+                                    
                                     // Ensure page is active when switching to signup modal
                                     window.focus();
                                     document.body.focus();

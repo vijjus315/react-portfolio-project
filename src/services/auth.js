@@ -25,7 +25,12 @@ export const resetPassword = (payload) => {
 };
 
 export const changePassword = (payload) => {
-    return apiClient.post("/auth/change-password", payload).then((r) => r.data);
+    // Transform payload to match API requirements
+    const apiPayload = {
+        oldPassword: payload.old_password,
+        newPassword: payload.new_password
+    };
+    return apiClient.post("/auth/change-passsword", apiPayload).then((r) => r.data);
 };
 
 export const updateProfile = (payload) => {

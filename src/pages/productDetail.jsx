@@ -902,37 +902,13 @@ const ProductDetail = () => {
                 currentCartItems = cartItems;
             }
             
-            // Check if item already exists in cart
-            const existingCartItem = currentCartItems.find(item => 
-                item.product_id === product.id && item.variant_id === variant.id
-            );
-
-            if (existingCartItem) {
-                // If item exists, update quantity
-                const newQuantity = existingCartItem.quantity + quantity;
-                const { updateCartItemQuantity } = await import('../services/cart.js');
-                await updateCartItemQuantity(product.id, newQuantity, variant.id);
-                
-                // Update local cart items and localStorage
-                const updatedItems = currentCartItems.map(item => 
-                    item.id === existingCartItem.id 
-                        ? { 
-                            ...item, 
-                            quantity: newQuantity,
-                            products: {
-                                ...item.products,
-                                product_images: product.product_images || item.products.product_images || []
-                            }
-                        }
-                        : item
-                );
-                setCartItems(updatedItems);
-                updateCartCountInStorage(updatedItems);
-                
-                // Store cart items in localStorage for cart page to access
-                localStorage.setItem('cart_items', JSON.stringify(updatedItems));
-            } else {
-                // If item doesn't exist, add to cart
+            // Check if cart is empty
+            const isCartEmpty = !currentCartItems || currentCartItems.length === 0;
+            console.log('🛒 Cart is empty:', isCartEmpty, 'Current cart items:', currentCartItems);
+            
+            if (isCartEmpty) {
+                // When cart is empty, always use /cart/add-to-cart API
+                console.log('🛒 Cart is empty - using /cart/add-to-cart API');
                 await addToCart(product.id, quantity, variant.id);
                 
                 // Update local cart items and localStorage
@@ -948,14 +924,72 @@ const ProductDetail = () => {
                         product_images: product.product_images || []
                     }
                 };
-                console.log(newItem);
-                const updatedItems = [...currentCartItems, newItem];
+                console.log('🛒 New item created for empty cart:', newItem);
+                const updatedItems = [newItem];
                 setCartItems(updatedItems);
                 updateCartCountInStorage(updatedItems);
                 
                 // Store cart items in localStorage for cart page to access
                 localStorage.setItem('cart_items', JSON.stringify(updatedItems));
-                console.log('🛒 Added new item, final cart items:', updatedItems);
+                console.log('🛒 Added item to empty cart, final cart items:', updatedItems);
+            } else {
+                // When cart is not empty, check if item already exists
+                const existingCartItem = currentCartItems.find(item => 
+                    item.product_id === product.id && item.variant_id === variant.id
+                );
+
+                if (existingCartItem) {
+                    // If item exists, update quantity using /cart/update-cart API
+                    console.log('🛒 Item exists in cart - using /cart/update-cart API');
+                    const newQuantity = existingCartItem.quantity + quantity;
+                    const { updateCartItemQuantity } = await import('../services/cart.js');
+                    await updateCartItemQuantity(product.id, newQuantity, variant.id);
+                    
+                    // Update local cart items and localStorage
+                    const updatedItems = currentCartItems.map(item => 
+                        item.id === existingCartItem.id 
+                            ? { 
+                                ...item, 
+                                quantity: newQuantity,
+                                products: {
+                                    ...item.products,
+                                    product_images: product.product_images || item.products.product_images || []
+                                }
+                            }
+                            : item
+                    );
+                    setCartItems(updatedItems);
+                    updateCartCountInStorage(updatedItems);
+                    
+                    // Store cart items in localStorage for cart page to access
+                    localStorage.setItem('cart_items', JSON.stringify(updatedItems));
+                } else {
+                    // If item doesn't exist in non-empty cart, add to cart using /cart/add-to-cart API
+                    console.log('🛒 Item does not exist in non-empty cart - using /cart/add-to-cart API');
+                    await addToCart(product.id, quantity, variant.id);
+                    
+                    // Update local cart items and localStorage
+                    const newItem = {
+                        id: Date.now(), // Temporary ID for local state
+                        product_id: product.id,
+                        variant_id: variant.id,
+                        quantity: quantity,
+                        product_variants: variant,
+                        products: { 
+                            id: product.id, 
+                            title: product.title,
+                            product_images: product.product_images || []
+                        }
+                    };
+                    console.log('🛒 New item created for non-empty cart:', newItem);
+                    const updatedItems = [...currentCartItems, newItem];
+                    setCartItems(updatedItems);
+                    updateCartCountInStorage(updatedItems);
+                    
+                    // Store cart items in localStorage for cart page to access
+                    localStorage.setItem('cart_items', JSON.stringify(updatedItems));
+                    console.log('🛒 Added new item to non-empty cart, final cart items:', updatedItems);
+                }
             }
 
             // Dispatch cart update event for header

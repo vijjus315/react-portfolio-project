@@ -103,7 +103,15 @@ const ChangePasswordModal = () => {
                     new_password_confirmation: ''
                 });
             } else {
-                if (response.errors) {
+                // Handle specific error messages
+                if (response.message === "Current password doesn't match.") {
+                    // Show error toaster message
+                    if (window.toastr) {
+                        window.toastr.error("Current password doesn't match.");
+                    }
+                    // Set form error for display
+                    setErrors({ old_password: "Current password doesn't match." });
+                } else if (response.errors) {
                     setErrors(response.errors);
                 } else {
                     setErrors({ general: response.message || 'Failed to change password. Please try again.' });
@@ -111,7 +119,18 @@ const ChangePasswordModal = () => {
             }
         } catch (err) {
             console.error('Error changing password:', err);
-            setErrors({ general: 'Failed to change password. Please try again.' });
+            
+            // Handle API error response
+            if (err.data && err.data.message === "Current password doesn't match.") {
+                // Show error toaster message
+                if (window.toastr) {
+                    window.toastr.error("Current password doesn't match.");
+                }
+                // Set form error for display
+                setErrors({ old_password: "Current password doesn't match." });
+            } else {
+                setErrors({ general: 'Failed to change password. Please try again.' });
+            }
         } finally {
             setIsLoading(false);
         }
