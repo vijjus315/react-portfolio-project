@@ -5,7 +5,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
-import { getCartItems, updateCartItemQuantity, removeCartItem } from '../services/cart.js';
+import { getCartItems, updateCartItemQuantity, removeCartItem, clearCart } from '../services/cart.js';
 import { checkout } from '../services/order.js';
 import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
@@ -70,7 +70,21 @@ const Cart = () => {
       const response = await checkout(userId);
       
       if (response.success && response.redirect_url) {
-        console.log('✅ Checkout successful, redirecting to:', response.redirect_url);
+        console.log('✅ Checkout successful, clearing cart and redirecting to:', response.redirect_url);
+        
+        // Clear the cart after successful order placement
+        try {
+          await clearCart();
+          console.log('🛒 Cart cleared successfully after order placement');
+          
+          // Update local state and storage
+          setCartItems([]);
+          updateCartCountInStorage([]);
+        } catch (clearError) {
+          console.error('⚠️ Failed to clear cart after order placement:', clearError);
+          // Don't block the redirect even if cart clearing fails
+        }
+        
         // Redirect to Stripe checkout
         window.location.href = response.redirect_url;
       } else {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { getWishlistItems, addToWishlist, removeFromWishlist } from '../services/wishlist.js';
+import { isAuthenticated } from '../services/auth.js';
 import { getImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
 
@@ -8,10 +9,30 @@ const Wishlist = () => {
     const [wishlistItems, setWishlistItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // Fetch wishlist items on component mount
+    // Check authentication status and fetch wishlist items on component mount
     useEffect(() => {
-        fetchWishlistItems();
+        const checkAuthAndFetch = async () => {
+            try {
+                const authenticated = isAuthenticated();
+                setIsLoggedIn(authenticated);
+                
+                if (authenticated) {
+                    await fetchWishlistItems();
+                } else {
+                    // For non-logged-in users, show empty wishlist immediately
+                    setIsLoading(false);
+                    setWishlistItems([]);
+                }
+            } catch (err) {
+                console.error('Error checking authentication:', err);
+                setIsLoading(false);
+                setError('Failed to check authentication status');
+            }
+        };
+        
+        checkAuthAndFetch();
     }, []);
 
     const fetchWishlistItems = async () => {
@@ -32,6 +53,16 @@ const Wishlist = () => {
     };
 
     const handleWishlistToggle = async (productId, isInWishlist) => {
+        // Don't allow wishlist operations for non-logged-in users
+        if (!isLoggedIn) {
+            if (window.toastr) {
+                window.toastr.warning('Please log in to manage your wishlist.');
+            } else {
+                alert('Please log in to manage your wishlist.');
+            }
+            return;
+        }
+
         try {
             if (isInWishlist) {
                 // Remove from wishlist

@@ -7,6 +7,7 @@ import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import { getProducts } from '../services/product.js';
 import { addToWishlist, removeFromWishlist } from '../services/wishlist.js';
+import { isAuthenticated } from '../services/auth.js';
 import { getImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
 
@@ -135,6 +136,16 @@ const ProductsPage = () => {
     const handleWishlistToggle = async (productId, event) => {
         event.preventDefault();
         event.stopPropagation();
+        
+        // Check if user is logged in
+        if (!isAuthenticated()) {
+            if (window.toastr) {
+                window.toastr.error('Please login first');
+            } else {
+                alert('Please login first');
+            }
+            return;
+        }
         
         if (updatingWishlist.has(productId)) {
             return; // Prevent multiple clicks while updating

@@ -588,6 +588,7 @@ import { getProductBySlug, getProductById } from '../services/product.js';
 import { getImageUrl, getVideoUrl } from '../utils/imageUtils.js';
 import { addToCart, getCartItems } from '../services/cart.js';
 import { addToWishlist, removeFromWishlist } from '../services/wishlist.js';
+import { isAuthenticated } from '../services/auth.js';
 
 //! import useLocalStorage
 import { useLocalStorage } from '../customHooks/useLocalStorage.jsx';
@@ -998,6 +999,16 @@ const ProductDetail = () => {
     // Wishlist toggle handler
     const handleWishlistToggle = async () => {
         if (!product) return;
+
+        // Check if user is logged in
+        if (!isAuthenticated()) {
+            if (window.toastr) {
+                window.toastr.error('Please login first');
+            } else {
+                alert('Please login first');
+            }
+            return;
+        }
 
         try {
             if (isFavorited) {

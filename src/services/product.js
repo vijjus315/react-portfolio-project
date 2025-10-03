@@ -5,7 +5,7 @@ import { getCurrentUserId } from "../utils/validators.js";
 export const getProducts = async (userId = null) => {
     try {
         // Use provided userId or get from session
-        const actualUserId = userId || getCurrentUserId() || 34;
+        const actualUserId = userId || getCurrentUserId();
         const response = await apiClient.get(`/product/get-products?user_id=${actualUserId}`);
         return response.data;
     } catch (error) {
