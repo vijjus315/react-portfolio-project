@@ -1,10 +1,21 @@
 import { apiClient } from "./client.js";
+import { isAuthenticated } from "./auth.js";
 
 /**
- * Fetch cart items for the authenticated user or guest
+ * Fetch cart items for the authenticated user only
  * @returns {Promise<Object>} API response with cart items
  */
 export const getCartItems = async () => {
+  // Check if user is authenticated first
+  if (!isAuthenticated()) {
+    console.log("👤 User not authenticated - returning empty cart");
+    return {
+      success: true,
+      message: "User not authenticated",
+      body: { cartItems: [] }
+    };
+  }
+
   try {
     console.log("📋 API: Fetching cart items (READ ONLY) via /cart/get-cart");
     const response = await apiClient.get("/cart/get-cart");
@@ -12,22 +23,6 @@ export const getCartItems = async () => {
     return response.data;
   } catch (error) {
     console.error("❌ API: Error fetching cart items:", error);
-    
-    // If it's a 401 error and user is not logged in, return empty cart for guest users
-    if (error.status === 401) {
-      const authToken = localStorage.getItem('auth_token');
-      const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
-      
-      if (!isLoggedIn) {
-        console.log("👤 Guest user - returning empty cart");
-        return {
-          success: true,
-          message: "Cart fetched (guest mode)",
-          body: { cartItems: [] }
-        };
-      }
-    }
-    
     throw error;
   }
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { login as apiLogin } from '../services/auth.js';
 import { checkAndOpenOTPVerification } from '../utils/otpVerification.js';
 import "../styles/bootstrap.js"
@@ -20,6 +20,29 @@ const LoginModal = () => {
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
 
+    // Clear form data when modal is closed
+    useEffect(() => {
+        const modal = document.getElementById('loginmodal');
+        
+        const handleModalHidden = () => {
+            // Clear form data
+            setEmail('');
+            setPassword('');
+            setRemember(false);
+            setErrors({});
+            setSubmitting(false);
+        };
+
+        if (modal) {
+            modal.addEventListener('hidden.bs.modal', handleModalHidden);
+            
+            // Cleanup event listener
+            return () => {
+                modal.removeEventListener('hidden.bs.modal', handleModalHidden);
+            };
+        }
+    }, []);
+
     const handleSubmit = async (e) => {
         
     e.preventDefault(); 
@@ -27,6 +50,30 @@ const LoginModal = () => {
     // Set a "submitting" state so UI can show a loader/spinner or disable the button
     setErrors({}); 
     // Clear any previous validation errors before a new request
+    
+    // Client-side validation
+    const validationErrors = {};
+    
+    // Email validation
+    if (!email.trim()) {
+        validationErrors.email = ['Email is required.'];
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+        validationErrors.email = ['Please enter a valid email address.'];
+    }
+    
+    // Password validation
+    if (!password.trim()) {
+        validationErrors.password = ['Password is required.'];
+    } else if (password.length < 6) {
+        validationErrors.password = ['Password must be at least 6 characters long.'];
+    }
+    
+    // If there are validation errors, show them and stop submission
+    if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        setSubmitting(false);
+        return;
+    }
     
     // Test localStorage functionality
     try {
@@ -97,6 +144,20 @@ const LoginModal = () => {
     } catch (err) { 
         // Only create dummy data if there's a real API error (network/server issue)
         console.log('⚠️ Login API error, but proceeding anyway:', err);
+        
+        // Check for specific error message "This email is not associated with us."
+        if (err.data && err.data.message === "This email is not associated with us.") {
+            // Show error toaster message
+            if (window.toastr) {
+                window.toastr.error("This email is not associated with us.");
+            }
+            // Set form error for display
+            setErrors({ email: ["This email is not associated with us."] });
+            
+            // Don't close modal or proceed with login - keep modal open to show error
+            setSubmitting(false);
+            return;
+        }
         
         // Check if we have response data (even if it's an error response)
         // API client normalizes errors to { status, data } format

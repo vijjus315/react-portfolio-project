@@ -128,24 +128,6 @@ const Cart = () => {
         const response = await getCartItems();
         if (response.success) {
           const items = response.body.cartItems || [];
-          
-          // If API returns empty cart but we have items in localStorage, use localStorage
-          if (items.length === 0) {
-            const localCartItems = localStorage.getItem('cart_items');
-            if (localCartItems) {
-              try {
-                const parsedItems = JSON.parse(localCartItems);
-                console.log('📋 Using localStorage cart items:', parsedItems);
-                setCartItems(parsedItems);
-                updateCartCountInStorage(parsedItems);
-                setError(null);
-                return;
-              } catch (e) {
-                console.error('Error parsing localStorage cart items:', e);
-              }
-            }
-          }
-          
           setCartItems(items);
           updateCartCountInStorage(items);
           // Clear any previous errors if we successfully got data (even if empty)
@@ -155,47 +137,7 @@ const Cart = () => {
         }
       } catch (err) {
         console.error('Error fetching cart items:', err);
-        
-        // Check if user is logged in
-        const authToken = localStorage.getItem('auth_token');
-        const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
-        
-        if (!isLoggedIn) {
-          // For guest users, check localStorage first, then show empty cart
-          console.log('👤 Guest user - checking localStorage for cart items');
-          const localCartItems = localStorage.getItem('cart_items');
-          if (localCartItems) {
-            try {
-              const parsedItems = JSON.parse(localCartItems);
-              console.log('📋 Using localStorage cart items for guest user:', parsedItems);
-              
-              // Debug each item's image data
-              parsedItems.forEach((item, index) => {
-                console.log(`📸 Item ${index} image data:`, {
-                  productTitle: item.products?.title,
-                  productImages: item.products?.product_images,
-                  hasImages: item.products?.product_images?.length > 0,
-                  firstImageUrl: item.products?.product_images?.[0]?.image_url
-                });
-              });
-              
-              setCartItems(parsedItems);
-              updateCartCountInStorage(parsedItems);
-              setError(null);
-            } catch (e) {
-              console.error('Error parsing localStorage cart items:', e);
-              setCartItems([]);
-              updateCartCountInStorage([]);
-              setError(null);
-            }
-          } else {
-            setCartItems([]);
-            updateCartCountInStorage([]);
-            setError(null);
-          }
-        } else {
-          setError('Failed to load cart items. Please try again.');
-        }
+        setError('Failed to load cart items. Please try again.');
       } finally {
         setIsLoading(false);
       }

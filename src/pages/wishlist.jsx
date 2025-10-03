@@ -3,6 +3,11 @@ import { createRoot } from 'react-dom/client';
 import { getWishlistItems, addToWishlist, removeFromWishlist } from '../services/wishlist.js';
 import { isAuthenticated } from '../services/auth.js';
 import { getImageUrl } from '../utils/imageUtils.js';
+import LoginModal from '../components/login.jsx';
+import SignupModal from '../components/signup.jsx';
+import VerifyEmailModal from '../components/verifyEmail.jsx';
+import ChangePasswordModal from '../components/changePassword.jsx';
+import EditProfileModal from '../components/editProfile.jsx';
 import '../styles/bootstrap';
 
 const Wishlist = () => {
@@ -161,6 +166,7 @@ const Wishlist = () => {
     }
 
     return (
+        <>
         <section className="py-5">
             <div className="container">
                 <div className="row">
@@ -240,6 +246,20 @@ const Wishlist = () => {
                                     />
                                     <h4 className="fw-400">Hey, it's feel so light</h4>
                                     <p className="fw-400 pb-2">There is nothing in your wishlist. Let's add some items.</p>
+                                    {!isLoggedIn && (
+                                        <div className="mt-3">
+                                            <button 
+                                                className="btn text-white" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#loginmodal" 
+                                                type="button"
+                                                style={{ backgroundColor: "var(--primary-theme)",
+                                                color: "#fff", padding: "12px 28px", fontSize: "1rem" }}
+                                            >
+                                                Login to manage wishlist
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -247,6 +267,14 @@ const Wishlist = () => {
                 </div>
             </div>
         </section>
+        
+        {/* Login and Signup Modals */}
+        <LoginModal />
+        <SignupModal />
+        <VerifyEmailModal />
+        <ChangePasswordModal />
+        <EditProfileModal />
+        </>
     );
 };
 
