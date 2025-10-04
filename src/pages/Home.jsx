@@ -604,7 +604,11 @@ const Home = () => {
                             </div>
                         </div>
 
-                        {post.map(b => (
+                        {post.filter(b => ![
+                            'how-to-set-up-a-portable-pickleball-court-in-20-minutes',
+                            'portable-vs-permanent-pickleball-courts', 
+                            'how-to-turn-your-driveway-into-a-portable-pickleball-court'
+                        ].includes(b.slug)).map(b => (
                             <div className="col-lg-4 pb-5 pb-lg-0" key={b.id}>
                                 <div className="stay-blog">
                                     <div className="blog-img ">
