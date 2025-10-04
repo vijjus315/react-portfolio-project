@@ -114,7 +114,7 @@ function App() {
               <Route
                 path="/blogs/:id"
                 element={
-                  <PageLayout title="Blog Detail">
+                  <PageLayout title="">
                     <BlogDetail />
                   </PageLayout>
                 }
@@ -122,7 +122,7 @@ function App() {
               <Route
                 path="/blog-detail/:id"
                 element={
-                  <PageLayout title="Blog Detail">
+                  <PageLayout title="">
                     <BlogDetail />
                   </PageLayout>
                 }
