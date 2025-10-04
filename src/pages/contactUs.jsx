@@ -5,6 +5,9 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import ForgetPasswordModal from '../components/forgetPassword.jsx';
+import VerifyOtpModal from '../components/verifyOtp.jsx';
+import ResetPasswordModal from '../components/resetPassword.jsx';
 import Toast, { ToastContainer } from '../components/Toast.jsx';
 import { useToast } from '../customHooks/useToast.jsx';
 import '../styles/bootstrap';
@@ -504,6 +507,9 @@ const ContactUs = () => {
      <VerifyEmailModal />
      <ChangePasswordModal />
      <EditProfileModal />
+     <ForgetPasswordModal />
+     <VerifyOtpModal />
+     <ResetPasswordModal />
      
      {/* Toast Container */}
      <ToastContainer toasts={toasts} removeToast={removeToast} />

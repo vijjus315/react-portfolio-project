@@ -31,6 +31,7 @@ import SignupModal from "./components/signup.jsx";
 import VerifyEmailModal from "./components/verifyEmail.jsx";
 import ChangePasswordModal from "./components/changePassword.jsx";
 import EditProfileModal from "./components/editProfile.jsx";
+import ForgetPasswordModal from "./components/forgetPassword.jsx";
 import Header from "./layouts/Navbar.jsx";
 import Footer from "./layouts/Footer.jsx";
 

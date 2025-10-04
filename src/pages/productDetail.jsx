@@ -584,6 +584,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import ForgetPasswordModal from '../components/forgetPassword.jsx';
 import { getProductBySlug, getProductById } from '../services/product.js';
 import { getImageUrl, getVideoUrl } from '../utils/imageUtils.js';
 import { addToCart, getCartItems } from '../services/cart.js';
@@ -1320,6 +1321,7 @@ const ProductDetail = () => {
             <VerifyEmailModal />
             <ChangePasswordModal />
             <EditProfileModal />
+            <ForgetPasswordModal />
         
         </>
     );

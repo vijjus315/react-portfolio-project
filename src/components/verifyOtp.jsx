@@ -1,31 +1,26 @@
-import React, { useState } from 'react';
-import { forgotPassword } from '../services/auth.js';
+import React, { useState, useEffect } from 'react';
 import '../styles/bootstrap';
 
-const ForgotPasswordModal = () => {
+const VerifyOtpModal = () => {
+    const [otp, setOtp] = useState('');
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Function to get CSRF token
-    const getCsrf = () => {
-        const el = document.querySelector('meta[name="csrf-token"]');
-        return el ? el.getAttribute('content') : '';
-    };
+    // Load email from localStorage when modal opens
+    useEffect(() => {
+        const storedEmail = localStorage.getItem('reset_email');
+        if (storedEmail) {
+            setEmail(storedEmail);
+        }
+    }, []);
 
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!email) {
-            setError('Please enter your email address');
-            return;
-        }
-
-        // Basic email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setError('Please enter a valid email address');
+        if (!otp || otp.length !== 6) {
+            setError('Please enter a valid 6-digit OTP');
             return;
         }
 
@@ -33,75 +28,82 @@ const ForgotPasswordModal = () => {
         setError('');
 
         try {
-            const response = await fetch('http://18.188.69.99:4235/api/v1/auth/forget-password', {
+            const response = await fetch('http://18.188.69.99:4235/api/v1/auth/verify-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: email
+                    email: email,
+                    otp: otp
                 })
             });
             
             const data = await response.json();
 
             if (data.success) {
-                // Close forgot password modal
-                const forgotModal = document.getElementById('forgotmodal');
-                if (forgotModal) {
-                    const bootstrapForgotModal = window.bootstrap.Modal.getInstance(forgotModal);
-                    if (bootstrapForgotModal) {
-                        bootstrapForgotModal.hide();
+                // Close verify OTP modal
+                const verifyModal = document.getElementById('verifyModal');
+                if (verifyModal) {
+                    const bootstrapVerifyModal = window.bootstrap.Modal.getInstance(verifyModal);
+                    if (bootstrapVerifyModal) {
+                        bootstrapVerifyModal.hide();
                     }
                 }
                 
-                // Store email in localStorage to pass to verify OTP modal
+                // Store email in localStorage to pass to reset password modal
                 localStorage.setItem('reset_email', email);
                 
-                // Open verify OTP modal after a short delay
+                // Open reset password modal after a short delay
                 setTimeout(() => {
-                    const verifyModal = document.getElementById('verifyModal');
-                    if (verifyModal) {
-                        // Set the email in the verify modal
-                        const emailInput = verifyModal.querySelector('input[name="email"]');
+                    const resetModal = document.getElementById('resetPasswordModal');
+                    if (resetModal) {
+                        // Set the email in the reset password modal
+                        const emailInput = resetModal.querySelector('input[name="email"]');
                         if (emailInput) {
                             emailInput.value = email;
                         }
                         
-                        const bootstrapVerifyModal = new window.bootstrap.Modal(verifyModal);
-                        bootstrapVerifyModal.show();
+                        const bootstrapResetModal = new window.bootstrap.Modal(resetModal);
+                        bootstrapResetModal.show();
                     }
                 }, 300);
                 
                 // Show success message
                 if (window.toastr) {
-                    window.toastr.success(data.message || 'OTP sent to your email!');
+                    window.toastr.success(data.message || 'OTP verified successfully!');
                 }
                 
                 // Reset form
-                setEmail('');
+                setOtp('');
             } else {
-                setError(data.message || 'Failed to send reset link. Please try again.');
+                setError(data.message || 'Invalid OTP. Please try again.');
             }
         } catch (err) {
-            console.error('Error sending forgot password request:', err);
-            setError('Failed to send reset link. Please try again.');
+            console.error('Error verifying OTP:', err);
+            setError('An error occurred. Please try again.');
         } finally {
             setIsLoading(false);
         }
     };
 
     // Handle input change
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+    const handleOtpChange = (e) => {
+        const value = e.target.value.replace(/\D/g, '').slice(0, 6); // Only numbers, max 6 digits
+        setOtp(value);
         if (error) {
             setError('');
         }
     };
 
+    // Handle email change (this will be set when modal opens)
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+
     return (
-        <div className="modal fade" id="forgotmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal fade" id="verifyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="verifyModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content modal-content-width">
                     <div className="modal-header border-0">
@@ -116,11 +118,11 @@ const ForgotPasswordModal = () => {
                     </div>
                     <div className="modal-body pt-0">
                         <div className="text-center">
-                            <img src={`${window.location.origin}/webassets/img/forgotpwd.png`} className="img-fluid" alt="Forgot Password" />
-                            <h1 className="font-oswald pb-3">Forgot Password</h1>
-                            <p>Enter the email you used to create your account so we can send you a link for resetting your password</p>
+                            <img src={`${window.location.origin}/webassets/img/verify-email.png`} className="img-fluid" alt="Verify OTP" />
+                            <h1 className="font-oswald pb-3">Verify OTP</h1>
+                            <p>Please enter the 6-digit OTP sent to your email address</p>
                         </div>
-                        <form id="forgotPasswordForm" onSubmit={handleSubmit}>
+                        <form id="verifyOtpForm" onSubmit={handleSubmit}>
                             <div className="form-group mb-4">
                                 <label className="pb-2">Email</label>
                                 <input 
@@ -130,16 +132,28 @@ const ForgotPasswordModal = () => {
                                     placeholder="Email address"
                                     value={email}
                                     onChange={handleEmailChange}
-                                    disabled={isLoading}
                                     required
                                 />
-                                <span className="text-danger error-message" id="forgot-error-email">{error}</span>
+                            </div>
+                            <div className="form-group mb-4">
+                                <label className="pb-2">OTP Code</label>
+                                <input 
+                                    type="text" 
+                                    className="form-control common-input" 
+                                    name="otp" 
+                                    placeholder="Enter 6-digit OTP"
+                                    value={otp}
+                                    onChange={handleOtpChange}
+                                    maxLength="6"
+                                    required
+                                />
+                                <span className="text-danger error-message">{error}</span>
                             </div>
                             <div className="pt-3 pb-3">
                                 <button 
                                     type="submit" 
                                     className="btn green-btn w-100 box-shadow"
-                                    disabled={isLoading}
+                                    disabled={isLoading || otp.length !== 6}
                                     style={{
                                         backgroundColor: isLoading ? '#6c757d' : 'var(--primary-theme)',
                                         border: 'none',
@@ -156,16 +170,16 @@ const ForgotPasswordModal = () => {
                                             <div className="spinner-border spinner-border-sm me-2" role="status">
                                                 <span className="visually-hidden">Loading...</span>
                                             </div>
-                                            Sending...
+                                            Verifying...
                                         </>
                                     ) : (
-                                        'Send OTP'
+                                        'Verify OTP'
                                     )}
                                 </button>
                             </div>
                         </form>
                         
-                        {/* Back to Login Link */}
+                        {/* Back to Forgot Password Link */}
                         <div className="text-center mt-3">
                             <a 
                                 href="#" 
@@ -173,23 +187,23 @@ const ForgotPasswordModal = () => {
                                 style={{ color: 'var(--primary-theme)' }}
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    // Close forgot password modal
-                                    const forgotModal = document.getElementById('forgotmodal');
-                                    const bootstrapForgotModal = window.bootstrap.Modal.getInstance(forgotModal);
-                                    if (bootstrapForgotModal) {
-                                        bootstrapForgotModal.hide();
+                                    // Close verify OTP modal
+                                    const verifyModal = document.getElementById('verifyModal');
+                                    const bootstrapVerifyModal = window.bootstrap.Modal.getInstance(verifyModal);
+                                    if (bootstrapVerifyModal) {
+                                        bootstrapVerifyModal.hide();
                                     }
-                                    // Open login modal after a short delay
+                                    // Open forgot password modal after a short delay
                                     setTimeout(() => {
-                                        const loginModal = document.getElementById('loginmodal');
-                                        if (loginModal) {
-                                            const bootstrapLoginModal = new window.bootstrap.Modal(loginModal);
-                                            bootstrapLoginModal.show();
+                                        const forgotModal = document.getElementById('forgotmodal');
+                                        if (forgotModal) {
+                                            const bootstrapForgotModal = new window.bootstrap.Modal(forgotModal);
+                                            bootstrapForgotModal.show();
                                         }
                                     }, 300);
                                 }}
                             >
-                                ← Back to Login
+                                ← Back to Forgot Password
                             </a>
                         </div>
                     </div>
@@ -199,4 +213,4 @@ const ForgotPasswordModal = () => {
     );
 };
 
-export default ForgotPasswordModal;
+export default VerifyOtpModal;

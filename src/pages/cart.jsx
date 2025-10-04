@@ -5,6 +5,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import ForgetPasswordModal from '../components/forgetPassword.jsx';
 import { getCartItems, updateCartItemQuantity, removeCartItem, clearCart } from '../services/cart.js';
 import { checkout } from '../services/order.js';
 import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
@@ -648,6 +649,7 @@ const Cart = () => {
       <VerifyEmailModal />
       <ChangePasswordModal />
       <EditProfileModal />
+      <ForgetPasswordModal />
     </>
   );
 };

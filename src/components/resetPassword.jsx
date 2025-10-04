@@ -1,144 +1,121 @@
 import React, { useState, useEffect } from 'react';
-import { resetPassword } from '../services/auth.js';
 import '../styles/bootstrap';
 
 const ResetPasswordModal = () => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        password_confirmation: ''
-    });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState({});
-    const [showPassword, setShowPassword] = useState({
-        password: false,
-        password_confirmation: false
-    });
+    const [error, setError] = useState('');
 
-    // Function to get CSRF token
-    const getCsrf = () => {
-        const el = document.querySelector('meta[name="csrf-token"]');
-        return el ? el.getAttribute('content') : '';
-    };
-
-    // Handle input change
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-        
-        // Clear error when user starts typing
-        if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
+    // Load email from localStorage when modal opens
+    useEffect(() => {
+        const storedEmail = localStorage.getItem('reset_email');
+        if (storedEmail) {
+            setEmail(storedEmail);
         }
-    };
+    }, []);
 
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Validation
-        const newErrors = {};
-        if (!formData.password) {
-            newErrors.password = 'Password is required';
-        } else if (formData.password.length < 8) {
-            newErrors.password = 'Password must be at least 8 characters';
+        if (!password) {
+            setError('Password is required');
+            return;
         }
         
-        if (!formData.password_confirmation) {
-            newErrors.password_confirmation = 'Please confirm your password';
-        } else if (formData.password !== formData.password_confirmation) {
-            newErrors.password_confirmation = 'Passwords do not match';
+        if (password.length < 8) {
+            setError('Password must be at least 8 characters long');
+            return;
         }
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
             return;
         }
 
         setIsLoading(true);
-        setErrors({});
+        setError('');
 
         try {
-            const response = await resetPassword({
-                email: formData.email,
-                password: formData.password,
-                password_confirmation: formData.password_confirmation,
-                _token: getCsrf()
+            const response = await fetch('http://18.188.69.99:4235/api/v1/auth/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
             });
+            
+            const data = await response.json();
 
-            if (response.success) {
-                // Close current modal
-                const modal = document.getElementById('resetPasswordModal');
-                if (modal) {
-                    const bootstrapModal = window.bootstrap.Modal.getInstance(modal);
-                    if (bootstrapModal) {
-                        bootstrapModal.hide();
+            if (data.success) {
+                // Close reset password modal
+                const resetModal = document.getElementById('resetPasswordModal');
+                if (resetModal) {
+                    const bootstrapResetModal = window.bootstrap.Modal.getInstance(resetModal);
+                    if (bootstrapResetModal) {
+                        bootstrapResetModal.hide();
                     }
-                }
-                
-                // Open success modal
-                const successModal = document.getElementById('successfullmodal');
-                if (successModal) {
-                    const successBootstrapModal = new window.bootstrap.Modal(successModal);
-                    successBootstrapModal.show();
                 }
                 
                 // Show success message
                 if (window.toastr) {
-                    window.toastr.success(response.message || 'Password reset successfully!');
+                    window.toastr.success(data.message || 'Password reset successfully!');
                 }
+                
+                // Reset form
+                setPassword('');
+                setConfirmPassword('');
+                
+                // Clear stored email
+                localStorage.removeItem('reset_email');
+                
+                // Optionally redirect to login or show login modal
+                setTimeout(() => {
+                    const loginModal = document.getElementById('loginmodal');
+                    if (loginModal) {
+                        const bootstrapLoginModal = new window.bootstrap.Modal(loginModal);
+                        bootstrapLoginModal.show();
+                    }
+                }, 1000);
+                
             } else {
-                if (response.errors) {
-                    setErrors(response.errors);
-                } else {
-                    setErrors({ general: response.message || 'Failed to reset password. Please try again.' });
-                }
+                setError(data.message || 'Failed to reset password. Please try again.');
             }
         } catch (err) {
             console.error('Error resetting password:', err);
-            setErrors({ general: 'Failed to reset password. Please try again.' });
+            setError('An error occurred. Please try again.');
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Toggle password visibility
-    const togglePasswordVisibility = (field) => {
-        setShowPassword(prev => ({
-            ...prev,
-            [field]: !prev[field]
-        }));
+    // Handle input changes
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        if (error) {
+            setError('');
+        }
     };
 
-    // Set email when modal is shown
-    useEffect(() => {
-        const modal = document.getElementById('resetPasswordModal');
-        if (modal) {
-            const handleShow = () => {
-                const emailInput = document.getElementById('resetEmail');
-                if (emailInput) {
-                    setFormData(prev => ({
-                        ...prev,
-                        email: emailInput.value
-                    }));
-                }
-            };
-
-            modal.addEventListener('shown.bs.modal', handleShow);
-            return () => {
-                modal.removeEventListener('shown.bs.modal', handleShow);
-            };
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
+        if (error) {
+            setError('');
         }
-    }, []);
+    };
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
 
     return (
-        <div className="modal fade" id="resetPasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal fade" id="resetPasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content modal-content-width">
                     <div className="modal-header border-0">
@@ -154,67 +131,62 @@ const ResetPasswordModal = () => {
                     <div className="modal-body pt-0">
                         <div className="text-center">
                             <img src={`${window.location.origin}/webassets/img/resetpwd.png`} className="img-fluid" alt="Reset Password" />
-                            <h1 className="font-oswald pb-2">Reset Password</h1>
-                            <p>Choose a new password for your account</p>
+                            <h1 className="font-oswald pb-3">Reset Password</h1>
+                            <p>Enter your new password below</p>
                         </div>
                         <form id="resetPasswordForm" onSubmit={handleSubmit}>
-                            <input type="hidden" id="resetEmail" name="email" value={formData.email} />
-                            <div className="form-group mb-3">
+                            <div className="form-group mb-4">
+                                <label className="pb-2">Email</label>
+                                <input 
+                                    type="email" 
+                                    className="form-control common-input" 
+                                    name="email" 
+                                    placeholder="Email address"
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group mb-4">
                                 <label className="pb-2">New Password</label>
-                                <div className="position-relative">
-                                    <input 
-                                        type={showPassword.password ? "text" : "password"}
-                                        className="form-control common-input password-field" 
-                                        name="password" 
-                                        placeholder="Password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        disabled={isLoading}
-                                        required
-                                    />
-                                    <div className="icon-eye">
-                                        <i 
-                                            className={`fa ${showPassword.password ? 'fa-eye-slash' : 'fa-eye'} toggle-password`}
-                                            aria-hidden="true"
-                                            onClick={() => togglePasswordVisibility('password')}
-                                            style={{ cursor: 'pointer' }}
-                                        ></i>
-                                    </div>
-                                    <span className="text-danger error-message" id="reset-error-password">{errors.password}</span>
-                                </div>
+                                <input 
+                                    type="password" 
+                                    className="form-control common-input" 
+                                    name="password" 
+                                    placeholder="Enter new password"
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                    required
+                                />
                             </div>
-                            <div className="form-group">
-                                <label className="pb-2">Confirm New Password</label>
-                                <div className="position-relative">
-                                    <input 
-                                        type={showPassword.password_confirmation ? "text" : "password"}
-                                        className="form-control common-input password-field" 
-                                        name="password_confirmation" 
-                                        placeholder="Password"
-                                        value={formData.password_confirmation}
-                                        onChange={handleInputChange}
-                                        disabled={isLoading}
-                                        required
-                                    />
-                                    <div className="icon-eye">
-                                        <i 
-                                            className={`fa ${showPassword.password_confirmation ? 'fa-eye-slash' : 'fa-eye'} toggle-password`}
-                                            aria-hidden="true"
-                                            onClick={() => togglePasswordVisibility('password_confirmation')}
-                                            style={{ cursor: 'pointer' }}
-                                        ></i>
-                                    </div>
-                                    <span className="text-danger error-message" id="reset-error-password_confirmation">{errors.password_confirmation}</span>
-                                </div>
+                            <div className="form-group mb-4">
+                                <label className="pb-2">Confirm Password</label>
+                                <input 
+                                    type="password" 
+                                    className="form-control common-input" 
+                                    name="confirmPassword" 
+                                    placeholder="Confirm new password"
+                                    value={confirmPassword}
+                                    onChange={handleConfirmPasswordChange}
+                                    required
+                                />
+                                <span className="text-danger error-message">{error}</span>
                             </div>
-                            {errors.general && (
-                                <div className="text-danger text-center mb-3">{errors.general}</div>
-                            )}
-                            <div className="pt-4 pb-3">
+                            <div className="pt-3 pb-3">
                                 <button 
                                     type="submit" 
                                     className="btn green-btn w-100 box-shadow"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !password || !confirmPassword}
+                                    style={{
+                                        backgroundColor: isLoading ? '#6c757d' : 'var(--primary-theme)',
+                                        border: 'none',
+                                        padding: '12px 24px',
+                                        borderRadius: '8px',
+                                        fontSize: '16px',
+                                        fontWeight: '500',
+                                        color: 'white',
+                                        cursor: isLoading ? 'not-allowed' : 'pointer'
+                                    }}
                                 >
                                     {isLoading ? (
                                         <>
@@ -224,11 +196,39 @@ const ResetPasswordModal = () => {
                                             Resetting...
                                         </>
                                     ) : (
-                                        'Reset'
+                                        'Reset Password'
                                     )}
                                 </button>
                             </div>
                         </form>
+                        
+                        {/* Back to Login Link */}
+                        <div className="text-center mt-3">
+                            <a 
+                                href="#" 
+                                className="text-decoration-none f16-size fw-400"
+                                style={{ color: 'var(--primary-theme)' }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    // Close reset password modal
+                                    const resetModal = document.getElementById('resetPasswordModal');
+                                    const bootstrapResetModal = window.bootstrap.Modal.getInstance(resetModal);
+                                    if (bootstrapResetModal) {
+                                        bootstrapResetModal.hide();
+                                    }
+                                    // Open login modal after a short delay
+                                    setTimeout(() => {
+                                        const loginModal = document.getElementById('loginmodal');
+                                        if (loginModal) {
+                                            const bootstrapLoginModal = new window.bootstrap.Modal(loginModal);
+                                            bootstrapLoginModal.show();
+                                        }
+                                    }, 300);
+                                }}
+                            >
+                                ← Back to Login
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

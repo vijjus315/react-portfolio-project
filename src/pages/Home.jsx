@@ -5,9 +5,12 @@ import '../styles/bootstrap';
 
 import LoginModal from '../components/login.jsx';
 import SignupModal from '../components/signup.jsx';
-  import ChangePasswordModal from '../components/changePassword.jsx';
+import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
+import ForgetPasswordModal from '../components/forgetPassword.jsx';
+import VerifyOtpModal from '../components/verifyOtp.jsx';
+import ResetPasswordModal from '../components/resetPassword.jsx';
 import Ceo from '../components/ceo.jsx';
 // import Header from '../layouts/Navbar.jsx';
 // import Footer from '../layouts/Footer.jsx';
@@ -88,7 +91,10 @@ const Home = () => {
             <SignupModal />
             <VerifyEmailModal />
             <ChangePasswordModal />
-        <EditProfileModal />
+            <EditProfileModal />
+            <ForgetPasswordModal />
+            <VerifyOtpModal />
+            <ResetPasswordModal />
             {/* Head meta stays in master; if needed, can be added via react-helmet */}
 
             {/* SCORE A DEAL hero slider (banner) */}

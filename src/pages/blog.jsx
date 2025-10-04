@@ -6,6 +6,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import ForgetPasswordModal from '../components/forgetPassword.jsx';
 import { getBlogs, transformBlogData, sortBlogsByPriority } from '../services/blog.js';
 import "../styles/bootstrap";
 import BlogDetail from "./blogDetail.jsx";
@@ -252,6 +253,7 @@ const Blog = () => {
       <VerifyEmailModal />
       <ChangePasswordModal />
       <EditProfileModal />
+      <ForgetPasswordModal />
     </>
   );
 };

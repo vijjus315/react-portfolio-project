@@ -329,7 +329,39 @@ const LoginModal = () => {
                                         <input name="remember" id="remember" type="checkbox" className="check_form" checked={remember} onChange={(e) => setRemember(e.target.checked)} />Remember me
                                     </label>
                                 </div>
-                                <a className="lost-pass primary-theme text-decoration-none f16-size fw-400" href="#" data-bs-toggle="modal" data-bs-target="#forgotmodal">
+                                <a 
+                                    className="lost-pass primary-theme text-decoration-none f16-size fw-400" 
+                                    href="#" 
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        console.log('🔐 Forgot Password link clicked');
+                                        
+                                        // Close login modal
+                                        const loginModal = document.getElementById('loginmodal');
+                                        console.log('🔐 Login modal element:', loginModal);
+                                        const bootstrapLoginModal = window.bootstrap.Modal.getInstance(loginModal);
+                                        console.log('🔐 Bootstrap login modal instance:', bootstrapLoginModal);
+                                        
+                                        if (bootstrapLoginModal) {
+                                            bootstrapLoginModal.hide();
+                                            console.log('🔐 Login modal hidden');
+                                        }
+                                        
+                                        // Open forgot password modal after a short delay
+                                        setTimeout(() => {
+                                            const forgotModal = document.getElementById('forgotmodal');
+                                            console.log('🔐 Forgot modal element:', forgotModal);
+                                            
+                                            if (forgotModal) {
+                                                const bootstrapForgotModal = new window.bootstrap.Modal(forgotModal);
+                                                bootstrapForgotModal.show();
+                                                console.log('🔐 Forgot password modal shown');
+                                            } else {
+                                                console.error('🔐 Forgot password modal not found in DOM');
+                                            }
+                                        }, 300);
+                                    }}
+                                >
                                     Forgot Password?
                                 </a>
                             </div>
