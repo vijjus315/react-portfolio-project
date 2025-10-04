@@ -112,7 +112,15 @@ function App() {
                 }
               />
               <Route
-                path="/blogs-detail/:slug"
+                path="/blogs/:id"
+                element={
+                  <PageLayout title="Blog Detail">
+                    <BlogDetail />
+                  </PageLayout>
+                }
+              />
+              <Route
+                path="/blog-detail/:id"
                 element={
                   <PageLayout title="Blog Detail">
                     <BlogDetail />

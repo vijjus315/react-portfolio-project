@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Link } from 'react-router-dom';
 import '../styles/bootstrap';
 
 import LoginModal from '../components/login.jsx';
@@ -566,7 +567,7 @@ const Home = () => {
                                         <p className="f18 fw-400 mb-1 d-flex align-items-center gap-2"><img src={`${window.location.origin}/webassets/img/calender.svg`} />May 31, 2025</p>
                                         <h4 className="one-line textcolor" style={{ fontSize: "1.25rem"}}>How to Turn Your Driveway into a Portable Pickleball Court</h4>
                                         <span className=" four-line mb-4 padding-blog " dangerouslySetInnerHTML={{ __html: `<p><b>Transforming your driveway into a portable pickleball court</b> for driveway games is easier than you might think. Whether you’re hosting weekend matches with friends, practicing your dink shots solo, or laying the foundation for a neighborhood pickleball league, a temporary <b><a href=\"https://www.portacourts.com/product-detail/premium-pickleball-court\">pickleball court setup</a></b> turns ordinary concrete into an action-packed arena. In this guide, we’ll  read no surface-level advice here into each step, tool, and technique you need to build a reliable, safe, and hack-proof portable court.</p>` }} />
-                                        <a className="black-btn " href="https://www.portacourts.com/blog-detail/how-to-turn-your-driveway-into-a-portable-pickleball-court">Read More</a>
+                                        <Link className="black-btn " to="/blogs/15">Read More</Link>
                                     </div>
                                 </div>
                             </div>
@@ -582,7 +583,7 @@ const Home = () => {
                                         <p className="f18 fw-400 mb-1 d-flex align-items-center gap-2"><img src={`${window.location.origin}/webassets/img/calender.svg`} />May 28, 2025</p>
                                         <h4 className="one-line textcolor" style={{ fontSize: "1.25rem"}}>Portable vs Permanent Pickleball Courts: Which One to Choose?</h4>
                                         <span className=" four-line mb-4 padding-blog " dangerouslySetInnerHTML={{ __html: `<p>When it comes to bringing pickleball to your home, community center, or recreational facility, one of the first and biggest decisions you’ll face is whether to invest in a <b>portable vs permanent pickleball court</b>. Both options have their unique advantages, drawbacks, and technical considerations. In this in-depth guide, we’ll dive deep into the terminology, installation processes, performance characteristics, and cost implications of both permanent and <b><a href=\"https://www.portacourts.com/product-detail/premium-pickleball-court\">portable pickleball courts</a></b>. By the end, you’ll be armed with the industry-specific insights you need to make an informed decision.</p>` }} />
-                                        <a className="black-btn " href="https://www.portacourts.com/blog-detail/portable-vs-permanent-pickleball-courts">Read More</a>
+                                        <Link className="black-btn " to="/blogs/10">Read More</Link>
                                     </div>
                                 </div>
                             </div>
@@ -598,7 +599,7 @@ const Home = () => {
                                         <p className="f18 fw-400 mb-1 d-flex align-items-center gap-2"><img src={`${window.location.origin}/webassets/img/calender.svg`} />May 26, 2025</p>
                                         <h4 className="one-line textcolor" style={{ fontSize: "1.25rem"}}>How to Set Up a Portable Pickleball Court in 20 Minutes</h4>
                                         <span className=" four-line mb-4 padding-blog " dangerouslySetInnerHTML={{ __html: `<ul><li><span style=\"font-size: 1rem;\">If you're a pickleball enthusiast who's always on the move or simply short of space, a <b><a href=\"https://www.portacourts.com/product-detail/premium-pickleball-court\">DIY portable pickleball court</a></b> could be the ultimate game-changer. Whether you're at a local park, driveway, or gymnasium, being able to set up a fully functional court in under 20 minutes means more play, less prep. In this in-depth guide, we'll break down everything you need to know: from selecting the <b>best portable pickleball net</b>, laying out accurate <b>pickleball boundary lines portable</b> options, to choosing from top-rated <b>portable pickleball court kits</b>.</span></li></ul>` }} />
-                                        <a className="black-btn " href="https://www.portacourts.com/blog-detail/how-to-set-up-a-portable-pickleball-court-in-20-minutes">Read More</a>
+                                        <Link className="black-btn " to="/blogs/15">Read More</Link>
                                     </div>
                                 </div>
                             </div>
@@ -623,7 +624,7 @@ const Home = () => {
                                             <h4 className="one-line textcolor">{b.title}
                                             </h4>
                                             <span className=" four-line mb-4 padding-blog " dangerouslySetInnerHTML={{ __html: b.description }} />
-                                            <a className="black-btn " href={`/blog-detail/${b.slug}`}>Read More</a>
+                                            <Link className="black-btn " to={`/blogs/${b.id}`}>Read More</Link>
                                         </div>
                                     </div>
                                 </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { createRoot } from "react-dom/client";       
+import { createRoot } from "react-dom/client";
+import { useNavigate } from "react-router-dom";       
 import LoginModal from '../components/login.jsx';
 import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
@@ -14,6 +15,7 @@ const Blog = () => {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -72,8 +74,8 @@ const Blog = () => {
 
   const openBlogDetail = (post) => {
     setSelectedBlog(post);
-    // responsible for showing /blog-detail in url.
-    window.history.pushState({}, "", "/blog-detail");
+    // Navigate to blog detail page using React Router
+    navigate(`/blog-detail/${post.id}`);
   };
 
   return (
@@ -254,6 +256,7 @@ const Blog = () => {
   );
 };
 
+// Export the component for use in router
 export default Blog;
 
 // Auto-mount
