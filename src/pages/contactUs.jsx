@@ -1,13 +1,120 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client';
 import LoginModal from '../components/login.jsx';
 import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import Toast, { ToastContainer } from '../components/Toast.jsx';
+import { useToast } from '../customHooks/useToast.jsx';
 import '../styles/bootstrap';
 
 const ContactUs = () => {
+  const [formData, setFormData] = useState({
+    first_name: '',
+    email: '',
+    phone: '',
+    message: '',
+    subjects: ''
+  });
+  
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+  
+  // Initialize toast hook
+  const { toasts, removeToast, showSuccess, showError } = useToast();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = 'First name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+    
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    
+    if (!formData.subjects.trim()) {
+      newErrors.subjects = 'Subject is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    
+    try {
+      const response = await fetch('http://18.188.69.99:4235/api/v1/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setSubmitStatus('success');
+        showSuccess("Success! Your message has been sent successfully. We'll get back to you soon!");
+        setFormData({
+          first_name: '',
+          email: '',
+          phone: '',
+          message: '',
+          subjects: ''
+        });
+      } else {
+        setSubmitStatus('error');
+        showError('There was a problem sending your message. Please try again.');
+        console.error('Contact form submission error:', data);
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+      showError('There was a problem sending your message. Please try again.');
+      console.error('Contact form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <>
     <section className="contact-wrapper">
@@ -85,7 +192,7 @@ const ContactUs = () => {
             <div className="container">
                 <div className="sign-up-form">
                     <div className="form-contact">
-                        <form id="contactForm" noValidate="novalidate">
+                        <form id="contactForm" onSubmit={handleSubmit} noValidate="novalidate">
                             <input
                                 type="hidden"
                                 name="_token"
@@ -99,12 +206,17 @@ const ContactUs = () => {
                                         <input
                                             type="text"
                                             name="first_name"
+                                            value={formData.first_name}
+                                            onChange={handleInputChange}
                                             placeholder="Enter here"
                                             className="contact-input form-control text-white"
                                             style={{ border: 'none',outline: 'none',boxShadow: 'none',backgroundColor: 'transparent', borderBottom: '1px solid #ccc', borderRadius: '0'}}
                                         />
-                                        <span className="text-danger error-message" id="error-first_name"
-                                        ></span>
+                                        {errors.first_name && (
+                                            <span className="text-danger error-message">
+                                                {errors.first_name}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="col-lg-6 mb-5">
@@ -113,38 +225,55 @@ const ContactUs = () => {
                                         <input
                                             type="text"
                                             name="subjects"
+                                            value={formData.subjects}
+                                            onChange={handleInputChange}
                                             placeholder="Enter here"
                                             className="contact-input form-control text-white"
-                                            // style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }}
                                             style={{ border: 'none',outline: 'none',boxShadow: 'none',backgroundColor: 'transparent', borderBottom: '1px solid #ccc', borderRadius: '0'}}
                                         />
-                                        <span className="text-danger error-message" id="error-subjects"></span>
+                                        {errors.subjects && (
+                                            <span className="text-danger error-message">
+                                                {errors.subjects}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="col-lg-6 mb-5">
                                     <div className="form-group">
                                         <label className="primary-theme">Email</label>
                                         <input
-                                            type="text"
+                                            type="email"
                                             name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
                                             placeholder="Enter here"
                                             className="contact-input form-control text-white"
                                             style={{ border: 'none',outline: 'none',boxShadow: 'none',backgroundColor: 'transparent', borderBottom: '1px solid #ccc', borderRadius: '0'}}
                                         />
-                                        <span className="text-danger error-message" id="error-email"></span>
+                                        {errors.email && (
+                                            <span className="text-danger error-message">
+                                                {errors.email}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="col-lg-6 mb-5">
                                     <div className="form-group">
                                         <label className="primary-theme">Phone Number</label>
                                         <input
-                                            type="text"
+                                            type="tel"
                                             name="phone"
+                                            value={formData.phone}
+                                            onChange={handleInputChange}
                                             placeholder="Enter here"
                                             className="contact-input form-control text-white"
                                             style={{ border: 'none',outline: 'none',boxShadow: 'none',backgroundColor: 'transparent', borderBottom: '1px solid #ccc', borderRadius: '0'}}
                                         />
-                                        <span className="text-danger error-message" id="error-phone"></span>
+                                        {errors.phone && (
+                                            <span className="text-danger error-message">
+                                                {errors.phone}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="col-lg-12 mb-5">
@@ -152,17 +281,29 @@ const ContactUs = () => {
                                         <label className="primary-theme">Your message</label>
                                         <textarea
                                             name="message"
+                                            value={formData.message}
+                                            onChange={handleInputChange}
                                             placeholder="Enter here"
                                             className="contact-input form-control text-white"
                                             style={{ border: 'none',outline: 'none',boxShadow: 'none',backgroundColor: 'transparent', borderBottom: '1px solid #ccc', borderRadius: '0'}}
+                                            rows="5"
                                         ></textarea>
-                                        <span className="text-danger error-message" id="error-message"></span>
+                                        {errors.message && (
+                                            <span className="text-danger error-message">
+                                                {errors.message}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <button type="submit" className="green-btn">
-                                        Send Message
+                                    <button 
+                                        type="submit" 
+                                        className="green-btn"
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? 'Sending...' : 'Send Message'}
                                     </button>
+                                    
                                 </div>
                             </div>
                         </form>
@@ -363,6 +504,9 @@ const ContactUs = () => {
      <VerifyEmailModal />
      <ChangePasswordModal />
      <EditProfileModal />
+     
+     {/* Toast Container */}
+     <ToastContainer toasts={toasts} removeToast={removeToast} />
     </>
 
   )
