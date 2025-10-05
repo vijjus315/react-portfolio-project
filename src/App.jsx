@@ -22,6 +22,7 @@ import BlogDetail from "./pages/blogDetail.jsx";
 import Cart from "./pages/cart.jsx";
 import Wishlist from "./pages/wishlist.jsx";
 import MyOrders from "./pages/myOrders.jsx";
+import OrderDetail from "./pages/orderDetail.jsx";
 import Address from "./pages/address.jsx";
 import TrackOrder from "./pages/trackOrder.jsx";
 
@@ -159,6 +160,14 @@ function App() {
                 element={
                   <PageLayout title="">
                     <MyOrders />
+                  </PageLayout>
+                }
+              />
+              <Route
+                path="/order-detail/:id"
+                element={
+                  <PageLayout title="">
+                    <OrderDetail />
                   </PageLayout>
                 }
               />

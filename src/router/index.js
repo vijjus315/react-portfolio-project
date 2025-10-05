@@ -9,6 +9,7 @@ import { About } from '../pages/About'
 import { NotFound } from '../pages/NotFound'
 import BlogDetail from '../pages/blogDetail'
 import Blog from '../pages/blog'
+import OrderDetail from '../pages/orderDetail'
 
 /**
  * Application routes configuration
@@ -38,6 +39,11 @@ export const router = createBrowserRouter([
   {
     path: '/blog-detail/:id',
     element: <BlogDetail />,
+    errorElement: <NotFound />
+  },
+  {
+    path: '/order-detail/:id',
+    element: <OrderDetail />,
     errorElement: <NotFound />
   },
   {

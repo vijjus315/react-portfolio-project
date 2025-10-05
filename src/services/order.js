@@ -28,8 +28,17 @@ export const getMyOrders = async (page = 1) => {
 export const getOrderDetail = async (orderId) => {
     try {
         console.log('🔍 API: Fetching order details for ID:', orderId);
-        const response = await apiClient.get(`/order-detail/${orderId}`);
+        const response = await apiClient.get(`/order/order-details?order_id=${orderId}`);
         console.log('✅ API: Order details fetched successfully', response.data);
+        
+        // Transform the response to match the expected structure
+        if (response.data.success && response.data.body) {
+            return {
+                success: true,
+                data: response.data.body
+            };
+        }
+        
         return response.data;
     } catch (error) {
         console.error('❌ API: Error fetching order details:', error);
