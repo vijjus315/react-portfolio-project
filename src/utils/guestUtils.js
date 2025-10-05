@@ -82,6 +82,15 @@ export const handleOrderCompletion = () => {
   try {
     // Only generate new guest ID if user is a guest
     if (isGuestUser()) {
+      // Clear all cart-related localStorage for guest users
+      try {
+        localStorage.removeItem('cart_items');
+        localStorage.removeItem('cart_count');
+        console.log('🛒 Cleared cart localStorage for guest user');
+      } catch (storageError) {
+        console.error('⚠️ Failed to clear cart localStorage:', storageError);
+      }
+      
       const newGuestId = generateNewGuestId();
       console.log('🛒 Order completed - new guest session started:', newGuestId);
       
@@ -89,6 +98,9 @@ export const handleOrderCompletion = () => {
       window.dispatchEvent(new CustomEvent('guestSessionReset', {
         detail: { newGuestId }
       }));
+      
+      // Dispatch cart update event to update header
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
       
       return newGuestId;
     } else {
@@ -112,5 +124,28 @@ export const isGuestUser = () => {
   } catch (error) {
     console.error('Error checking guest status:', error);
     return true; // Assume guest if error
+  }
+};
+
+/**
+ * Clear cart localStorage for guest users
+ * This ensures that when a guest user places an order, their cart is completely cleared
+ */
+export const clearGuestCart = () => {
+  try {
+    if (isGuestUser()) {
+      localStorage.removeItem('cart_items');
+      localStorage.removeItem('cart_count');
+      console.log('🛒 Cleared guest cart localStorage');
+      
+      // Dispatch cart update event to update header
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error clearing guest cart:', error);
+    return false;
   }
 };

@@ -86,7 +86,6 @@ const Blog = () => {
           {!selectedBlog ? (
             <>
               <div className="text-center">
-                {/* size increase through fontsize */}
                 <h1 className="mb-1" style={{ fontSize: "3.75rem" }}>Porta Courts Blogs</h1>
                 <p className="mb-5 f18 text-grey">
                   Stay updated with the latest trend!
@@ -118,7 +117,7 @@ const Blog = () => {
                 <>
                   {/* Top 3 Blogs - 3 Column Layout */}
                   {blogPost.length > 0 && (
-                    <div className="row mb-5">
+                    <div className="row mb-5" style={{ marginBottom: "4rem" }}>
                       {blogPost.slice(0, 3).map((post) => (
                         <div
                           className="col-md-6 col-lg-4 mb-4 mb-lg-0"
@@ -141,7 +140,7 @@ const Blog = () => {
                                 <span className="f16 black-grey fw-500">Created</span>
                                 <span className="f14 text-grey">- {post.date}</span>
                               </div>
-                              <h4 className="black-grey pb-3 mb-0 oneline-blog" style={{ fontSize: "1.25rem"}}>
+                              <h4 className="black-grey pb-3 mb-0 oneline-blog" style={{ fontSize: "1.25rem" }}>
                                 {post.title}
                               </h4>
                               <div className="four-line mb-4 padding-blog text-grey fw-400">
@@ -170,7 +169,7 @@ const Blog = () => {
 
                   {/* Remaining Blogs - 2 Column Layout */}
                   {blogPost.length > 3 && (
-                    <div className="row">
+                    <div className="row" style={{ marginTop: "2rem" }}>
                       {blogPost.slice(3).map((post) => (
                         <div
                           className="col-lg-6 mb-4"

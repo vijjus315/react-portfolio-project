@@ -9,7 +9,7 @@ import ForgetPasswordModal from '../components/forgetPassword.jsx';
 import { getCartItems, updateCartItemQuantity, removeCartItem, clearCart } from '../services/cart.js';
 import { checkout } from '../services/order.js';
 import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
-import { isGuestUser, handleOrderCompletion } from '../utils/guestUtils.js';
+import { isGuestUser, handleOrderCompletion, clearGuestCart } from '../utils/guestUtils.js';
 import '../styles/bootstrap';
 
 
@@ -86,6 +86,12 @@ const Cart = () => {
         try {
           await clearCart();
           console.log('🛒 Cart cleared successfully after order placement');
+          
+          // Clear localStorage for guest users
+          if (isGuestUser()) {
+            clearGuestCart();
+            console.log('🛒 Guest cart localStorage cleared');
+          }
           
           // Update local state and storage
           setCartItems([]);

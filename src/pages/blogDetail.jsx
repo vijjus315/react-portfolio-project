@@ -74,22 +74,10 @@ const BlogDetail = () => {
         <div className="container">
           <div className="row">
             <div className="col-12 text-center">
-              <div className="spinner-border" role="status">
+              <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
-              <p>Loading blog ID: {id}</p>
-              <button 
-                onClick={() => {
-                  console.log('Manual test - fetching blog 15');
-                  fetch('http://18.188.69.99:4235/api/v1/blogs/15')
-                    .then(res => res.json())
-                    .then(data => console.log('Manual test result:', data))
-                    .catch(err => console.error('Manual test error:', err));
-                }}
-                style={{ marginTop: '10px', padding: '10px' }}
-              >
-                Test API Call (Blog 15)
-              </button>
+              <p className="mt-3">Loading blog...</p>
             </div>
           </div>
         </div>
@@ -123,8 +111,8 @@ const BlogDetail = () => {
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <h2 className="fw-400 mb-4">{blog.title}</h2>
-            <div className="author-section mb-4 d-flex justify-content-between align-items-center">
+            <h2 className="fw-400 mb-2">{blog.title}</h2>
+            <div className="author-section mb-3 d-flex justify-content-between align-items-center">
               {/* Author Info */}
               <div className="author-info d-flex align-items-center">
                 <div className="position-relative me-3">
@@ -149,7 +137,7 @@ const BlogDetail = () => {
               </div>
             </div>
 
-            <div className="blog-detailbanner mb-4">
+            <div className="blog-detailbanner mb-3">
               <img src={blog.image_url} className="blogdetail-fluid" alt={blog.title} />
             </div>
 
@@ -161,7 +149,7 @@ const BlogDetail = () => {
         </div>
 
         {/* Comments Section */}
-        <div className="row mt-5">
+        <div className="row mt-4">
           <div className="col-12 col-lg-9 mb-3">
             <div className="row align-items-center">
               <div className="col-6">
