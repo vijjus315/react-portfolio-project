@@ -31,6 +31,9 @@ const Cart = () => {
       cartCountElement.textContent = totalItems.toString();
     }
     
+    // Dispatch cart update event to notify other components (like header)
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+    
     console.log('🛒 Updated cart count in storage and header:', totalItems);
   };
 
