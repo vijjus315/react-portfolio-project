@@ -8,6 +8,7 @@ import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import { getMyOrders } from '../services/order.js';
+import { getImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
 
 const MyOrders = () => {
@@ -200,58 +201,81 @@ const MyOrders = () => {
                                     <div className="table-responsive table-height ">
                                         <table className=" w-100 table cart-table my-order-table">
                                             <tbody style={{ verticalAlign: 'middle' }} className="order-tbody my-order-tbody">
-                                                {orders.map((singleitem) => (
-                                                    <tr key={singleitem.id} style={{ borderRadius: '10px', height: '60px', borderStyle: 'none !important' }} className="bg-white border-radius-tr">
-                                                        <td className="py-3" style={{ textAlign: 'start', fontSize: '16px', fontStyle: 'normal', fontWeight: '500' }}>
-                                                            <div className="d-flex justify-content-start gap-3 cilent-profile-column">
-                                                                <img 
-                                                                    src={`/storage/${singleitem.product?.product_images?.[0]?.image_url}`} 
-                                                                    className="client-profile cart-client-profile"
-                                                                    alt={singleitem.product?.title}
-                                                                />
-                                                                <div>
-                                                                    <p className="font-oswald f20 fw-400 one-line text-black mb-0 cart-item-title">
-                                                                        {singleitem.product?.title}
-                                                                    </p>
-                                                                    <div className="d-flex align-items-center gap-2">
-                                                                        <p className="qty-btn font-Yantramanav mt-2">Qty: {singleitem.qty}</p>
-                                                                        <p className="qty-btn font-Yantramanav mt-2">
-                                                                            Size: {singleitem.variant?.length}ftX{singleitem.variant?.width}ftx{singleitem.variant?.thickness}mm
+                                                {orders.map((singleitem) => {
+                                                    // Construct image URL with better fallback handling
+                                                    let imageUrl = `${window.location.origin}/webassets/img/placeholder.jpg`; // Default fallback
+                                                    
+                                                    if (singleitem.products?.product_images && singleitem.products.product_images.length > 0) {
+                                                        const originalImageUrl = singleitem.products.product_images[0].image_url;
+                                                        if (originalImageUrl) {
+                                                            imageUrl = getImageUrl(originalImageUrl);
+                                                        }
+                                                    }
+                                                    
+                                                    // Calculate total price
+                                                    const unitPrice = parseFloat(singleitem.product_variants?.discounted_price || singleitem.price);
+                                                    const totalPrice = unitPrice * singleitem.qty;
+                                                    
+                                                    return (
+                                                        <tr key={singleitem.id} style={{ borderRadius: '10px', height: '60px', borderStyle: 'none !important' }} className="bg-white border-radius-tr">
+                                                            <td className="py-3" style={{ textAlign: 'start', fontSize: '16px', fontStyle: 'normal', fontWeight: '500' }}>
+                                                                <div className="d-flex justify-content-start gap-3 cilent-profile-column">
+                                                                    <img 
+                                                                        src={imageUrl}
+                                                                        className="client-profile cart-client-profile"
+                                                                        alt={singleitem.products?.title}
+                                                                        style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                                                                        onError={(e) => {
+                                                                            console.error('🖼️ Image failed to load:', imageUrl);
+                                                                            // Try fallback URL
+                                                                            const fallbackUrl = `https://www.portacourts.com/storage/images/placeholder.jpg`;
+                                                                            if (e.target.src !== fallbackUrl) {
+                                                                                e.target.src = fallbackUrl;
+                                                                            } else {
+                                                                                e.target.src = `${window.location.origin}/webassets/img/placeholder.jpg`;
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    <div>
+                                                                        <p className="font-oswald f20 fw-400 one-line text-black mb-0 cart-item-title">
+                                                                            {singleitem.products?.title}
                                                                         </p>
+                                                                        <div className="d-flex align-items-center gap-2">
+                                                                            <p className="qty-btn font-Yantramanav mt-2">Qty: {singleitem.qty}</p>
+                                                                            <p className="qty-btn font-Yantramanav mt-2">
+                                                                                Size: {singleitem.product_variants?.length}ft X {singleitem.product_variants?.width}ft X {singleitem.product_variants?.thickness}mm
+                                                                            </p>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-3" style={{ textAlign: 'center', fontSize: '16px', fontStyle: 'normal', fontWeight: '600' }}>
-                                                            <span className="primary-theme item-price">
-                                                                $ {singleitem.discount_price * singleitem.qty}
-                                                            </span>
-                                                        </td>
-                                                        <td className="py-3" style={{ textAlign: 'center', fontSize: '16px', fontStyle: 'normal', fontWeight: '600' }}>
-                                                            {singleitem.delivertack && (
-                                                                <h6 className="font-Yantramanav sky-blue-text mb-0">
-                                                                    Delivered on {formatDate(singleitem.delivertack.created_at)}
-                                                                </h6>
-                                                            )}
-                                                            <p className="mb-0 fw-400 thank-text font-Yantramanav lh-base">
-                                                                Your Item has been {getStatusText(singleitem.status)}
-                                                            </p>
-                                                            {singleitem.delivertack && (
+                                                            </td>
+                                                            <td className="py-3" style={{ textAlign: 'center', fontSize: '16px', fontStyle: 'normal', fontWeight: '600' }}>
+                                                                <span className="primary-theme item-price">
+                                                                    ${totalPrice.toFixed(2)}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-3" style={{ textAlign: 'center', fontSize: '16px', fontStyle: 'normal', fontWeight: '600' }}>
+                                                                <p className="mb-0 fw-400 thank-text font-Yantramanav lh-base">
+                                                                    Your Item has been {getStatusText(singleitem.status)}
+                                                                </p>
+                                                                <p className="mb-0 fw-400 thank-text font-Yantramanav lh-base text-muted">
+                                                                    Ordered on {formatDate(singleitem.created_at)}
+                                                                </p>
                                                                 <a href={`/product-detail/${singleitem.product_id}`}>
                                                                     <span className="mb-0 fw-400 thank-text font-Yantramanav primary-theme">
                                                                         <i className="fa fa-star me-2" aria-hidden="true"></i>
-                                                                        Rate & Review Product delivered
+                                                                        Rate & Review Product
                                                                     </span>
                                                                 </a>
-                                                            )}
-                                                        </td>
-                                                        <td className="py-3" style={{ textAlign: 'end', fontSize: '16px', fontStyle: 'normal', fontWeight: '600' }}>
-                                                            <a href={`/order-detail/${singleitem.id}`} className="rounded-pill green-btn">
-                                                                View Details
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                ))}
+                                                            </td>
+                                                            <td className="py-3" style={{ textAlign: 'end', fontSize: '16px', fontStyle: 'normal', fontWeight: '600' }}>
+                                                                <a href={`/order-detail/${singleitem.id}`} className="rounded-pill green-btn">
+                                                                    View Details
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })}
                                             </tbody>
                                         </table>
                                     </div>

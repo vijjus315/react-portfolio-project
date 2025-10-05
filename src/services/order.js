@@ -7,6 +7,16 @@ export const getMyOrders = async (page = 1) => {
         console.log('🔍 API: Fetching user orders');
         const response = await apiClient.get(`/order/my-order-list`);
         console.log('✅ API: Orders fetched successfully', response.data);
+        
+        // Transform the response to match the expected structure
+        if (response.data.success && response.data.body && response.data.body.item) {
+            return {
+                success: true,
+                data: response.data.body.item,
+                pagination: null // API doesn't seem to return pagination data
+            };
+        }
+        
         return response.data;
     } catch (error) {
         console.error('❌ API: Error fetching orders:', error);
