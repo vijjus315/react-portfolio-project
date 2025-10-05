@@ -87,10 +87,18 @@ const Cart = () => {
           await clearCart();
           console.log('🛒 Cart cleared successfully after order placement');
           
-          // Clear localStorage for guest users
+          // Clear localStorage for both guest and authenticated users
           if (isGuestUser()) {
             clearGuestCart();
             console.log('🛒 Guest cart localStorage cleared');
+          } else {
+            // Clear localStorage for authenticated users as well
+            localStorage.removeItem('cart_items');
+            localStorage.removeItem('cart_count');
+            console.log('🛒 Authenticated user cart localStorage cleared');
+            
+            // Dispatch cart update event to update header
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
           }
           
           // Update local state and storage

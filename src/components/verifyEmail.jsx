@@ -142,6 +142,15 @@ const VerifyEmailModal = () => {
                         return;
                     }
                     
+                    // Clear localStorage cart data before loading user's cart from API
+                    try {
+                        localStorage.removeItem('cart_items');
+                        localStorage.removeItem('cart_count');
+                        console.log('🛒 Cleared localStorage cart data on OTP verification');
+                    } catch (error) {
+                        console.error('⚠️ Failed to clear localStorage cart data:', error);
+                    }
+                    
                     // Use utility function to update user data and dispatch login event
                     updateUserDataAfterOTPVerification(updatedUserData);
                     

@@ -155,6 +155,16 @@ const SignupModal = () => {
         checkAndOpenOTPVerification(userData, userData.email);
       } else {
         console.log('✅ User OTP is already verified, proceeding with login');
+        
+        // Clear localStorage cart data before loading user's cart from API
+        try {
+          localStorage.removeItem('cart_items');
+          localStorage.removeItem('cart_count');
+          console.log('🛒 Cleared localStorage cart data on signup');
+        } catch (error) {
+          console.error('⚠️ Failed to clear localStorage cart data:', error);
+        }
+        
         // Dispatch custom event for header update
         window.dispatchEvent(new CustomEvent('userLoggedIn'));
 

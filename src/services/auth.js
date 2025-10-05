@@ -67,8 +67,23 @@ export const isAuthenticated = () => {
 };
 
 export const clearAuthData = () => {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
+    // Clear all localStorage data for a fresh start
+    try {
+        localStorage.clear();
+        console.log('🛒 Cleared all localStorage data on logout for fresh start');
+    } catch (error) {
+        console.error('⚠️ Failed to clear localStorage:', error);
+        // Fallback: clear specific items individually
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user_data');
+        localStorage.removeItem('cart_items');
+        localStorage.removeItem('cart_count');
+        localStorage.removeItem('wishlist_count');
+        localStorage.removeItem('guest_id');
+        localStorage.removeItem('loginModalClosed');
+        localStorage.removeItem('signupModalClosed');
+        console.log('🛒 Cleared specific localStorage items as fallback');
+    }
 };
 
 export default { login, signup, verifyOtp, resendOtp, forgotPassword, resetPassword, changePassword, updateProfile, logout, getAuthToken, getUserData, isAuthenticated, clearAuthData };

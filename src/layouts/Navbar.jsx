@@ -58,15 +58,22 @@ const Header = () => {
                 setCartItemCount(totalItems);
                 // Save cart count to localStorage for persistence across page navigation
                 localStorage.setItem('cart_count', totalItems.toString());
+                
+                // Store cart items in localStorage for cart page to access
+                localStorage.setItem('cart_items', JSON.stringify(response.body.cartItems));
+                
                 console.log('🛒 Updated cart count from API:', totalItems, isGuestUser() ? '(guest)' : '(authenticated)');
+                console.log('🛒 Cart items stored in localStorage:', response.body.cartItems.length, 'items');
             } else {
                 setCartItemCount(0);
                 localStorage.setItem('cart_count', '0');
+                localStorage.setItem('cart_items', JSON.stringify([]));
             }
         } catch (error) {
             console.error('Error fetching cart count:', error);
             setCartItemCount(0);
             localStorage.setItem('cart_count', '0');
+            localStorage.setItem('cart_items', JSON.stringify([]));
         }
     };
 
@@ -220,8 +227,16 @@ const Header = () => {
         setIsLoggedIn(false);
         setUserData(null);
         setIsDropdownOpen(false);
-        // Dispatch custom event for other components
+        
+        // Reset cart and wishlist counts
+        setCartItemCount(0);
+        setWishlistCount(0);
+        
+        // Dispatch custom events for other components
         window.dispatchEvent(new CustomEvent('userLoggedOut'));
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+        window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+        
         // Redirect to home page
         window.location.href = '/';
     };

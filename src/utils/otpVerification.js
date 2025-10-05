@@ -149,9 +149,23 @@ export const clearAuthDataOnOTPCancel = () => {
         // Clear the global flag
         window.otpVerificationInProgress = false;
         
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user_data');
-        console.log('✅ Authentication data cleared due to OTP verification cancellation');
+        // Clear all localStorage data for a fresh start
+        try {
+            localStorage.clear();
+            console.log('✅ All localStorage data cleared due to OTP verification cancellation');
+        } catch (error) {
+            console.error('⚠️ Failed to clear localStorage:', error);
+            // Fallback: clear specific items individually
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            localStorage.removeItem('cart_items');
+            localStorage.removeItem('cart_count');
+            localStorage.removeItem('wishlist_count');
+            localStorage.removeItem('guest_id');
+            localStorage.removeItem('loginModalClosed');
+            localStorage.removeItem('signupModalClosed');
+            console.log('✅ Cleared specific localStorage items as fallback');
+        }
         
         // Ensure page becomes active
         window.focus();
