@@ -225,8 +225,8 @@ const Reviews = ({ productRatings = [], productId = null }) => {
                       {[1, 2, 3, 4, 5].map((val) => (
                         <i
                           key={val}
-                          className={`cus-star-icon fa fa-star ${
-                            rating >= val ? "fillstar" : "unfillstar"
+                          className={`cus-star-icon fa ${
+                            rating >= val ? "fa-star fillstar" : "fa-star-o unfillstar"
                           }`}
                           data-value={val}
                           aria-hidden="true"
