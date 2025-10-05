@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { isAuthenticated, getUserData, clearAuthData } from '../services/auth.js';
 import { getCartItems } from '../services/cart.js';
 import { getWishlistItems } from '../services/wishlist.js';
+import { getOrCreateGuestId, isGuestUser } from '../utils/guestUtils.js';
 import "../styles/bootstrap.js"
 
 //! login and sign up api works perfectly.
@@ -50,38 +51,14 @@ const Header = () => {
     // Function to fetch and update cart count
     const updateCartCount = async () => {
         try {
-            // Check if user is logged in
-            const authToken = localStorage.getItem('auth_token');
-            const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
-            
-            if (!isLoggedIn) {
-                // For guest users, get count from localStorage
-                const localCartItems = localStorage.getItem('cart_items');
-                if (localCartItems) {
-                    try {
-                        const parsedItems = JSON.parse(localCartItems);
-                        const totalItems = parsedItems.reduce((total, item) => total + item.quantity, 0);
-                        setCartItemCount(totalItems);
-                        localStorage.setItem('cart_count', totalItems.toString());
-                        console.log('🛒 Updated cart count from localStorage (guest):', totalItems);
-                        return;
-                    } catch (e) {
-                        console.error('Error parsing localStorage cart items:', e);
-                    }
-                }
-                setCartItemCount(0);
-                localStorage.setItem('cart_count', '0');
-                return;
-            }
-            
-            // For logged-in users, fetch from API
+            // For both guest and authenticated users, fetch from API
             const response = await getCartItems();
             if (response.success && response.body && response.body.cartItems) {
                 const totalItems = response.body.cartItems.reduce((total, item) => total + item.quantity, 0);
                 setCartItemCount(totalItems);
                 // Save cart count to localStorage for persistence across page navigation
                 localStorage.setItem('cart_count', totalItems.toString());
-                console.log('🛒 Updated cart count from API (logged in):', totalItems);
+                console.log('🛒 Updated cart count from API:', totalItems, isGuestUser() ? '(guest)' : '(authenticated)');
             } else {
                 setCartItemCount(0);
                 localStorage.setItem('cart_count', '0');

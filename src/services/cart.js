@@ -1,28 +1,40 @@
 import { apiClient } from "./client.js";
 import { isAuthenticated } from "./auth.js";
+import { getOrCreateGuestId, isGuestUser } from "../utils/guestUtils.js";
 
 /**
- * Fetch cart items for the authenticated user only
+ * Fetch cart items for both authenticated users and guests
  * @returns {Promise<Object>} API response with cart items
  */
 export const getCartItems = async () => {
-  // Check if user is authenticated first
-  if (!isAuthenticated()) {
-    console.log("👤 User not authenticated - returning empty cart");
-    return {
-      success: true,
-      message: "User not authenticated",
-      body: { cartItems: [] }
-    };
-  }
-
   try {
-    console.log("📋 API: Fetching cart items (READ ONLY) via /cart/get-cart");
-    const response = await apiClient.get("/cart/get-cart");
-    console.log("📋 API: Cart items fetched successfully");
-    return response.data;
+    if (isGuestUser()) {
+      // For guest users, get cart items using guest_id
+      const guestId = getOrCreateGuestId();
+      console.log("📋 API: Fetching cart items for guest via /cart/get-cart", { guest_id: guestId });
+      const response = await apiClient.get(`/cart/get-cart?guest_id=${guestId}`);
+      console.log("📋 API: Guest cart items fetched successfully");
+      return response.data;
+    } else {
+      // For authenticated users, use existing flow
+      console.log("📋 API: Fetching cart items for authenticated user via /cart/get-cart");
+      const response = await apiClient.get("/cart/get-cart");
+      console.log("📋 API: Authenticated user cart items fetched successfully");
+      return response.data;
+    }
   } catch (error) {
     console.error("❌ API: Error fetching cart items:", error);
+    
+    // If it's a 401 error and user is not logged in, return empty cart for guest users
+    if (error.status === 401 && isGuestUser()) {
+      console.log("👤 Guest user - returning empty cart");
+      return {
+        success: true,
+        message: "Guest user - empty cart",
+        body: { cartItems: [] }
+      };
+    }
+    
     throw error;
   }
 };
@@ -40,28 +52,33 @@ export const updateCartItemQuantity = async (
   variantId
 ) => {
   try {
-    const response = await apiClient.post("/cart/update-cart", {
-      product_id: productId,
+    const requestData = {
       quantity: quantity,
       variant_id: variantId,
-    });
+    };
+
+    // Add guest_id for guest users
+    if (isGuestUser()) {
+      const guestId = getOrCreateGuestId();
+      requestData.guest_id = guestId;
+      console.log("📋 API: Updating cart quantity for guest", { guest_id: guestId, quantity, variant_id: variantId });
+    } else {
+      console.log("📋 API: Updating cart quantity for authenticated user", { quantity, variant_id: variantId });
+    }
+
+    const response = await apiClient.post("/cart/update-cart", requestData);
     return response.data;
   } catch (error) {
     console.error("Error updating cart item quantity:", error);
     
     // If it's a 401 error and user is not logged in, return success for guest users
-    if (error.status === 401) {
-      const authToken = localStorage.getItem('auth_token');
-      const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
-      
-      if (!isLoggedIn) {
-        console.log("👤 Guest user - quantity update handled locally");
-        return {
-          success: true,
-          message: "Quantity updated (guest mode)",
-          body: { cartItems: [] }
-        };
-      }
+    if (error.status === 401 && isGuestUser()) {
+      console.log("👤 Guest user - quantity update handled locally");
+      return {
+        success: true,
+        message: "Quantity updated (guest mode)",
+        body: { cartItems: [] }
+      };
     }
     
     throw error;
@@ -75,26 +92,30 @@ export const updateCartItemQuantity = async (
  */
 export const removeCartItem = async (variantId) => {
   try {
-    const response = await apiClient.get(
-      `/cart/remove-from-cart?variant_id=${variantId}`
-    );
+    let url = `/cart/remove-from-cart?variant_id=${variantId}`;
+    
+    // Add guest_id for guest users
+    if (isGuestUser()) {
+      const guestId = getOrCreateGuestId();
+      url += `&guest_id=${guestId}`;
+      console.log("📋 API: Removing cart item for guest", { guest_id: guestId, variant_id: variantId });
+    } else {
+      console.log("📋 API: Removing cart item for authenticated user", { variant_id: variantId });
+    }
+
+    const response = await apiClient.get(url);
     return response.data;
   } catch (error) {
     console.error("Error removing cart item:", error);
     
     // If it's a 401 error and user is not logged in, return success for guest users
-    if (error.status === 401) {
-      const authToken = localStorage.getItem('auth_token');
-      const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
-      
-      if (!isLoggedIn) {
-        console.log("👤 Guest user - item removal handled locally");
-        return {
-          success: true,
-          message: "Item removed (guest mode)",
-          body: { cartItems: [] }
-        };
-      }
+    if (error.status === 401 && isGuestUser()) {
+      console.log("👤 Guest user - item removal handled locally");
+      return {
+        success: true,
+        message: "Item removed (guest mode)",
+        body: { cartItems: [] }
+      };
     }
     
     throw error;
@@ -110,25 +131,22 @@ export const removeCartItem = async (variantId) => {
  */
 export const addToCart = async (productId, quantity, variantId) => {
   try {
-    console.log("🚀 API: Adding item to cart via /cart/add-to-cart", {
+    const requestData = {
       product_id: productId,
       quantity: quantity,
       variant_id: variantId,
-    });
+    };
 
-    // Check if user is logged in
-    const authToken = localStorage.getItem('auth_token');
-    const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
-
-    if (!isLoggedIn) {
-      console.log("👤 Guest user - adding to cart without authentication");
+    // Add guest_id for guest users
+    if (isGuestUser()) {
+      const guestId = getOrCreateGuestId();
+      requestData.guest_id = guestId;
+      console.log("🚀 API: Adding item to cart for guest via /cart/add-to-cart", requestData);
+    } else {
+      console.log("🚀 API: Adding item to cart for authenticated user via /cart/add-to-cart", requestData);
     }
 
-    const response = await apiClient.post("/cart/add-to-cart", {
-      product_id: productId,
-      quantity: quantity,
-      variant_id: variantId,
-    });
+    const response = await apiClient.post("/cart/add-to-cart", requestData);
 
     console.log("✅ API: Item successfully added to cart", response.data);
     return response.data;
@@ -136,20 +154,14 @@ export const addToCart = async (productId, quantity, variantId) => {
     console.error("❌ API: Error adding item to cart:", error);
     
     // If it's a 401 error and user is not logged in, show a more user-friendly message
-    if (error.status === 401) {
-      const authToken = localStorage.getItem('auth_token');
-      const isLoggedIn = authToken && !authToken.startsWith('dummy_token_');
-      
-      if (!isLoggedIn) {
-        // For guest users, we can still try to add to a local cart or show a different message
-        console.log("👤 Guest user - cart addition failed, but continuing with local state");
-        // Return a success response for guest users to maintain functionality
-        return {
-          success: true,
-          message: "Item added to cart (guest mode)",
-          body: { cartItems: [] }
-        };
-      }
+    if (error.status === 401 && isGuestUser()) {
+      console.log("👤 Guest user - cart addition failed, but continuing with local state");
+      // Return a success response for guest users to maintain functionality
+      return {
+        success: true,
+        message: "Item added to cart (guest mode)",
+        body: { cartItems: [] }
+      };
     }
     
     throw error;
@@ -157,15 +169,37 @@ export const addToCart = async (productId, quantity, variantId) => {
 };
 
 /**
- * Clear entire cart
+ * Clear entire cart (supports both logged-in and guest users)
  * @returns {Promise<Object>} API response
  */
 export const clearCart = async () => {
   try {
-    const response = await apiClient.delete("/cart/clear-cart");
+    let url = "/cart/clear-cart";
+    
+    // Add guest_id for guest users
+    if (isGuestUser()) {
+      const guestId = getOrCreateGuestId();
+      url += `?guest_id=${guestId}`;
+      console.log("📋 API: Clearing cart for guest", { guest_id: guestId });
+    } else {
+      console.log("📋 API: Clearing cart for authenticated user");
+    }
+
+    const response = await apiClient.delete(url);
     return response.data;
   } catch (error) {
     console.error("Error clearing cart:", error);
+    
+    // If it's a 401 error and user is not logged in, return success for guest users
+    if (error.status === 401 && isGuestUser()) {
+      console.log("👤 Guest user - cart clearing handled locally");
+      return {
+        success: true,
+        message: "Cart cleared (guest mode)",
+        body: { cartItems: [] }
+      };
+    }
+    
     throw error;
   }
 };

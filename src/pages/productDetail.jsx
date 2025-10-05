@@ -590,6 +590,7 @@ import { getImageUrl, getVideoUrl } from '../utils/imageUtils.js';
 import { addToCart, getCartItems } from '../services/cart.js';
 import { addToWishlist, removeFromWishlist } from '../services/wishlist.js';
 import { isAuthenticated } from '../services/auth.js';
+import { isGuestUser } from '../utils/guestUtils.js';
 
 //! import useLocalStorage
 import { useLocalStorage } from '../customHooks/useLocalStorage.jsx';

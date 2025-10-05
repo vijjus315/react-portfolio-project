@@ -9,6 +9,7 @@ import ForgetPasswordModal from '../components/forgetPassword.jsx';
 import { getCartItems, updateCartItemQuantity, removeCartItem, clearCart } from '../services/cart.js';
 import { checkout } from '../services/order.js';
 import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
+import { isGuestUser } from '../utils/guestUtils.js';
 import '../styles/bootstrap';
 
 
@@ -40,6 +41,16 @@ const Cart = () => {
         window.toastr.warning('Your cart is empty. Please add items before checkout.');
       } else {
         alert('Your cart is empty. Please add items before checkout.');
+      }
+      return;
+    }
+
+    // Check if user is a guest
+    if (isGuestUser()) {
+      if (window.toastr) {
+        window.toastr.error('Please log in to proceed with checkout.');
+      } else {
+        alert('Please log in to proceed with checkout.');
       }
       return;
     }
