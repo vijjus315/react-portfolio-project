@@ -71,4 +71,25 @@ export const checkout = async (userId = null) => {
     }
 };
 
-export default { getMyOrders, getOrderDetail, checkout };
+// Get track order details by order ID
+export const getTrackOrderDetails = async (orderId) => {
+    try {
+        console.log('🔍 API: Fetching track order details for ID:', orderId);
+        const response = await apiClient.get(`/order/track-order-details?order_id=${orderId}`);
+        console.log('✅ API: Track order details fetched successfully', response.data);
+
+        if (response.data.success && response.data.body) {
+            return {
+                success: true,
+                data: response.data.body
+            };
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error('❌ API: Error fetching track order details:', error);
+        throw error;
+    }
+};
+
+export default { getMyOrders, getOrderDetail, checkout, getTrackOrderDetails };
