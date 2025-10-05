@@ -9,7 +9,7 @@ import ForgetPasswordModal from '../components/forgetPassword.jsx';
 import { getCartItems, updateCartItemQuantity, removeCartItem, clearCart } from '../services/cart.js';
 import { checkout } from '../services/order.js';
 import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
-import { isGuestUser } from '../utils/guestUtils.js';
+import { isGuestUser, handleOrderCompletion } from '../utils/guestUtils.js';
 import '../styles/bootstrap';
 
 
@@ -45,40 +45,35 @@ const Cart = () => {
       return;
     }
 
-    // Check if user is a guest
-    if (isGuestUser()) {
-      if (window.toastr) {
-        window.toastr.error('Please log in to proceed with checkout.');
-      } else {
-        alert('Please log in to proceed with checkout.');
-      }
-      return;
-    }
+    // Allow checkout for both guests and authenticated users
 
     setIsCheckoutLoading(true);
     try {
-      // Get user ID from localStorage
       let userId = null;
-      try {
-        const userData = localStorage.getItem('user_data');
-        if (userData) {
-          const parsed = JSON.parse(userData);
-          userId = parsed.id || parsed.user_id;
+      
+      // Get user ID for authenticated users
+      if (!isGuestUser()) {
+        try {
+          const userData = localStorage.getItem('user_data');
+          if (userData) {
+            const parsed = JSON.parse(userData);
+            userId = parsed.id || parsed.user_id;
+          }
+        } catch (e) {
+          console.error('Error getting user ID from localStorage:', e);
         }
-      } catch (e) {
-        console.error('Error getting user ID from localStorage:', e);
+
+        if (!userId) {
+          if (window.toastr) {
+            window.toastr.error('Please log in to proceed with checkout.');
+          } else {
+            alert('Please log in to proceed with checkout.');
+          }
+          return;
+        }
       }
 
-      if (!userId) {
-        if (window.toastr) {
-          window.toastr.error('Please log in to proceed with checkout.');
-        } else {
-          alert('Please log in to proceed with checkout.');
-        }
-        return;
-      }
-
-      console.log('🛒 Initiating checkout for user ID:', userId);
+      console.log('🛒 Initiating checkout', isGuestUser() ? 'for guest' : `for user ID: ${userId}`);
       const response = await checkout(userId);
       
       if (response.success && response.redirect_url) {
@@ -95,6 +90,17 @@ const Cart = () => {
         } catch (clearError) {
           console.error('⚠️ Failed to clear cart after order placement:', clearError);
           // Don't block the redirect even if cart clearing fails
+        }
+        
+        // Handle order completion - generate new guest ID for new session
+        try {
+          const newGuestId = handleOrderCompletion();
+          if (newGuestId) {
+            console.log('🆔 Order completion handled - new guest session started:', newGuestId);
+          }
+        } catch (orderCompletionError) {
+          console.error('⚠️ Failed to handle order completion:', orderCompletionError);
+          // Don't block the redirect even if order completion handling fails
         }
         
         // Redirect to Stripe checkout

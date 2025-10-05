@@ -52,6 +52,56 @@ export const clearGuestId = () => {
 };
 
 /**
+ * Generate a new guest ID and replace the existing one
+ * This is useful after order placement to start a new session
+ * @returns {string} New guest ID
+ */
+export const generateNewGuestId = () => {
+  try {
+    // Generate new guest ID
+    const newGuestId = generateGuestId();
+    
+    // Replace the existing guest ID
+    localStorage.setItem('guest_id', newGuestId);
+    console.log('🆔 Generated new guest ID for new session:', newGuestId);
+    
+    return newGuestId;
+  } catch (error) {
+    console.error('Error generating new guest ID:', error);
+    // Fallback to session-based ID if localStorage fails
+    return generateGuestId();
+  }
+};
+
+/**
+ * Handle order completion - generates new guest ID for new session
+ * This should be called when an order is successfully placed/completed
+ * Can be used in success pages, webhooks, or after checkout completion
+ */
+export const handleOrderCompletion = () => {
+  try {
+    // Only generate new guest ID if user is a guest
+    if (isGuestUser()) {
+      const newGuestId = generateNewGuestId();
+      console.log('🛒 Order completed - new guest session started:', newGuestId);
+      
+      // Dispatch event to notify other components of the new session
+      window.dispatchEvent(new CustomEvent('guestSessionReset', {
+        detail: { newGuestId }
+      }));
+      
+      return newGuestId;
+    } else {
+      console.log('🛒 Order completed - authenticated user, no guest ID reset needed');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error handling order completion:', error);
+    return null;
+  }
+};
+
+/**
  * Check if current user is a guest (not authenticated)
  * @returns {boolean} True if user is a guest
  */

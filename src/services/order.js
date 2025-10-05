@@ -1,4 +1,5 @@
 import apiClient from './client.js';
+import { getOrCreateGuestId, isGuestUser } from '../utils/guestUtils.js';
 
 // Get user's orders with pagination
 export const getMyOrders = async (page = 1) => {
@@ -26,13 +27,23 @@ export const getOrderDetail = async (orderId) => {
     }
 };
 
-// Checkout function to initiate payment
-export const checkout = async (userId) => {
+// Checkout function to initiate payment (supports both authenticated users and guests)
+export const checkout = async (userId = null) => {
     try {
-        console.log('🔍 API: Initiating checkout for user ID:', userId);
-        const response = await apiClient.post('/order/checkout', {
-            user_id: userId
-        });
+        let requestData = {};
+        
+        if (isGuestUser()) {
+            // For guest users, use guest_id
+            const guestId = getOrCreateGuestId();
+            requestData.guest_id = guestId;
+            console.log('🔍 API: Initiating checkout for guest ID:', guestId);
+        } else {
+            // For authenticated users, use user_id
+            requestData.user_id = userId;
+            console.log('🔍 API: Initiating checkout for user ID:', userId);
+        }
+        
+        const response = await apiClient.post('/order/checkout', requestData);
         console.log('✅ API: Checkout initiated successfully', response.data);
         return response.data;
     } catch (error) {
