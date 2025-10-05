@@ -1,5 +1,5 @@
 import { apiClient } from "./client.js";
-import { isAuthenticated } from "./auth.js";
+import { isAuthenticated, getUserData } from "./auth.js";
 import { getOrCreateGuestId, isGuestUser } from "../utils/guestUtils.js";
 
 /**
@@ -16,9 +16,16 @@ export const getCartItems = async () => {
       console.log("📋 API: Guest cart items fetched successfully");
       return response.data;
     } else {
-      // For authenticated users, use existing flow
-      console.log("📋 API: Fetching cart items for authenticated user via /cart/get-cart");
-      const response = await apiClient.get("/cart/get-cart");
+      // For authenticated users, get user_id and include it in the request
+      const userData = getUserData();
+      const userId = userData?.id || userData?.user_id;
+      
+      if (!userId) {
+        throw new Error("User ID not found in user data");
+      }
+      
+      console.log("📋 API: Fetching cart items for authenticated user via /cart/get-cart", { user_id: userId });
+      const response = await apiClient.get(`/cart/get-cart?user_id=${userId}`);
       console.log("📋 API: Authenticated user cart items fetched successfully");
       return response.data;
     }
@@ -57,13 +64,21 @@ export const updateCartItemQuantity = async (
       variant_id: variantId,
     };
 
-    // Add guest_id for guest users
+    // Add guest_id for guest users or user_id for authenticated users
     if (isGuestUser()) {
       const guestId = getOrCreateGuestId();
       requestData.guest_id = guestId;
       console.log("📋 API: Updating cart quantity for guest", { guest_id: guestId, quantity, variant_id: variantId });
     } else {
-      console.log("📋 API: Updating cart quantity for authenticated user", { quantity, variant_id: variantId });
+      const userData = getUserData();
+      const userId = userData?.id || userData?.user_id;
+      
+      if (!userId) {
+        throw new Error("User ID not found in user data");
+      }
+      
+      requestData.user_id = userId;
+      console.log("📋 API: Updating cart quantity for authenticated user", { user_id: userId, quantity, variant_id: variantId });
     }
 
     const response = await apiClient.post("/cart/update-cart", requestData);
@@ -94,13 +109,21 @@ export const removeCartItem = async (variantId) => {
   try {
     let url = `/cart/remove-from-cart?variant_id=${variantId}`;
     
-    // Add guest_id for guest users
+    // Add guest_id for guest users or user_id for authenticated users
     if (isGuestUser()) {
       const guestId = getOrCreateGuestId();
       url += `&guest_id=${guestId}`;
       console.log("📋 API: Removing cart item for guest", { guest_id: guestId, variant_id: variantId });
     } else {
-      console.log("📋 API: Removing cart item for authenticated user", { variant_id: variantId });
+      const userData = getUserData();
+      const userId = userData?.id || userData?.user_id;
+      
+      if (!userId) {
+        throw new Error("User ID not found in user data");
+      }
+      
+      url += `&user_id=${userId}`;
+      console.log("📋 API: Removing cart item for authenticated user", { user_id: userId, variant_id: variantId });
     }
 
     const response = await apiClient.get(url);
@@ -137,12 +160,20 @@ export const addToCart = async (productId, quantity, variantId) => {
       variant_id: variantId,
     };
 
-    // Add guest_id for guest users
+    // Add guest_id for guest users or user_id for authenticated users
     if (isGuestUser()) {
       const guestId = getOrCreateGuestId();
       requestData.guest_id = guestId;
       console.log("🚀 API: Adding item to cart for guest via /cart/add-to-cart", requestData);
     } else {
+      const userData = getUserData();
+      const userId = userData?.id || userData?.user_id;
+      
+      if (!userId) {
+        throw new Error("User ID not found in user data");
+      }
+      
+      requestData.user_id = userId;
       console.log("🚀 API: Adding item to cart for authenticated user via /cart/add-to-cart", requestData);
     }
 
@@ -176,13 +207,21 @@ export const clearCart = async () => {
   try {
     let url = "/cart/clear-cart";
     
-    // Add guest_id for guest users
+    // Add guest_id for guest users or user_id for authenticated users
     if (isGuestUser()) {
       const guestId = getOrCreateGuestId();
       url += `?guest_id=${guestId}`;
       console.log("📋 API: Clearing cart for guest", { guest_id: guestId });
     } else {
-      console.log("📋 API: Clearing cart for authenticated user");
+      const userData = getUserData();
+      const userId = userData?.id || userData?.user_id;
+      
+      if (!userId) {
+        throw new Error("User ID not found in user data");
+      }
+      
+      url += `?user_id=${userId}`;
+      console.log("📋 API: Clearing cart for authenticated user", { user_id: userId });
     }
 
     const response = await apiClient.delete(url);
