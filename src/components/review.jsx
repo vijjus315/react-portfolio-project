@@ -16,7 +16,7 @@ const Reviews = ({ productRatings = [], productId = null }) => {
       const transformedReviews = productRatings.map(apiReview => ({
         id: apiReview.id,
         name: apiReview.user?.name || "Anonymous User",
-        profile: apiReview.user?.profile || "https://www.portacourts.com/webassets/img/profile.png",
+        profile: apiReview.user?.profile || "http://localhost:3000/public/webassets/img/dummy.png",
         date: new Date(apiReview.created_at).toLocaleDateString(),
         rating: parseInt(apiReview.rating),
         comment: apiReview.comment || "",
@@ -70,7 +70,7 @@ const Reviews = ({ productRatings = [], productId = null }) => {
         const newReview = {
           id: Date.now(),
           name: "You",
-          profile: "https://www.portacourts.com/webassets/img/profile.png",
+          profile: "http://localhost:3000/public/webassets/img/dummy.png",
           date: new Date().toLocaleDateString(),
           rating,
           comment: reviewText,
@@ -167,6 +167,9 @@ const Reviews = ({ productRatings = [], productId = null }) => {
                     src={review.profile}
                     alt="User Profile"
                     className="profile-comment"
+                    onError={(e) => {
+                      e.target.src = "http://localhost:3000/public/webassets/img/dummy.png";
+                    }}
                   />
                 </div>
                 <div className="d-flex justify-content-between w-100">
