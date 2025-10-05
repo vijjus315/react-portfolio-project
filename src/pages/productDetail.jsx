@@ -536,7 +536,7 @@
 //                                     </div>
 //                                 </div>
 //                                 {/* Reviews Tab */}
-//                                 <Reviews productRatings={product.ratings || []} />
+//                                 <Reviews productRatings={product.ratings || []} productId={product.id} />
                                 
 //                             </div>
 //                         </div>
@@ -1305,7 +1305,7 @@ const ProductDetail = () => {
                                     </div>
                                 </div>
                                 {/* Reviews Tab */}
-                                <Reviews productRatings={product.ratings || []} />
+                                <Reviews productRatings={product.ratings || []} productId={product.id} />
                                 
                             </div>
                         </div>

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ReviewSubmit from "./reviewSubmit";
+import { addRating } from "../services/rating.js";
+import { isAuthenticated } from "../services/auth.js";
 
-const Reviews = ({ productRatings = [] }) => {
+const Reviews = ({ productRatings = [], productId = null }) => {
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const [showReviewSubmit, setShowReviewSubmit] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Transform API ratings to match component format
   useEffect(() => {
@@ -23,24 +26,84 @@ const Reviews = ({ productRatings = [] }) => {
     }
   }, [productRatings]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!reviewText.trim() || rating === 0) return;
+    
+    // Validation
+    if (!reviewText.trim() || rating === 0) {
+      if (window.toastr) {
+        window.toastr.warning('Please provide both rating and comment');
+      } else {
+        alert('Please provide both rating and comment');
+      }
+      return;
+    }
 
-    const newReview = {
-      id: Date.now(),
-      name: "Guest User",
-      profile: "https://www.portacourts.com/webassets/img/profile.png",
-      date: new Date().toLocaleDateString(),
-      rating,
-      comment: reviewText,
-    };
+    // Check if user is authenticated
+    if (!isAuthenticated()) {
+      if (window.toastr) {
+        window.toastr.error('Please login to submit a review');
+      } else {
+        alert('Please login to submit a review');
+      }
+      return;
+    }
 
-    setReviews([newReview, ...reviews]);
-    setReviewText("");
-    setRating(0);
+    // Check if product ID is available
+    if (!productId) {
+      if (window.toastr) {
+        window.toastr.error('Product ID not found');
+      } else {
+        alert('Product ID not found');
+      }
+      return;
+    }
 
-    setShowReviewSubmit(true);
+    setIsSubmitting(true);
+
+    try {
+      // Submit rating to API
+      const response = await addRating(productId, rating, reviewText);
+      
+      if (response.success) {
+        // Create new review object for local state
+        const newReview = {
+          id: Date.now(),
+          name: "You",
+          profile: "https://www.portacourts.com/webassets/img/profile.png",
+          date: new Date().toLocaleDateString(),
+          rating,
+          comment: reviewText,
+        };
+
+        // Add to reviews list
+        setReviews([newReview, ...reviews]);
+        
+        // Clear form
+        setReviewText("");
+        setRating(0);
+
+        // Show success message
+        if (window.toastr) {
+          window.toastr.success('Review submitted successfully!');
+        }
+
+        // Show review submitted modal
+        setShowReviewSubmit(true);
+      } else {
+        throw new Error(response.message || 'Failed to submit review');
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      
+      if (window.toastr) {
+        window.toastr.error('Failed to submit review. Please try again.');
+      } else {
+        alert('Failed to submit review. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -192,17 +255,30 @@ const Reviews = ({ productRatings = [] }) => {
                     type="submit"
                     id="submitReview"
                     className="btn green-btn w-100 mt-2"
-                    style={{ backgroundColor: "var(--primary-theme)",
-                                    color: "#fff", 
-                                    borderRadius: "10px", 
-                                    padding: "11px 31px", 
-                                    height: "50px", 
-                                    border: "0",
-                                    textTransform: "capitalize", 
-                                    fontSize: "16px"
+                    disabled={isSubmitting}
+                    style={{ 
+                      backgroundColor: isSubmitting ? "#ccc" : "var(--primary-theme)",
+                      color: "#fff", 
+                      borderRadius: "10px", 
+                      padding: "11px 31px", 
+                      height: "50px", 
+                      border: "0",
+                      textTransform: "capitalize", 
+                      fontSize: "16px",
+                      cursor: isSubmitting ? "not-allowed" : "pointer",
+                      opacity: isSubmitting ? 0.7 : 1
                     }}
                   >
-                    Submit Review
+                    {isSubmitting ? (
+                      <>
+                        <div className="spinner-border spinner-border-sm me-2" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        Submitting...
+                      </>
+                    ) : (
+                      'Submit Review'
+                    )}
                   </button>
                 </form>
               </div>
