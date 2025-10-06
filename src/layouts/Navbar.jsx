@@ -271,7 +271,7 @@ const Header = () => {
         <header className="font-Yantramanav header-wrapper ">
             <nav className="navbar navbar-expand-lg pt-0  pb-0">
                 <div className="container">
-                    <a className="navbar-brand py-0" href="/"><img src={`${window.location.origin}/public/webassets/img/logo.svg`} /></a>
+                    <a className="navbar-brand py-0" href="/"><img src={`${window.location.origin}/webassets/img/logo.svg`} /></a>
                     <button 
                     className="navbar-toggler" 
                     type="button" 
@@ -309,10 +309,10 @@ const Header = () => {
                         </ul>
                         <div className="d-flex gap-4 align-items-center flex-wrap">
                             <div className="d-flex gap-4 align-items-center ">
-                                <a className="wishlist-icon text-decoration-none position-relative me-2" href="/wishlist"><img src={`${window.location.origin}/public/webassets/img/wishlist.svg`} />
+                                <a className="wishlist-icon text-decoration-none position-relative me-2" href="/wishlist"><img src={`${window.location.origin}/webassets/img/wishlist.svg`} />
                                     <span className="number-count wishlistcount">{wishlistCount}</span>
                                 </a>
-                                <a className="wishlist-icon text-decoration-none position-relative me-2" href="/cart"><img src={`${window.location.origin}/public/webassets/img/addtocart.svg`} />
+                                <a className="wishlist-icon text-decoration-none position-relative me-2" href="/cart"><img src={`${window.location.origin}/webassets/img/addtocart.svg`} />
                                     <span className="number-count cartcount">{cartItemCount}</span>
                                 </a>
                             </div>
