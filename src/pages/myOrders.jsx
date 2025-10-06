@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Link } from 'react-router-dom';
 import Header from '../layouts/Navbar.jsx';
 import Footer from '../layouts/Footer.jsx';
 import LoginModal from '../components/login.jsx';
@@ -288,7 +289,7 @@ const MyOrders = () => {
                                     <img src="/webassets/img/EmptyCart.svg" className="img-fluid" alt="Empty orders" />
                                     <h4 className="fw-400">Hey, it's feel so light</h4>
                                     <p className="fw-400 pb-2">There is nothing in your order. Let's add some items.</p>
-                                    <a href="/wishlist" className="green-btn py-3">Add Items From Wishlist</a>
+                                    <Link to="/wishlist" className="green-btn py-3">Add Items From Wishlist</Link>
                                 </div>
                             </div>
                         )}

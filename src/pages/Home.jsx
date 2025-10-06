@@ -165,13 +165,13 @@ const Home = () => {
                                 }}
                                 >
                                     <div className="product-feature-img product-bg position-relative">
-                                        <a href="/product-detail/pickleball-court-premium-with-acrylic-top"><img src="https://www.portacourts.com/storage/images/ZZFA0LxRbGtSVsLxyeiGzhyvUqCVZlMEBKwhli4W.jpg" className="img-fluid product-pic" /></a>
+                                        <Link to="/product-detail/pickleball-court-premium-with-acrylic-top"><img src="https://www.portacourts.com/storage/images/ZZFA0LxRbGtSVsLxyeiGzhyvUqCVZlMEBKwhli4W.jpg" className="img-fluid product-pic" /></Link>
                                         <a className="icon-wish-product addwishlist">
                                             <img src={`${window.location.origin}/webassets/img/unfillwishlist.svg`} className="wishlist-icon" />
                                         </a>
                                     </div>
                                     <div className="ps-4  py-3 pe-3 pe-lg-0 py-lg-0 feat_col_home">
-                                        <h3 className="mb-2 fw-400 one-line text-capitalize text-black"><a href="/product-detail/pickleball-court-premium-with-acrylic-top" className="text-black">Pickleball Court – Premium (with Acrylic Top)</a></h3>
+                                        <h3 className="mb-2 fw-400 one-line text-capitalize text-black"><Link to="/product-detail/pickleball-court-premium-with-acrylic-top" className="text-black">Pickleball Court – Premium (with Acrylic Top)</Link></h3>
                                         <p className="f14 lh-base my-4 two-line">Specifically engineered for professionals, PortaCourts presents Pickleball Court Pro for&nbsp;pro-players.&nbsp;Take your pickleball experience to the next level with our Pickleball Court Pro surface – built for unmatched grip, durability, and pro-level bounce. Designed for players who demand performance similar to top-tier tournaments like the PPA Tour, this surface offers the ultimate combination of comfort, stability, and safety.Whether you’re building a community court, upgrading a private space, or setting up for events, Pickleball Court Pro delivers a premium playing experience indoors or outdoors.Key FeaturesProfessional-Grade Surface: Made from durable acrylic roll mats with nano-granule texture for superior grip and wear resistance.Multi-Surface Compatibility: Installs over concrete, asphalt, wood, or any flat base.Flexible Installation:&nbsp; &nbsp; &nbsp; &nbsp; Temporary: Use single or double-sided tape.&nbsp; &nbsp; &nbsp; &nbsp; Permanent: Use glue for a long-lasting setup.Player-Safe Design: Special HIMOP coating offers high grip while protecting knees and joints during intense play.All-Weather Ready: Perfect for both indoor and outdoor courts – rain or shine.SpecificationsMaterial Thickness: 3.0 mmCore Layers: 2mm PVC + Fiberglass underlaymentTop Coat: Soft acrylic with HIMOP coating for grip and bounceWarranty: 3 YearsColor Options: Grey, Light Blue, Dark Blue, Green – or customize to match your brandWeight: Each roll approx. 270 lbs – easy to transport and installCourt Sizes AvailableCourt Pro Max: 24 ft × 50 ftCourt Pro Tour: 30 ft × 60 ftCourt Pro Tour Max: 36 ft × 60 ftCustom Sizes: Available on requestWhy Choose Pickleball Court Pro?As pickleball continues to grow in popularity across the U.S., players are seeking more professional-grade gear and surfaces. Pickleball Court Pro meets that demand with a surface trusted by serious athletes – combining high-end performance with fast, flexible installation.</p>
                                         <p className="mb-1"> <span className="primary-theme price-offer">$8820.00</span><span className="price-old ms-2">$9800.00</span></p>
                                         <div className="d-flex align-items-center gap-1 mb-4">
@@ -181,14 +181,14 @@ const Home = () => {
                                             <i className="fa fa-star-o" aria-hidden="true"></i>
                                             <i className="fa fa-star-o" aria-hidden="true"></i>
                                         </div>
-                                        <a className=" green-btn py-3" href="/product-detail/pickleball-court-premium-with-acrylic-top">
+                                        <Link className=" green-btn py-3" to="/product-detail/pickleball-court-premium-with-acrylic-top">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none">
                                                 <path d="M16.2251 12.1335H7.64816C7.06827 12.1332 6.50637 11.9322 6.0579 11.5645C5.60944 11.1969 5.30207 10.6854 5.18803 10.1168L3.49773 1.67373H0.836779C0.614851 1.67373 0.402013 1.58557 0.245087 1.42864C0.0881603 1.27171 0 1.05888 0 0.836949C0 0.615021 0.0881603 0.402184 0.245087 0.245257C0.402013 0.0883307 0.614851 0.000170233 0.836779 0.000170233H4.18389C4.37965 -0.00377763 4.5706 0.0610485 4.7235 0.183364C4.87639 0.30568 4.98155 0.47774 5.02067 0.669593L6.82811 9.79048C6.86723 9.98233 6.97239 10.1544 7.12529 10.2767C7.27818 10.399 7.46913 10.4638 7.66489 10.4599H16.2251C16.4197 10.4642 16.6097 10.4006 16.7625 10.2799C16.9152 10.1593 17.0211 9.98915 17.0619 9.79885L18.4091 3.52301C18.4357 3.39943 18.4339 3.27144 18.404 3.14865C18.374 3.02585 18.3166 2.91144 18.2361 2.81401C18.1555 2.71658 18.054 2.63865 17.939 2.58609C17.8241 2.53352 17.6987 2.50768 17.5724 2.51051H16.7356C16.5136 2.51051 16.3008 2.42235 16.1439 2.26542C15.987 2.10849 15.8988 1.89565 15.8988 1.67373C15.8988 1.4518 15.987 1.23896 16.1439 1.08204C16.3008 0.925109 16.5136 0.836949 16.7356 0.836949H17.5724C17.9523 0.828177 18.3293 0.905804 18.675 1.06397C19.0206 1.22214 19.3257 1.45673 19.5675 1.75003C19.8092 2.04334 19.9812 2.3877 20.0704 2.75716C20.1597 3.12661 20.1639 3.51151 20.0827 3.88282L18.7187 10.1587C18.5951 10.7252 18.2792 11.2314 17.8246 11.5914C17.3701 11.9514 16.8049 12.1429 16.2251 12.1335Z" fill="white" />
                                                 <path d="M14.2246 5.8591H9.20397C8.98204 5.8591 8.7692 5.77094 8.61227 5.61402C8.45535 5.45709 8.36719 5.24425 8.36719 5.02233C8.36719 4.8004 8.45535 4.58756 8.61227 4.43063C8.7692 4.27371 8.98204 4.18555 9.20397 4.18555H14.2246C14.4466 4.18555 14.6594 4.27371 14.8163 4.43063C14.9733 4.58756 15.0614 4.8004 15.0614 5.02233C15.0614 5.24425 14.9733 5.45709 14.8163 5.61402C14.6594 5.77094 14.4466 5.8591 14.2246 5.8591Z" fill="white" />
                                                 <path d="M11.7157 8.36806C11.4938 8.36806 11.2809 8.2799 11.124 8.12297C10.9671 7.96604 10.8789 7.75321 10.8789 7.53128V2.51061C10.8789 2.28868 10.9671 2.07584 11.124 1.91892C11.2809 1.76199 11.4938 1.67383 11.7157 1.67383C11.9376 1.67383 12.1505 1.76199 12.3074 1.91892C12.4643 2.07584 12.5525 2.28868 12.5525 2.51061V7.53128C12.5525 7.75321 12.4643 7.96604 12.3074 8.12297C12.1505 8.2799 11.9376 8.36806 11.7157 8.36806Z" fill="white" />
                                             </svg>
                                             Add to Cart
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -208,13 +208,13 @@ const Home = () => {
                                 }}
                                 >
                                     <div className="product-feature-img product-bg position-relative">
-                                        <a href="/product-detail/pickleball-court-standard-court"><img src="https://www.portacourts.com/storage/images/LAJbtgX3kexrZLI8fp7yUfQrdPqRf4VLyUdVefD6.jpg" className="img-fluid product-pic" /></a>
+                                        <Link to="/product-detail/pickleball-court-standard-court"><img src="https://www.portacourts.com/storage/images/LAJbtgX3kexrZLI8fp7yUfQrdPqRf4VLyUdVefD6.jpg" className="img-fluid product-pic" /></Link>
                                         <a className="icon-wish-product addwishlist">
                                             <img src={`${window.location.origin}/webassets/img/unfillwishlist.svg`} className="wishlist-icon" />
                                         </a>
                                     </div>
                                     <div className="ps-4  py-3 pe-3 pe-lg-0 py-lg-0 feat_col_home">
-                                        <h3 className="mb-2 fw-400 one-line text-capitalize text-black"><a href="/product-detail/pickleball-court-standard-court" className="text-black">Pickleball Court – Standard Court</a></h3>
+                                        <h3 className="mb-2 fw-400 one-line text-capitalize text-black"><Link to="/product-detail/pickleball-court-standard-court" className="text-black">Pickleball Court – Standard Court</Link></h3>
                                         <p className="f14 lh-base my-4 two-line">Transform your backyard or recreational space into a top-notch recreational/sports area with Premium PickleBall courts by Portacourts. Our courts are designed for both athletes and casual players. We offer unmatched durability, and high-quality surface pickleball courts with non-slip coatings to our customers. We serve globally and our main motive is providing the best quality products and services.Pickleball Court Dimensions and Size:We have different sizes of portable pickleball courts, which are distinguished on the basis of length and width in (Ft)&nbsp; and thickness of courts in (mm).Court SizeDimensions (Ft)Thickness (mm)Small Court21 ft x 45 ft2.5 mm&nbsp;Medium Court24 ft x 50 ft2.5 mmLarge Court26 ft x 50 ft2.5 mmExtra Large Court28 ft x 60 ft2.5 mmProfessional Court30 ft x 60 ft2.5 mmPremium Court36 ft x 60 ft2.5 mmFeatures of Premium Portable Pickleball CourtHigh-Quality Surface Material: Our portable court is crafted with the finest sports-grade materials, providing optimal traction and bounce. The smooth surface ensures precise ball control, minimizing the risk of injury and enhancing your gameplay.&nbsp;Customizable Design: We offer customization options including specific colors, lines, and patterns, allowing you to reflect your style. Choose from a wide range of designs to make your pickleball court truly unique. Our experts work with 100% accuracy to meet your visionary pickleball court.Easy Installation: Our premium pickleball courts are modular and come with an easy-to-install system. Within a short timeframe, you’ll have a professional-grade court ready for play without extensive groundwork.&nbsp;Non-Slip Surface: Safety is our priority, which is why we use non-slip coatings that provide excellent grip, even during fast-paced games even when it's rainy outside.UV Protection: The surface is coated with UV-resistant layers, ensuring that the colors and quality of your court remain vibrant and intact for years to come.&nbsp;Portable &amp; Scalable: Our premium design allows for easy portability and scalability, whether you want a single court or a larger play area.Technical Specifications of Pickleball CourtWhat makes Portacourts PickleBall Court stand out globally is its technical specification:Technical TermSpecificationMaterial100% raw NBR rubber mixed PVC materialLocationOutdoor and Indoor Pickleball courtsSize30 ft x 60 ft, 26 ft x 60 ft, 24 ft x 50 ft, 20 ft x 44 ftWeight3.5 kg for 2.5 mm, 4.0 kg for 3.0 mmColorAny color design can be printed, never color fades Using Life6-8 yearsFlammabilityB1Temperature Range-40°C to ~80°CUsagePickleball sports courtsThickness2.5 mm / 3.0 mmShock Absorption20% - 75%Vertical Deformation≤1.1 mmPickleball Rebound Rate≥90%Friction Coefficient80 - 100Wear Resistance≤350 mgImpact Resistance≥8N/mSurface TreatmentUV / PUR treatmentSound Insulation≥4 dBSlip ResistanceR9Indentation Resistance≤0.50 mmResidual Indentation0.04 mmDimensional Stability≤0.04%Thermal Resistance≤0.17 m²K/WToxic and Harmful Substances TestNoRecycleYesIncluded in the PackageWe work for customer satisfaction and with years of research and manufacturing processes, Portacourts comes with this top-tier PickleBall Court. With the ordering of the product, you will get the following items, which are included in the package:What's IncludedQuantityDetailsPickleball Court Roll1Professional grade, Durable, long-lasting pickleball court.Pickleball Net1Adjustable and high-quality fabric pickleball net.Pickleball Paddles4Durable paddles designed for optimal control.Pickleballs20Premium pickleballs for the consistent bounce.Why Choose Only Portacourts Premium Pickleball Court?Unmatched Durability: Engineered to last, this court offers long-term value with minimal maintenance required.&nbsp;Professional Standards: We adhere to official pickleball court dimensions and regulations, so you can enjoy the same quality that professionals do.&nbsp;Aesthetic Appeal: Enhance your outdoor space with a visually stunning court that complements your property’s overall design.&nbsp;Versatility: Our court is great for residential homes, schools, clubs, or commercial spaces, suiting all environments.24/7 Customer Support: When selecting a pickleball court, we believe that excellent customer service is just as crucial as product quality. That's why our team provides 24/7 customer support, ensuring that you can contact us anytime, day or night. Whether you have questions about installation, or product details, or need maintenance assistance, we're always just a call or message away.</p>
                                         <p className="mb-1"> <span className="primary-theme price-offer">$6570.00</span><span className="price-old ms-2">$7300.00</span></p>
                                         <div className="d-flex align-items-center gap-1 mb-4">
@@ -224,14 +224,14 @@ const Home = () => {
                                             <i className="fa fa-star-o" aria-hidden="true"></i>
                                             <i className="fa fa-star-o" aria-hidden="true"></i>
                                         </div>
-                                        <a className=" green-btn py-3" href="/product-detail/pickleball-court-standard-court">
+                                        <Link className=" green-btn py-3" to="/product-detail/pickleball-court-standard-court">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none">
                                                 <path d="M16.2251 12.1335H7.64816C7.06827 12.1332 6.50637 11.9322 6.0579 11.5645C5.60944 11.1969 5.30207 10.6854 5.18803 10.1168L3.49773 1.67373H0.836779C0.614851 1.67373 0.402013 1.58557 0.245087 1.42864C0.0881603 1.27171 0 1.05888 0 0.836949C0 0.615021 0.0881603 0.402184 0.245087 0.245257C0.402013 0.0883307 0.614851 0.000170233 0.836779 0.000170233H4.18389C4.37965 -0.00377763 4.5706 0.0610485 4.7235 0.183364C4.87639 0.30568 4.98155 0.47774 5.02067 0.669593L6.82811 9.79048C6.86723 9.98233 6.97239 10.1544 7.12529 10.2767C7.27818 10.399 7.46913 10.4638 7.66489 10.4599H16.2251C16.4197 10.4642 16.6097 10.4006 16.7625 10.2799C16.9152 10.1593 17.0211 9.98915 17.0619 9.79885L18.4091 3.52301C18.4357 3.39943 18.4339 3.27144 18.404 3.14865C18.374 3.02585 18.3166 2.91144 18.2361 2.81401C18.1555 2.71658 18.054 2.63865 17.939 2.58609C17.8241 2.53352 17.6987 2.50768 17.5724 2.51051H16.7356C16.5136 2.51051 16.3008 2.42235 16.1439 2.26542C15.987 2.10849 15.8988 1.89565 15.8988 1.67373C15.8988 1.4518 15.987 1.23896 16.1439 1.08204C16.3008 0.925109 16.5136 0.836949 16.7356 0.836949H17.5724C17.9523 0.828177 18.3293 0.905804 18.675 1.06397C19.0206 1.22214 19.3257 1.45673 19.5675 1.75003C19.8092 2.04334 19.9812 2.3877 20.0704 2.75716C20.1597 3.12661 20.1639 3.51151 20.0827 3.88282L18.7187 10.1587C18.5951 10.7252 18.2792 11.2314 17.8246 11.5914C17.3701 11.9514 16.8049 12.1429 16.2251 12.1335Z" fill="white" />
                                                 <path d="M14.2246 5.8591H9.20397C8.98204 5.8591 8.7692 5.77094 8.61227 5.61402C8.45535 5.45709 8.36719 5.24425 8.36719 5.02233C8.36719 4.8004 8.45535 4.58756 8.61227 4.43063C8.7692 4.27371 8.98204 4.18555 9.20397 4.18555H14.2246C14.4466 4.18555 14.6594 4.27371 14.8163 4.43063C14.9733 4.58756 15.0614 4.8004 15.0614 5.02233C15.0614 5.24425 14.9733 5.45709 14.8163 5.61402C14.6594 5.77094 14.4466 5.8591 14.2246 5.8591Z" fill="white" />
                                                 <path d="M11.7157 8.36806C11.4938 8.36806 11.2809 8.2799 11.124 8.12297C10.9671 7.96604 10.8789 7.75321 10.8789 7.53128V2.51061C10.8789 2.28868 10.9671 2.07584 11.124 1.91892C11.2809 1.76199 11.4938 1.67383 11.7157 1.67383C11.9376 1.67383 12.1505 1.76199 12.3074 1.91892C12.4643 2.07584 12.5525 2.28868 12.5525 2.51061V7.53128C12.5525 7.75321 12.4643 7.96604 12.3074 8.12297C12.1505 8.2799 11.9376 8.36806 11.7157 8.36806Z" fill="white" />
                                             </svg>
                                             Add to Cart
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -244,16 +244,16 @@ const Home = () => {
                                 <div className="col-md-6 col-lg-6 mb-4" key={p.id}>
                                     <div className="feature-pro">
                                         <div className="product-feature-img product-bg position-relative">
-                                            <a href={`/product-detail/${p.slug}`}><img src={`/storage/${image.image_url}`} className="img-fluid product-pic" /></a>
+                                            <Link to={`/product-detail/${p.slug}`}><img src={`/storage/${image.image_url}`} className="img-fluid product-pic" /></Link>
                                             <a className="icon-wish-product addwishlist" data-product-id={p.id} data-in-wishlist={p.in_wishlist ? '1' : ''}>
                                                 <img src={`${window.location.origin}${p.in_wishlist ? '/webassets/img/green-wishlist-bg.svg' : '/webassets/img/unfillwishlist.svg'}`} className="wishlist-icon" />
                                             </a>
                                         </div>
 
                                         <div className="px-3 py-4">
-                                            <a href={`/product-detail/${p.slug}`} className="text-black">
+                                            <Link to={`/product-detail/${p.slug}`} className="text-black">
                                                 <h3 className="text-capitalize mb-2 fw-400 one-line">{p.title}</h3>
-                                            </a>
+                                            </Link>
                                             <p className="f14 lh-base my-4 two-line">{(p.description || '').replace(/<[^>]*>?/gm, '')}</p>
                                             <p className="mb-1"> <span className="primary-theme price-offer">${variant.discounted_price || ''}.00</span><span className="price-old ms-2">${variant.price || ''}.00</span></p>
                                             <div className="d-flex align-items-center gap-1 mb-4">
@@ -267,14 +267,14 @@ const Home = () => {
                                                     <i className="fa fa-star-o" aria-hidden="true" key={`es-${p.id}-${i}`}></i>
                                                 ))}
                                             </div>
-                                            <a className="green-btn py-3" href={`/product-detail/${p.slug}`}>
+                                            <Link className="green-btn py-3" to={`/product-detail/${p.slug}`}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none">
                                                     <path d="M16.2251 12.1335H7.64816C7.06827 12.1332 6.50637 11.9322 6.0579 11.5645C5.60944 11.1969 5.30207 10.6854 5.18803 10.1168L3.49773 1.67373H0.836779C0.614851 1.67373 0.402013 1.58557 0.245087 1.42864C0.0881603 1.27171 0 1.05888 0 0.836949C0 0.615021 0.0881603 0.402184 0.245087 0.245257C0.402013 0.0883307 0.614851 0.000170233 0.836779 0.000170233H4.18389C4.37965 -0.00377763 4.5706 0.0610485 4.7235 0.183364C4.87639 0.30568 4.98155 0.47774 5.02067 0.669593L6.82811 9.79048C6.86723 9.98233 6.97239 10.1544 7.12529 10.2767C7.27818 10.399 7.46913 10.4638 7.66489 10.4599H16.2251C16.4197 10.4642 16.6097 10.4006 16.7625 10.2799C16.9152 10.1593 17.0211 9.98915 17.0619 9.79885L18.4091 3.52301C18.4357 3.39943 18.4339 3.27144 18.404 3.14865C18.374 3.02585 18.3166 2.91144 18.2361 2.81401C18.1555 2.71658 18.054 2.63865 17.939 2.58609C17.8241 2.53352 17.6987 2.50768 17.5724 2.51051H16.7356C16.5136 2.51051 16.3008 2.42235 16.1439 2.26542C15.987 2.10849 15.8988 1.89565 15.8988 1.67373C15.8988 1.4518 15.987 1.23896 16.1439 1.08204C16.3008 0.925109 16.5136 0.836949 16.7356 0.836949H17.5724C17.9523 0.828177 18.3293 0.905804 18.675 1.06397C19.0206 1.22214 19.3257 1.45673 19.5675 1.75003C19.8092 2.04334 19.9812 2.3877 20.0704 2.75716C20.1597 3.12661 20.1639 3.51151 20.0827 3.88282L18.7187 10.1587C18.5951 10.7252 18.2792 11.2314 17.8246 11.5914C17.3701 11.9514 16.8049 12.1429 16.2251 12.1335Z" fill="white" />
                                                     <path d="M14.2246 5.8591H9.20397C8.98204 5.8591 8.7692 5.77094 8.61227 5.61402C8.45535 5.45709 8.36719 5.24425 8.36719 5.02233C8.36719 4.8004 8.45535 4.58756 8.61227 4.43063C8.7692 4.27371 8.98204 4.18555 9.20397 4.18555H14.2246C14.4466 4.18555 14.6594 4.27371 14.8163 4.43063C14.9733 4.58756 15.0614 4.8004 15.0614 5.02233C15.0614 5.24425 14.9733 5.45709 14.8163 5.61402C14.6594 5.77094 14.4466 5.8591 14.2246 5.8591Z" fill="white" />
                                                     <path d="M11.7157 8.36806C11.4938 8.36806 11.2809 8.2799 11.124 8.12297C10.9671 7.96604 10.8789 7.75321 10.8789 7.53128V2.51061C10.8789 2.28868 10.9671 2.07584 11.124 1.91892C11.2809 1.76199 11.4938 1.67383 11.7157 1.67383C11.9376 1.67383 12.1505 1.76199 12.3074 1.91892C12.4643 2.07584 12.5525 2.28868 12.5525 2.51061V7.53128C12.5525 7.75321 12.4643 7.96604 12.3074 8.12297C12.1505 8.2799 11.9376 8.36806 11.7157 8.36806Z" fill="white" />
                                                 </svg>
                                                 Add to Cart
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -303,15 +303,15 @@ const Home = () => {
                                         <div className="col-md-6 col-lg-6 mb-4" key={`extra-${p.id}`}>
                                             <div className="feature-pro">
                                                 <div className="product-feature-img product-bg position-relative ">
-                                                    <a href={`/product-detail/${p.slug}`}><img src={`/storage/${image.image_url}`} className="img-fluid product-pic" /></a>
+                                                    <Link to={`/product-detail/${p.slug}`}><img src={`/storage/${image.image_url}`} className="img-fluid product-pic" /></Link>
                                                     <a className="icon-wish-product addwishlist" data-product-id={p.id} data-in-wishlist={p.in_wishlist ? '1' : ''}>
                                                         <img src={`${window.location.origin}${p.in_wishlist ? '/webassets/img/green-wishlist-bg.svg' : '/webassets/img/unfillwishlist.svg'}`} className="wishlist-icon" />
                                                     </a>
                                                 </div>
                                                 <div className="px-3 py-4">
-                                                    <a href={`/product-detail/${p.slug}`} className="text-black">
+                                                    <Link to={`/product-detail/${p.slug}`} className="text-black">
                                                         <h3 className="text-capitalize one-line" style={{ fontSize: "0rem" }}>{p.title}</h3>
-                                                    </a>
+                                                    </Link>
                                                     <p className="f14 lh-base my-4 two-line">{(p.description || '').replace(/<[^>]*>?/gm, '')}</p>
                                                     <p className="mb-1"> <span className="primary-theme price-offer">${variant.discounted_price || ''}.00</span><span className="price-old ms-2">${variant.price || ''}.00</span></p>
                                                     <div className="d-flex align-items-center gap-1 mb-4">
@@ -325,14 +325,14 @@ const Home = () => {
                                                             <i className="fa fa-star-o" aria-hidden="true" key={`ees-${p.id}-${i}`}></i>
                                                         ))}
                                                     </div>
-                                                    <a className="green-btn py-3" href={`/product-detail/${p.slug}`}>
+                                                    <Link className="green-btn py-3" to={`/product-detail/${p.slug}`}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none">
                                                             <path d="M16.2251 12.1335H7.64816C7.06827 12.1332 6.50637 11.9322 6.0579 11.5645C5.60944 11.1969 5.30207 10.6854 5.18803 10.1168L3.49773 1.67373H0.836779C0.614851 1.67373 0.402013 1.58557 0.245087 1.42864C0.0881603 1.27171 0 1.05888 0 0.836949C0 0.615021 0.0881603 0.402184 0.245087 0.245257C0.402013 0.0883307 0.614851 0.000170233 0.836779 0.000170233H4.18389C4.37965 -0.00377763 4.5706 0.0610485 4.7235 0.183364C4.87639 0.30568 4.98155 0.47774 5.02067 0.669593L6.82811 9.79048C6.86723 9.98233 6.97239 10.1544 7.12529 10.2767C7.27818 10.399 7.46913 10.4638 7.66489 10.4599H16.2251C16.4197 10.4642 16.6097 10.4006 16.7625 10.2799C16.9152 10.1593 17.0211 9.98915 17.0619 9.79885L18.4091 3.52301C18.4357 3.39943 18.4339 3.27144 18.404 3.14865C18.374 3.02585 18.3166 2.91144 18.2361 2.81401C18.1555 2.71658 18.054 2.63865 17.939 2.58609C17.8241 2.53352 17.6987 2.50768 17.5724 2.51051H16.7356C16.5136 2.51051 16.3008 2.42235 16.1439 2.26542C15.987 2.10849 15.8988 1.89565 15.8988 1.67373C15.8988 1.4518 15.987 1.23896 16.1439 1.08204C16.3008 0.925109 16.5136 0.836949 16.7356 0.836949H17.5724C17.9523 0.828177 18.3293 0.905804 18.675 1.06397C19.0206 1.22214 19.3257 1.45673 19.5675 1.75003C19.8092 2.04334 19.9812 2.3877 20.0704 2.75716C20.1597 3.12661 20.1639 3.51151 20.0827 3.88282L18.7187 10.1587C18.5951 10.7252 18.2792 11.2314 17.8246 11.5914C17.3701 11.9514 16.8049 12.1429 16.2251 12.1335Z" fill="white" />
                                                             <path d="M14.2246 5.8591H9.20397C8.98204 5.8591 8.7692 5.77094 8.61227 5.61402C8.45535 5.45709 8.36719 5.24425 8.36719 5.02233C8.36719 4.8004 8.45535 4.58756 8.61227 4.43063C8.7692 4.27371 8.98204 4.18555 9.20397 4.18555H14.2246C14.4466 4.18555 14.6594 4.27371 14.8163 4.43063C14.9733 4.58756 15.0614 4.8004 15.0614 5.02233C15.0614 5.24425 14.9733 5.45709 14.8163 5.61402C14.6594 5.77094 14.4466 5.8591 14.2246 5.8591Z" fill="white" />
                                                             <path d="M11.7157 8.36806C11.4938 8.36806 11.2809 8.2799 11.124 8.12297C10.9671 7.96604 10.8789 7.75321 10.8789 7.53128V2.51061C10.8789 2.28868 10.9671 2.07584 11.124 1.91892C11.2809 1.76199 11.4938 1.67383 11.7157 1.67383C11.9376 1.67383 12.1505 1.76199 12.3074 1.91892C12.4643 2.07584 12.5525 2.28868 12.5525 2.51061V7.53128C12.5525 7.75321 12.4643 7.96604 12.3074 8.12297C12.1505 8.2799 11.9376 8.36806 11.7157 8.36806Z" fill="white" />
                                                         </svg>
                                                         Add to Cart
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -420,7 +420,7 @@ const Home = () => {
                                 At PortaCourts, we pride ourselves on using a leading process that guarantees lasting beauty. Our design layer is integrated within the board to prevent wear and maintain its original color and elegance over time, offering you a maintenance-free, cost-effective solution.
                             </p>
 
-                            <a className="green-btn border-0  py-3" href="/about-us" style={{ marginLeft: "135px" }}>Read More</a>
+                            <Link className="green-btn border-0  py-3" to="/about-us" style={{ marginLeft: "135px" }}>Read More</Link>
                         </div>
                         <div className="col-lg-5 abouts-inner-img px-0">
                             <img src={`${window.location.origin}/webassets/img/abouts-home.png`} className="img-fluid h-100 w-100" alt="About Us" />
@@ -446,9 +446,9 @@ const Home = () => {
               over time, offering you a maintenance-free, cost-effective solution.
             </p>
 
-            <a className="green-btn border-0 py-3" href="/about-us">
+            <Link className="green-btn border-0 py-3" to="/about-us">
               Read More
-            </a>
+            </Link>
           </div>
           <div className="col-lg-5 abouts-inner-img px-0">
             <img

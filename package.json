@@ -12,7 +12,7 @@
   "dependencies": {
     "@iconify/react": "^6.0.2",
     "@popperjs/core": "^2.11.8",
-    "@vitejs/plugin-react-swc": "3.6.0",
+    "@vitejs/plugin-react-swc": "^3.6.0",
     "axios": "^1.6.2",
     "bootstrap": "^5.3.8",
     "prop-types": "^15.8.1",

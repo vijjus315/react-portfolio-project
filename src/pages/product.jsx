@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Link } from 'react-router-dom';
 import LoginModal from '../components/login.jsx';
 import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
@@ -400,7 +401,7 @@ const ProductsPage = () => {
                                 return (
                                     <div className="col-md-6 col-xl-4 mb-3" key={p.id}>
                                         {/* /product-detail */}
-                                        <a href={`/product-detail/${p.slug}?id=${p.id}`} className="text-decoration-none">
+                                        <Link to={`/product-detail/${p.slug}?id=${p.id}`} className="text-decoration-none">
                                             <div className="feature-pro" style={{
                                                 border: "2px solid white",borderRadius: "0px",boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",backgroundColor: "#fff",
                                 
@@ -453,7 +454,7 @@ const ProductsPage = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </Link>
                                     </div>
                                 );
                                 })

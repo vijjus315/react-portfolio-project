@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Link } from 'react-router-dom';
 import LoginModal from '../components/login.jsx';
 import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
@@ -266,10 +267,10 @@ const Cart = () => {
               <div className="row common-card-bg">
                 <div className="col-12">
                   <div className="empty-cart text-center h-100 py-5">
-                    <img src={`${window.location.origin}/public/webassets/img/EmptyCart.svg`} className="img-fluid" alt="Empty cart" />
+                    <img src={`${window.location.origin}/webassets/img/EmptyCart.svg`} className="img-fluid" alt="Empty cart" />
                     <h4 className="fw-400">Hey, it's feel so light</h4>
                     <p className="fw-400 pb-2">There is nothing in your cart. Let's add some items.</p>
-                    <a href="/wishlist" className="green-btn py-3">Add Items From Wishlist</a>
+                    <Link to="/wishlist" className="green-btn py-3">Add Items From Wishlist</Link>
                   </div>
                 </div>
               </div>
