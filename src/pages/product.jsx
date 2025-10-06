@@ -232,15 +232,24 @@ const ProductsPage = () => {
         return list;
     }, [allProducts, appliedCategoryIds, appliedSortBy, appliedPriceRange]);
 
+    // Initialize slider on component mount
     useEffect(() => {
-        // Initialize jQuery UI slider if available to match original design
-        try {
-            if (window.$ && window.$.fn && typeof window.$.fn.slider === 'function') {
-                const [$min, $max] = priceRange;
-                const $slider = window.$('#slider-range');
-                if ($slider.data('ui-slider')) {
-                    $slider.slider('values', 0, $min).slider('values', 1, $max);
-                } else {
+        const initializeSlider = () => {
+            try {
+                if (window.$ && window.$.fn && typeof window.$.fn.slider === 'function') {
+                    const [$min, $max] = priceRange;
+                    const $slider = window.$('#slider-range');
+                    
+                    if ($slider.length === 0) {
+                        console.log('Slider element not found, retrying...');
+                        setTimeout(initializeSlider, 100);
+                        return;
+                    }
+                    
+                    if ($slider.data('ui-slider')) {
+                        $slider.slider('destroy');
+                    }
+                    
                     $slider.slider({
                         range: true,
                         min: 0,
@@ -253,11 +262,27 @@ const ProductsPage = () => {
                             setPriceRange([v1, v2]);
                         }
                     });
+                    
+                    window.$('#amount').text(`$${$min} - $${$max}`);
+                    console.log('Price range slider initialized successfully');
+                } else {
+                    console.log('jQuery UI slider not available');
                 }
-                window.$('#amount').text(`$${$min} - $${$max}`);
+            } catch (e) {
+                console.error('Error initializing slider:', e);
             }
-        } catch (e) {
-            // noooop
+        };
+        
+        // Initialize after a short delay to ensure DOM is ready
+        setTimeout(initializeSlider, 200);
+    }, []); // Only run once on mount
+
+    // Update slider values when priceRange changes
+    useEffect(() => {
+        if (window.$ && window.$('#slider-range').data('ui-slider')) {
+            const [$min, $max] = priceRange;
+            window.$('#slider-range').slider('values', 0, $min).slider('values', 1, $max);
+            window.$('#amount').text(`$${$min} - $${$max}`);
         }
     }, [priceRange]);
 
