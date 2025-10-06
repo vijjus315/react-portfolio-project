@@ -7,7 +7,6 @@ import SignupModal from '../components/signup.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import '../styles/bootstrap';
-import Ceo from '../components/ceo';  
 import VerifyEmailModal from '../components/verifyEmail';
 
 const AboutUs = () => {
@@ -174,8 +173,41 @@ const AboutUs = () => {
         </div>
       </section>
 
-      {/* ceo section */}
-      <Ceo />
+      {/* CEO Section */}
+      <section className="testimonials-wrapper py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12 col-sm-9 col-lg-8 mx-auto">
+              <div className="contain">
+                <div className="item">
+                  <div className="row">
+                    <div className="col-md-4">
+                      <div className="testimonial-image position-relative">
+                        <img src="https://www.portacourts.com/storage/images/eVJ82A8WLHTxXDp19uCg4J5nbVkq37eOlThNMti7.jpg" className="img-fluid" />
+                        <div className="name-testi">
+                          <img src="https://www.portacourts.com/webassets/img/ellipse.svg" className="img-fluid" />
+                          <h6 className="text-center black-grey">Hammy Owen</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-8 mt-3 mt-md-0">
+                      <div className="testimonials-text ps-md-4">
+                        <h2 className="text-white">CEO <br/>
+                        </h2>
+                        <p className="text-white "></p>
+                        <div>This all started when I wanted to avoid painting lines on my tennis court and found the temporary options unsatisfactory. After extensive research and beta testing, I believe we've created an incredible alternative that's not only high quality but also much cheaper than a permanent court and fully portable. We've used this setup everywhere—from backyard blacktops to tennis courts, and even in corporate conference rooms during meetings.</div>
+                        <div><br/></div>
+                        <div>Whether you're looking for a semi-permanent or permanent solution, or even considering starting a side hustle, this court is perfect for you. Market data shows that this is a lot more fun than renting bounce houses 🤪 (with daily rentals fetching $350-$450/day). You can organize tournaments, play in unique locations, or have your own court ready when you can't find an open one. Be an early adopter!</div> 
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* dark elements */}
       <section className="bgdark-grey py-5">
