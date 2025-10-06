@@ -247,13 +247,13 @@ const ProductsPage = () => {
                         values: [$min, $max],
                         slide: function (_e, ui) {
                             const [v1, v2] = ui.values;
-                            window.$('#amount').val(`$${v1} - $${v2}`);
+                            window.$('#amount').text(`$${v1} - $${v2}`);
                             // Update the price range state but don't apply until Apply Filter is clicked
                             setPriceRange([v1, v2]);
                         }
                     });
                 }
-                window.$('#amount').val(`$${$min} - $${$max}`);
+                window.$('#amount').text(`$${$min} - $${$max}`);
             }
         } catch (e) {
             // noooop
@@ -295,7 +295,7 @@ const ProductsPage = () => {
                                     <div className="d-flex align-items-center mt-3 justify-content-between">
                                         <h6 className="price-filter">Prices Range</h6>
                                         <p className="range-value primary-theme">
-                                            <input type="text" id="amount" />
+                                            <span id="amount">${priceRange[0]} - ${priceRange[1]}</span>
                                             <input type="hidden" name="min_price" id="min-price" value={priceRange[0]} />
                                             <input type="hidden" name="max_price" id="max-price" value={priceRange[1]} />
                                         </p>

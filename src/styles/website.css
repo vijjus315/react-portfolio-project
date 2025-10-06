@@ -175,6 +175,54 @@ body.login-page {
     visibility: visible !important;
 }
 
+/* Price range slider styling */
+.price-range-slider .range-value span {
+    color: var(--primary-theme);
+    font-size: 16px;
+    font-weight: 500;
+    font-family: var(--font-Yantramanav);
+    text-align: end;
+}
+
+/* Ensure slider handles are visible */
+.price-range-slider .range-bar {
+    border: none !important;
+    background: #c5c5c5 !important;
+    height: 6px !important;
+    width: 96% !important;
+    margin-left: 8px !important;
+    position: relative !important;
+}
+
+.price-range-slider .range-bar .ui-slider-range {
+    background: var(--primary-theme) !important;
+    height: 6px !important;
+    border-radius: 3px !important;
+}
+
+.price-range-slider .range-bar .ui-slider-handle {
+    border: 2px solid #fff !important;
+    border-radius: 50% !important;
+    background: var(--primary-theme) !important;
+    height: 20px !important;
+    width: 20px !important;
+    top: -7px !important;
+    cursor: pointer !important;
+    position: absolute !important;
+    z-index: 2 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+.price-range-slider .range-bar .ui-slider-handle:hover {
+    background: #2d5a2d !important;
+    transform: scale(1.1) !important;
+}
+
+.price-range-slider .range-bar .ui-slider-handle:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3) !important;
+}
+
 /* Toastr Error Styling */
 #toast-container > .toast-error {
     background-color: #dc3545 !important;
