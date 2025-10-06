@@ -34,7 +34,7 @@ export const changePassword = (payload) => {
 };
 
 export const updateProfile = (payload) => {
-    return apiClient.post("/auth/update-profile", payload).then((r) => r.data);
+    return apiClient.put("/auth/edit-profile", payload).then((r) => r.data);
 };
 
 export const logout = () => {
