@@ -8,6 +8,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import MyOrdersShimmer from '../components/MyOrdersShimmer.jsx';
 import { getMyOrders } from '../services/order.js';
 import { getImageUrl } from '../utils/imageUtils.js';
 import '../styles/bootstrap';
@@ -128,22 +129,7 @@ const MyOrders = () => {
     if (isLoading) {
         return (
             <>
-                <section className="py-5">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12">
-                                <div className="border-line"></div>
-                                <h2 className="text-capitalize">My orders</h2>
-                            </div>
-                            <div className="col-12 text-center py-5">
-                                <div className="spinner-border text-primary" role="status">
-                                    <span className="visually-hidden">Loading...</span>
-                                </div>
-                                <p className="mt-3">Loading your orders...</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <MyOrdersShimmer />
                 <LoginModal />
                 <SignupModal />
                 <VerifyEmailModal />
