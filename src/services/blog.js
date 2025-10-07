@@ -1,8 +1,22 @@
 import axios from "axios";
 
+// Get API base URL from environment variable with fallback
+const getBlogApiBaseUrl = () => {
+  // Vite automatically exposes environment variables prefixed with VITE_
+  const envUrl = import.meta.env.VITE_BLOG_API_BASE_URL;
+  
+  // Fallback to default URL if environment variable is not set
+  const defaultUrl = "http://3.138.53.79:4235/api/v1";
+  
+  console.log("🔧 Blog API: Environment URL:", envUrl);
+  console.log("🔧 Blog API: Using URL:", envUrl || defaultUrl);
+  
+  return envUrl || defaultUrl;
+};
+
 // Create a separate axios instance specifically for blog API
 const blogApiClient = axios.create({
-  baseURL: "http://18.188.69.99:4235/api/v1",
+  baseURL: getBlogApiBaseUrl(),
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

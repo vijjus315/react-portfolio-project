@@ -585,6 +585,7 @@ import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import ForgetPasswordModal from '../components/forgetPassword.jsx';
+import ProductDetailShimmer from '../components/ProductDetailShimmer.jsx';
 import { getProductBySlug, getProductById } from '../services/product.js';
 import { getImageUrl, getVideoUrl } from '../utils/imageUtils.js';
 import { addToCart, getCartItems } from '../services/cart.js';
@@ -1086,22 +1087,7 @@ const ProductDetail = () => {
     }, [product, activeVariantIdx]);
 
     if (!product) {
-        return (
-            <>
-                <section className="py-5">
-                    <div className="container">
-                        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
-                            <div className="text-center">
-                                <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
-                                    <span className="visually-hidden">Loading...</span>
-                                </div>
-                                <p className="mt-3 text-muted">Loading product details...</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </>
-        );
+        return <ProductDetailShimmer />;
     }
 
     return (

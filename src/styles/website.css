@@ -1085,6 +1085,193 @@ div .border-primary {
     resize: none;
 }
 
+/* Shimmer Loading Effect */
+.shimmer-container {
+    animation: shimmer-pulse 1.5s ease-in-out infinite;
+}
+
+.shimmer-placeholder {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer-wave 1.5s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.shimmer-image {
+    height: 250px;
+    overflow: hidden;
+}
+
+.shimmer-image .shimmer-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+}
+
+.shimmer-wishlist {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shimmer-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.shimmer-title {
+    height: 24px;
+    width: 80%;
+}
+
+.shimmer-price {
+    height: 20px;
+    width: 80px;
+}
+
+.shimmer-price-old {
+    height: 18px;
+    width: 60px;
+}
+
+.shimmer-star {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+}
+
+.shimmer-cart-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+/* Product Detail Shimmer Styles */
+.shimmer-thumbnail {
+    border: 1px solid #ccc !important;
+    cursor: default !important;
+}
+
+.shimmer-thumbnail-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+}
+
+.shimmer-main-image {
+    height: 550px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.shimmer-title {
+    height: 36px;
+    width: 70%;
+}
+
+.shimmer-label {
+    height: 20px;
+    width: 60px;
+}
+
+.shimmer-variant-data {
+    height: 24px;
+    width: 200px;
+}
+
+.shimmer-price-large {
+    height: 32px;
+    width: 120px;
+}
+
+.shimmer-price-strike {
+    height: 24px;
+    width: 80px;
+}
+
+.shimmer-discount-badge {
+    height: 28px;
+    width: 100px;
+    border-radius: 4px;
+}
+
+.shimmer-shipping-info {
+    height: 60px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.shimmer-category {
+    height: 20px;
+    width: 150px;
+}
+
+.shimmer-quantity-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.shimmer-quantity-number {
+    width: 60px;
+    height: 40px;
+    border-radius: 4px;
+    margin: 0 10px;
+}
+
+.shimmer-btn {
+    height: 45px;
+    border-radius: 6px;
+}
+
+.shimmer-btn-large {
+    width: 200px;
+}
+
+.shimmer-wishlist-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.shimmer-tab {
+    height: 40px;
+    width: 120px;
+    border-radius: 4px;
+    margin-right: 20px;
+}
+
+.shimmer-description-line {
+    height: 16px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+/* Shimmer Animations */
+@keyframes shimmer-wave {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes shimmer-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .blog-detail-wrapper h2 {
@@ -1102,5 +1289,32 @@ div .border-primary {
     .blog-detail-wrapper .container {
         padding: 20px;
         margin: 10px;
+    }
+    
+    .shimmer-image {
+        height: 200px;
+    }
+    
+    /* Product Detail Shimmer Mobile Styles */
+    .shimmer-thumbnail-img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .shimmer-main-image {
+        height: 300px;
+    }
+    
+    .shimmer-title {
+        height: 28px;
+        width: 85%;
+    }
+    
+    .shimmer-btn-large {
+        width: 150px;
+    }
+    
+    .shimmer-shipping-info {
+        height: 80px;
     }
 }

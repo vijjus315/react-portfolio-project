@@ -6,6 +6,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import ProductShimmer from '../components/ProductShimmer.jsx';
 import { getProducts } from '../services/product.js';
 import { addToWishlist, removeFromWishlist } from '../services/wishlist.js';
 import { isAuthenticated } from '../services/auth.js';
@@ -405,14 +406,7 @@ const ProductsPage = () => {
                         
                         <div className="row pt-4">
                             {isLoading ? (
-                                <div className="d-flex mx-auto justify-content-center align-items-center my-5 h-100">
-                                    <div className="text-center">
-                                        <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
-                                            <span className="visually-hidden">Loading...</span>
-                                        </div>
-                                        <p className="mt-3 text-muted">Loading products...</p>
-                                    </div>
-                                </div>
+                                <ProductShimmer count={3} />
                             ) : filteredProducts.length === 0 ? (
                                 <div className="d-flex mx-auto justify-content-center align-items-center my-5 h-100">
                                     <img src={`${window.location.origin}/webassets/img/wishlist-empty.png`} className=" no-data-found" />
