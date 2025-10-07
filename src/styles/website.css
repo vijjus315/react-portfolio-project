@@ -1569,6 +1569,46 @@ div .border-primary {
     width: 80px;
 }
 
+/* Address Page Shimmer Styles */
+.shimmer-add-address-btn {
+    height: 50px;
+    width: 140px;
+    border-radius: 10px;
+    margin-left: auto;
+}
+
+.shimmer-address-name {
+    height: 20px;
+    width: 120px;
+}
+
+.shimmer-address-line-1 {
+    height: 16px;
+    width: 180px;
+}
+
+.shimmer-address-line-2 {
+    height: 16px;
+    width: 150px;
+}
+
+.shimmer-address-line-3 {
+    height: 16px;
+    width: 140px;
+}
+
+.shimmer-dropdown-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.shimmer-address-type-badge {
+    height: 32px;
+    width: 80px;
+    border-radius: 20px;
+}
+
 /* Shimmer Animations */
 @keyframes shimmer-wave {
     0% {
@@ -1839,5 +1879,46 @@ div .border-primary {
     .shimmer-step-date {
         height: 12px;
         width: 60px;
+    }
+    
+    /* Address Page Shimmer Mobile Styles */
+    .shimmer-page-title {
+        height: 36px;
+        width: 150px;
+    }
+    
+    .shimmer-add-address-btn {
+        height: 40px;
+        width: 120px;
+    }
+    
+    .shimmer-address-name {
+        height: 18px;
+        width: 100px;
+    }
+    
+    .shimmer-address-line-1 {
+        height: 14px;
+        width: 160px;
+    }
+    
+    .shimmer-address-line-2 {
+        height: 14px;
+        width: 130px;
+    }
+    
+    .shimmer-address-line-3 {
+        height: 14px;
+        width: 120px;
+    }
+    
+    .shimmer-dropdown-btn {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .shimmer-address-type-badge {
+        height: 28px;
+        width: 70px;
     }
 }

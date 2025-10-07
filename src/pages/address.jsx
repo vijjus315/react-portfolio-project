@@ -5,6 +5,7 @@ import SignupModal from '../components/signup.jsx';
 import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
+import AddressShimmer from '../components/AddressShimmer.jsx';
 import { getAddresses, addAddress, updateAddress, deleteAddress } from '../services/address.js';
 import '../styles/bootstrap';
 
@@ -298,22 +299,7 @@ const Address = () => {
     };
 
     if (isLoading) {
-        return (
-            <>
-                
-                <section className="py-5">
-                    <div className="container">
-                        <div className="text-center">
-                            <div className="spinner-border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </div>
-                            <p className="mt-2">Loading addresses...</p>
-                        </div>
-                    </div>
-                </section>
-                
-            </>
-        );
+        return <AddressShimmer />;
     }
 
     return (
