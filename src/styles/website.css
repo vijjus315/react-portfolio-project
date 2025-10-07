@@ -878,11 +878,11 @@ div .border-primary {
 }
 
 .blog-detail-wrapper .container {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 40px;
-    margin-top: 20px;
+    /* background-color: white; */
+    /* border-radius: 10px; */
+    /* box-shadow: 0 2px 10px rgba(0,0,0,0.1); */
+    /* padding: 40px; */
+    /* margin-top: 20px; */
     margin-bottom: 20px;
 }
 
@@ -916,7 +916,7 @@ div .border-primary {
 
 .blogdetail-fluid {
     width: 100%;
-    height: auto;
+    /* height: auto; */
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
@@ -1253,6 +1253,159 @@ div .border-primary {
     margin-bottom: 8px;
 }
 
+/* Blog Shimmer Styles */
+.shimmer-blog-title {
+    height: 60px;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.shimmer-blog-subtitle {
+    height: 24px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+.shimmer-blog-image {
+    height: 250px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.shimmer-list-blog-image {
+    height: 120px;
+    width: 180px;
+    border-radius: 8px;
+}
+
+.shimmer-meta-text {
+    height: 16px;
+    width: 120px;
+}
+
+.shimmer-blog-grid-title {
+    height: 32px;
+    width: 100%;
+}
+
+.shimmer-list-blog-title {
+    height: 28px;
+    width: 100%;
+}
+
+.shimmer-author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.shimmer-author-name {
+    height: 20px;
+    width: 120px;
+}
+
+.shimmer-author-role {
+    height: 16px;
+    width: 80px;
+}
+
+/* Blog Detail Shimmer Styles */
+.shimmer-blog-detail-title {
+    height: 48px;
+    width: 80%;
+}
+
+.shimmer-author-detail-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.shimmer-author-name-detail {
+    height: 24px;
+    width: 120px;
+}
+
+.shimmer-date-detail {
+    height: 16px;
+    width: 100px;
+}
+
+.shimmer-comments-count {
+    height: 24px;
+    width: 40px;
+}
+
+.shimmer-comments-label {
+    height: 14px;
+    width: 60px;
+}
+
+.shimmer-blog-detail-banner {
+    height: 400px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.shimmer-content-paragraph {
+    height: 20px;
+    width: 100%;
+}
+
+.shimmer-border-line {
+    height: 2px;
+    width: 60px;
+}
+
+.shimmer-comments-header {
+    height: 32px;
+    width: 120px;
+}
+
+.shimmer-sort-label {
+    height: 16px;
+    width: 60px;
+    margin: 0 auto;
+}
+
+.shimmer-dropdown {
+    height: 36px;
+    width: 100px;
+    border-radius: 4px;
+}
+
+.shimmer-comment-text {
+    height: 16px;
+    width: 100%;
+}
+
+.shimmer-comment-date {
+    height: 14px;
+    width: 80px;
+}
+
+.shimmer-form-title {
+    height: 32px;
+    width: 150px;
+}
+
+.shimmer-form-label {
+    height: 16px;
+    width: 60px;
+}
+
+.shimmer-textarea {
+    height: 130px;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.shimmer-submit-btn {
+    height: 45px;
+    width: 100%;
+    border-radius: 6px;
+}
+
 /* Shimmer Animations */
 @keyframes shimmer-wave {
     0% {
@@ -1316,5 +1469,95 @@ div .border-primary {
     
     .shimmer-shipping-info {
         height: 80px;
+    }
+    
+    /* Blog Shimmer Mobile Styles */
+    .shimmer-blog-title {
+        height: 40px;
+        width: 280px;
+    }
+    
+    .shimmer-blog-subtitle {
+        height: 20px;
+        width: 200px;
+    }
+    
+    .shimmer-blog-image {
+        height: 200px;
+    }
+    
+    .shimmer-list-blog-image {
+        height: 100px;
+        width: 150px;
+    }
+    
+    .shimmer-blog-grid-title {
+        height: 28px;
+    }
+    
+    .shimmer-list-blog-title {
+        height: 24px;
+    }
+    
+    .shimmer-author-avatar {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .shimmer-author-name {
+        width: 100px;
+        height: 18px;
+    }
+    
+    .shimmer-author-role {
+        width: 70px;
+        height: 14px;
+    }
+    
+    /* Blog Detail Shimmer Mobile Styles */
+    .shimmer-blog-detail-title {
+        height: 36px;
+        width: 90%;
+    }
+    
+    .shimmer-author-detail-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .shimmer-author-name-detail {
+        width: 100px;
+        height: 20px;
+    }
+    
+    .shimmer-date-detail {
+        width: 80px;
+        height: 14px;
+    }
+    
+    .shimmer-blog-detail-banner {
+        height: 250px;
+    }
+    
+    .shimmer-content-paragraph {
+        height: 18px;
+    }
+    
+    .shimmer-comments-header {
+        height: 28px;
+        width: 100px;
+    }
+    
+    .shimmer-form-title {
+        height: 28px;
+        width: 130px;
+    }
+    
+    .shimmer-textarea {
+        height: 100px;
+    }
+    
+    .shimmer-submit-btn {
+        height: 40px;
     }
 }

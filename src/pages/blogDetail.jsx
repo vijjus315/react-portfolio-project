@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { useParams } from "react-router-dom";
+import BlogDetailShimmer from "../components/BlogDetailShimmer.jsx";
+import { getBlogDetailApiUrl } from "../services/blog.js";
 
 const BlogDetail = () => {
   const [comment, setComment] = useState("");
@@ -17,7 +19,7 @@ const BlogDetail = () => {
         console.log('Fetching blog with ID:', id);
         
         // Fetch blog detail using the ID from URL
-        const apiUrl = `http://18.188.69.99:4235/api/v1/blogs/${id}`;
+        const apiUrl = getBlogDetailApiUrl(id);
         console.log('API URL:', apiUrl);
         
         const response = await fetch(apiUrl, {
@@ -35,17 +37,32 @@ const BlogDetail = () => {
         
         const data = await response.json();
         console.log('API Response:', data);
+        console.log('API Response success:', data.success);
+        console.log('API Response body:', data.body);
         
-        if (data.success) {
+        if (data.success && data.body) {
           setBlog(data.body);
           setComments(data.body.blog_comments || []);
           console.log('Blog loaded successfully:', data.body.title);
+          console.log('Blog data:', {
+            id: data.body.id,
+            title: data.body.title,
+            description: data.body.description ? 'Has description' : 'No description',
+            image_url: data.body.image_url,
+            user: data.body.user
+          });
         } else {
-          console.error('Blog not found with ID:', id);
+          console.error('Blog not found or invalid response with ID:', id);
+          console.error('Response data:', data);
           setBlog(null);
         }
       } catch (error) {
         console.error('Error fetching blog detail:', error);
+        console.error('Error details:', {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
         setBlog(null);
       } finally {
         setLoading(false);
@@ -69,20 +86,7 @@ const BlogDetail = () => {
   };
 
   if (loading) {
-    return (
-      <section className="blog-detail-wrapper py-5">
-        <div className="container">
-          <div className="row">
-            <div className="col-12 text-center">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <p className="mt-3">Loading blog...</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
+    return <BlogDetailShimmer />;
   }
 
   if (!blog) {

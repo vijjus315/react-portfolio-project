@@ -7,6 +7,7 @@ import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import ForgetPasswordModal from '../components/forgetPassword.jsx';
+import BlogShimmer from '../components/BlogShimmer.jsx';
 import { getBlogs, transformBlogData, sortBlogsByPriority } from '../services/blog.js';
 import "../styles/bootstrap";
 import BlogDetail from "./blogDetail.jsx";
@@ -93,14 +94,7 @@ const Blog = () => {
               </div>
 
               {/* Loading State */}
-              {isLoading && (
-                <div className="text-center py-5">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <p className="mt-3 text-grey">Loading blogs...</p>
-                </div>
-              )}
+              {isLoading && <BlogShimmer />}
 
               {/* Error State */}
               {error && (
