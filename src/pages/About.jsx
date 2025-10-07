@@ -85,7 +85,7 @@ const AboutUs = () => {
                 Wanna know more about the industry trends, advanced court
                 solutions, and technical know-how behind the designing and
                 manufacturing of professional courts? Chip into our{" "}
-                <a href="https://www.portacourts.com/blog">blog</a> section!
+                <a href="/blog">blog</a> section!
               </p>
             </div>
           </div>
@@ -305,7 +305,7 @@ const AboutUs = () => {
                     </span>
                     <a
                       className="black-btn"
-                      href="https://www.portacourts.com/blog-detail/how-to-turn-your-driveway-into-a-portable-pickleball-court"
+                      href="/blogs/12"
                     >
                       Read More
                     </a>
@@ -340,7 +340,7 @@ const AboutUs = () => {
                     </span>
                     <a
                       className="black-btn"
-                      href="https://www.portacourts.com/blog-detail/portable-vs-permanent-pickleball-courts"
+                      href="/blogs/10"
                     >
                       Read More
                     </a>
@@ -375,7 +375,7 @@ const AboutUs = () => {
                     </span>
                     <a
                       className="black-btn"
-                      href="https://www.portacourts.com/blog-detail/how-to-set-up-a-portable-pickleball-court-in-20-minutes"
+                      href="/blogs/15"
                     >
                       Read More
                     </a>
