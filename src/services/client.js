@@ -8,7 +8,7 @@ import axios from "axios";
 // and falls back to the hardcoded URL if not provided.
 const baseURL =
     import.meta.env.VITE_API_BASE_URL ||
-    "http://18.188.69.99:4235/api/v1";
+    "http://3.138.53.79:4235/api/v1";
 
 // Create an Axios instance with custom configuration
 export const apiClient = axios.create({

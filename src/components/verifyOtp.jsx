@@ -28,7 +28,7 @@ const VerifyOtpModal = () => {
         setError('');
 
         try {
-            const response = await fetch('http://18.188.69.99:4235/api/v1/auth/verify-otp', {
+            const response = await fetch('http://3.138.53.79:4235/api/v1/auth/verify-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

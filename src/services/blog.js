@@ -41,7 +41,7 @@ const blogApiClient = axios.create({
  */
 export const getBlogs = async () => {
   try {
-    console.log("📝 API: Fetching blogs via http://18.188.69.99:4235/api/v1/blogs");
+    console.log("📝 API: Fetching blogs via http://3.138.53.79:4235/api/v1/blogs");
     const response = await blogApiClient.get("/blogs");
     console.log("📝 API: Blogs fetched successfully");
     return response.data;
