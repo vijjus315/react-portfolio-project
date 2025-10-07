@@ -11,10 +11,15 @@ export const getBlogApiBaseUrl = () => {
   // Fallback to default URL if environment variable is not set
   const defaultUrl = "http://3.138.53.79:4235/api/v1";
   
-  console.log("🔧 Blog API: Environment URL:", envUrl);
-  console.log("🔧 Blog API: Using URL:", envUrl || defaultUrl);
+  const baseUrl = envUrl || defaultUrl;
   
-  return envUrl || defaultUrl;
+  // Clean the URL to remove any trailing slashes to prevent double slashes
+  const cleanUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  
+  console.log("🔧 Blog API: Environment URL:", envUrl);
+  console.log("🔧 Blog API: Clean URL:", cleanUrl);
+  
+  return cleanUrl;
 };
 
 /**
@@ -23,7 +28,10 @@ export const getBlogApiBaseUrl = () => {
  * @returns {string} The complete blog detail API URL
  */
 export const getBlogDetailApiUrl = (blogId) => {
-  return `${getBlogApiBaseUrl()}blogs/${blogId}`;
+  const baseUrl = getBlogApiBaseUrl();
+  // Ensure base URL doesn't end with slash and path starts with slash
+  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  return `${cleanBaseUrl}/blogs/${blogId}`;
 };
 
 // Create a separate axios instance specifically for blog API
