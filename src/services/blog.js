@@ -29,11 +29,17 @@ export const getBlogApiBaseUrl = () => {
  */
 export const getBlogDetailApiUrl = (blogId) => {
   const baseUrl = getBlogApiBaseUrl();
-  // Ensure base URL ends with slash for proper concatenation
-  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-  const apiUrl = `${cleanBaseUrl}blogs/${blogId}`;
-  console.log("🔧 Blog Detail API URL:", apiUrl);
-  return apiUrl;
+  // Ensure base URL doesn't end with slash and path starts with slash
+  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  const finalUrl = `${cleanBaseUrl}/blogs/${blogId}`;
+  
+  console.log("🔧 Blog Detail URL Construction:");
+  console.log("  - Blog ID:", blogId);
+  console.log("  - Base URL:", baseUrl);
+  console.log("  - Clean Base URL:", cleanBaseUrl);
+  console.log("  - Final URL:", finalUrl);
+  
+  return finalUrl;
 };
 
 // Create a separate axios instance specifically for blog API
