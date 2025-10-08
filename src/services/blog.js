@@ -9,7 +9,7 @@ export const getBlogApiBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_BASE_URL;
   
   // Fallback to default URL if environment variable is not set
-  const defaultUrl = "http://3.138.53.79:4235/api/v1";
+  const defaultUrl = "https://staging.portacourts.com/api/v1";
   
   const baseUrl = envUrl || defaultUrl;
   
@@ -29,9 +29,11 @@ export const getBlogApiBaseUrl = () => {
  */
 export const getBlogDetailApiUrl = (blogId) => {
   const baseUrl = getBlogApiBaseUrl();
-  // Ensure base URL doesn't end with slash and path starts with slash
-  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-  return `${cleanBaseUrl}/blogs/${blogId}`;
+  // Ensure base URL ends with slash for proper concatenation
+  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+  const apiUrl = `${cleanBaseUrl}blogs/${blogId}`;
+  console.log("🔧 Blog Detail API URL:", apiUrl);
+  return apiUrl;
 };
 
 // Create a separate axios instance specifically for blog API
@@ -49,7 +51,7 @@ const blogApiClient = axios.create({
  */
 export const getBlogs = async () => {
   try {
-    console.log("📝 API: Fetching blogs via http://3.138.53.79:4235/api/v1/blogs");
+    console.log("📝 API: Fetching blogs via https://staging.portacourts.com/api/v1/blogs");
     const response = await blogApiClient.get("/blogs");
     console.log("📝 API: Blogs fetched successfully");
     return response.data;
