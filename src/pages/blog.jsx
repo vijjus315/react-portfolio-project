@@ -249,16 +249,28 @@ const Blog = () => {
                       />
                     </>
                   ) : (
-                    /* No Blogs Message */
-                    <div className="col-12 text-center py-5">
-                      <h3 className="text-grey">No blogs found</h3>
-                      <p className="text-grey">
-                        {currentPage > 1 
-                          ? `No blogs found on page ${currentPage}.`
-                          : 'Check back later for new blog posts!'
-                        }
-                      </p>
-                    </div>
+                    /* No Blogs Message with Back Button */
+                    <>
+                      <div className="col-12 text-center py-5">
+                        <h3 className="text-grey">No blogs found</h3>
+                        <p className="text-grey">
+                          {currentPage > 1 
+                            ? `No blogs found on page ${currentPage}.`
+                            : 'Check back later for new blog posts!'
+                          }
+                        </p>
+                      </div>
+                      
+                      {/* Show back button if we're on page 2 or higher and no blogs found */}
+                      {currentPage > 1 && (
+                        <Pagination
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onPageChange={handlePageChange}
+                          showBackButton={true}
+                        />
+                      )}
+                    </>
                   )}
                 </>
               )}

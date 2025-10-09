@@ -192,15 +192,29 @@ const Wishlist = () => {
                                                     />
                                                 </a>
                                                 <a 
-                                                    className="icon-wish-product addwishlist" 
+                                                    className="icon-wish-product addwishlist position-absolute" 
                                                     data-product-id={item.product_id} 
                                                     data-in-wishlist={isInWishlist}
                                                     onClick={() => handleWishlistToggle(item.product_id, isInWishlist)}
+                                                    style={{ 
+                                                        top: '10px', 
+                                                        right: '10px', 
+                                                        zIndex: 2,
+                                                        width: '40px',
+                                                        height: '40px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                                        borderRadius: '50%',
+                                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                    }}
                                                 >
                                                     <img 
                                                         src={`${window.location.origin}/webassets/img/green-wishlist-bg.svg`} 
                                                         className="wishlist-icon"
                                                         alt="Remove from wishlist"
+                                                        style={{ width: '24px', height: '24px' }}
                                                     />
                                                 </a>
                                             </div>
@@ -224,8 +238,9 @@ const Wishlist = () => {
                                                         </p>
                                                         {renderStars(product?.average_rating || 0)}
                                                     </div>
-                                                    <a href={`/product-detail/${product?.slug}`}>
-                                                        <img src={`${window.location.origin}/webassets/img/cart.svg`} alt="View product" />
+                                                    <a href={`/product-detail/${product?.slug}`} className="d-flex align-items-center gap-2 text-decoration-none">
+                                                        <img src={`${window.location.origin}/webassets/img/cart.svg`} alt="View product" style={{ width: '20px', height: '20px' }} />
+                                                        <span className="text-black fw-500" style={{ fontSize: '0.9rem' }}>View product</span>
                                                     </a>
                                                 </div>
                                             </div>
