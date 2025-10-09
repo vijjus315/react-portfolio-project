@@ -7,6 +7,7 @@ import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import ForgetPasswordModal from '../components/forgetPassword.jsx';
+import CartShimmer from '../components/CartShimmer.jsx';
 import { getCartItems, updateCartItemQuantity, removeCartItem, clearCart } from '../services/cart.js';
 import { checkout } from '../services/order.js';
 import { getImageUrl, testGetImageUrl } from '../utils/imageUtils.js';
@@ -255,13 +256,8 @@ const Cart = () => {
         <section className="py-5 mb-4">
           <div className="container">
             {isLoading ? (
-              // Loading State
-              <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '500px' }}>
-                <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <p className="mt-3 text-muted">Loading cart items...</p>
-              </div>
+              // Loading State with Shimmer
+              <CartShimmer rows={3} />
             ) : cartItems.length === 0 ? (
               // Empty Cart State - Original Design
               <div className="row common-card-bg">
