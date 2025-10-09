@@ -576,14 +576,24 @@ const Header = () => {
           {/* My Address Icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="21"
+            width="20"
             height="20"
-            viewBox="0 0 21 20"
+            viewBox="0 0 24 24"
             fill="none"
           >
             <path
-              d="M10.0865 7.27651C11.3791 7.27651 12.4269 6.26677 12.4269 5.02119C12.4269 3.77561 11.3791 2.76587 10.0865 2.76587C8.79394 2.76587 7.74609 3.77561 7.74609 5.02119C7.74609 6.26677 8.79394 7.27651 10.0865 7.27651Z"
-              fill="currentColor"
+              d="M10 2L3 7V22H21V7L10 2Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M14 13H10V17H14V13Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+              strokeLinejoin="round"
             />
           </svg>
           My Address
