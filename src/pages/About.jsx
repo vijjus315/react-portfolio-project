@@ -20,7 +20,7 @@ const AboutUs = () => {
             <div className="col-lg-7">
               <div className="banner-text">
                 <h1 className="font-oswald fw-600 text-uppercase" style={{ fontSize: "3.75rem" }}>
-                  <span className="color-change primary-theme" >A</span>
+                  <span className="color-change primary-theme" style={{ fontSize: "3.75rem" }}>A</span>
                   BOUT US
                 </h1>
                 <p className="text-white">

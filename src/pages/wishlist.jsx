@@ -9,6 +9,7 @@ import VerifyEmailModal from '../components/verifyEmail.jsx';
 import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import ForgetPasswordModal from '../components/forgetPassword.jsx';
+import WishlistShimmer from '../components/WishlistShimmer.jsx';
 import '../styles/bootstrap';
 
 const Wishlist = () => {
@@ -127,13 +128,8 @@ const Wishlist = () => {
                             <h2 className="text-capitalize">My Wishlist</h2>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-12 text-center py-5">
-                            <div className="spinner-border text-primary" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </div>
-                            <p className="mt-3">Loading your wishlist...</p>
-                        </div>
+                    <div className="row pt-4">
+                        <WishlistShimmer count={8} />
                     </div>
                 </div>
             </section>

@@ -126,7 +126,7 @@ const ContactUs = () => {
                     <div className="col-lg-7">
                         <div className="banner-text">
                             <h1 className="font-oswald fw-600 text-uppercase" style={{ fontSize: "3.75rem" }}>
-                                <span className="color-change primary-theme">C</span>ontact uS
+                                <span className="color-change primary-theme" style={{ fontSize: "3.75rem" }}>C</span>ontact Us
                             </h1>
                             <p className="text-white">
                                 We’d love to hear from you! Whether you have questions about our products, need assistance with a project, or want to provide feedback, the PortaCourts team is here to help. Reach out to us using the information below, and we’ll get back to you as soon as possible.
