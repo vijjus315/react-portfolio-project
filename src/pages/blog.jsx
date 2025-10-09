@@ -8,6 +8,7 @@ import ChangePasswordModal from '../components/changePassword.jsx';
 import EditProfileModal from '../components/editProfile.jsx';
 import ForgetPasswordModal from '../components/forgetPassword.jsx';
 import BlogShimmer from '../components/BlogShimmer.jsx';
+import Pagination from '../components/Pagination.jsx';
 import { getBlogs, transformBlogData, sortBlogsByPriority } from '../services/blog.js';
 import "../styles/bootstrap";
 import BlogDetail from "./blogDetail.jsx";
@@ -17,14 +18,19 @@ const Blog = () => {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalBlogs, setTotalBlogs] = useState(0);
   const navigate = useNavigate();
+  
+  const blogsPerPage = 6;
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         setIsLoading(true);
-        console.log('📝 Blog: Fetching blogs from API...');
-        const response = await getBlogs();
+        console.log(`📝 Blog: Fetching blogs from API - Page: ${currentPage}, Limit: ${blogsPerPage}`);
+        const response = await getBlogs(currentPage, blogsPerPage);
         
         if (response.success && response.body && response.body.data && response.body.data.rows) {
           console.log('📝 Blog: API response received:', response.body.data.rows.length, 'blogs');
@@ -32,15 +38,21 @@ const Blog = () => {
           // Transform API data to match UI structure
           const transformedBlogs = response.body.data.rows.map(transformBlogData);
           
-          // Sort blogs to prioritize specific IDs at the top
-          const sortedBlogs = sortBlogsByPriority(transformedBlogs);
+          // Sort blogs to prioritize specific IDs at the top (only for first page)
+          const sortedBlogs = currentPage === 1 ? sortBlogsByPriority(transformedBlogs) : transformedBlogs;
           setBlogPost(sortedBlogs);
           
+          // Set pagination info
+          setTotalPages(response.body.data.totalPages || Math.ceil(response.body.data.total / blogsPerPage));
+          setTotalBlogs(response.body.data.total || response.body.data.count || 0);
+          
           console.log('📝 Blog: Blogs transformed, sorted, and set:', sortedBlogs.length, 'blogs');
-          console.log('📝 Blog: Priority blogs at top:', sortedBlogs.slice(0, 4).map(b => `ID: ${b.id} - ${b.title}`));
+          console.log('📝 Blog: Pagination info - Page:', currentPage, 'Total Pages:', response.body.data.totalPages, 'Total Blogs:', response.body.data.total);
         } else {
           console.log('📝 Blog: No blogs found in API response');
           setBlogPost([]);
+          setTotalPages(1);
+          setTotalBlogs(0);
         }
       } catch (error) {
         console.error('❌ Blog: Failed to load blogs from API:', error);
@@ -48,13 +60,15 @@ const Blog = () => {
         
         // Fallback to empty array on error
         setBlogPost([]);
+        setTotalPages(1);
+        setTotalBlogs(0);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchBlogs();
-  }, []);
+  }, [currentPage, blogsPerPage]);
 
   // Static blog content - commented out as we're now using API data
   // const blogContent = [
@@ -78,6 +92,12 @@ const Blog = () => {
     setSelectedBlog(post);
     // Navigate to blog detail page using React Router
     navigate(`/blog-detail/${post.id}`);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -109,94 +129,40 @@ const Blog = () => {
               {/* Blog Posts Grid */}
               {!isLoading && !error && (
                 <>
-                  {/* Top 3 Blogs - 3 Column Layout */}
-                  {blogPost.length > 0 && (
-                    <div className="row mb-5" style={{ marginBottom: "4rem" }}>
-                      {blogPost.slice(0, 3).map((post) => (
-                        <div
-                          className="col-md-6 col-lg-4 mb-4 mb-lg-0"
-                          key={post.id}
-                        >
-                          <div
-                            className="blog-grid d-block"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => openBlogDetail(post)}
-                          >
-                            <div>
-                              <img
-                                src={post.image}
-                                className="img-fluid mb-3 blog-grid-image"
-                                alt={post.title}
-                              />
-                            </div>
-                            <div className="text-carousel">
-                              <div className="post-meta pb-3">
-                                <span className="f16 black-grey fw-500">Created</span>
-                                <span className="f14 text-grey">- {post.date}</span>
-                              </div>
-                              <h4 className="black-grey pb-3 mb-0 oneline-blog" style={{ fontSize: "1.25rem" }}>
-                                {post.title}
-                              </h4>
-                              <div className="four-line mb-4 padding-blog text-grey fw-400">
-                                <p className="text-grey fw-400">{post.description}</p>
-                              </div>
-                              <div className="post-author d-flex align-items-center gap-2">
-                                <div className="author-pic">
-                                  <img
-                                    src="https://www.portacourts.com/dummy.png"
-                                    alt={post.author}
-                                  />
-                                </div>
-                                <div className="text">
-                                  <p className="f20 black-grey fw-600 pb-0 lh-sm mb-0">
-                                    {post.author}
-                                  </p>
-                                  <p className="text-grey mb-0">{post.role}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Remaining Blogs - 2 Column Layout */}
-                  {blogPost.length > 3 && (
-                    <div className="row" style={{ marginTop: "2rem" }}>
-                      {blogPost.slice(3).map((post) => (
-                        <div
-                          className="col-lg-6 mb-4"
-                          key={post.id}
-                        >
-                          <div
-                            className="sports"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => openBlogDetail(post)}
-                          >
-                            <div className="mb-4">
-                              <div className="d-md-flex gap-3 align-items-center">
-                                <div className="listimage-blog">
+                  {blogPost.length > 0 ? (
+                    <>
+                      {/* First 3 Blogs - 3 Column Layout (only on first page) */}
+                      {currentPage === 1 && blogPost.length >= 3 && (
+                        <div className="row mb-5" style={{ marginBottom: "4rem" }}>
+                          {blogPost.slice(0, 3).map((post) => (
+                            <div
+                              className="col-md-6 col-lg-4 mb-4 mb-lg-0"
+                              key={post.id}
+                            >
+                              <div
+                                className="blog-grid d-block"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => openBlogDetail(post)}
+                              >
+                                <div>
                                   <img
                                     src={post.image}
-                                    className="listblog-image"
+                                    className="img-fluid mb-3 blog-grid-image"
                                     alt={post.title}
                                   />
                                 </div>
-
-                                <div className="text-carousel mt-3 mt-md-0">
-                                  <div className="post-meta pb-2">
-                                    <span className="f16 black-grey fw-500">
-                                      Created
-                                    </span>
-                                    <span className="f14 text-grey">
-                                      - {post.date}
-                                    </span>
+                                <div className="text-carousel">
+                                  <div className="post-meta pb-3">
+                                    <span className="f16 black-grey fw-500">Created</span>
+                                    <span className="f14 text-grey">- {post.date}</span>
                                   </div>
-                                  <h4 className="black-grey pb-3 mb-0 blogone f18">
+                                  <h4 className="black-grey pb-3 mb-0 oneline-blog" style={{ fontSize: "1.25rem" }}>
                                     {post.title}
                                   </h4>
-                                  <div className="post-author d-flex align-items-center gap-2 mt-2">
+                                  <div className="four-line mb-4 padding-blog text-grey fw-400">
+                                    <p className="text-grey fw-400">{post.description}</p>
+                                  </div>
+                                  <div className="post-author d-flex align-items-center gap-2">
                                     <div className="author-pic">
                                       <img
                                         src="https://www.portacourts.com/dummy.png"
@@ -207,25 +173,91 @@ const Blog = () => {
                                       <p className="f20 black-grey fw-600 pb-0 lh-sm mb-0">
                                         {post.author}
                                       </p>
-                                      <p className="text-grey mb-0">
-                                        {post.role}
-                                      </p>
+                                      <p className="text-grey mb-0">{post.role}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Remaining Blogs - 2 Column Layout */}
+                      <div className="row" style={{ marginTop: currentPage === 1 && blogPost.length >= 3 ? "2rem" : "0" }}>
+                        {blogPost.slice(currentPage === 1 ? 3 : 0).map((post) => (
+                          <div
+                            className="col-lg-6 mb-4"
+                            key={post.id}
+                          >
+                            <div
+                              className="sports"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => openBlogDetail(post)}
+                            >
+                              <div className="mb-4">
+                                <div className="d-md-flex gap-3 align-items-center">
+                                  <div className="listimage-blog">
+                                    <img
+                                      src={post.image}
+                                      className="listblog-image"
+                                      alt={post.title}
+                                    />
+                                  </div>
+
+                                  <div className="text-carousel mt-3 mt-md-0">
+                                    <div className="post-meta pb-2">
+                                      <span className="f16 black-grey fw-500">
+                                        Created
+                                      </span>
+                                      <span className="f14 text-grey">
+                                        - {post.date}
+                                      </span>
+                                    </div>
+                                    <h4 className="black-grey pb-3 mb-0 blogone f18">
+                                      {post.title}
+                                    </h4>
+                                    <div className="post-author d-flex align-items-center gap-2 mt-2">
+                                      <div className="author-pic">
+                                        <img
+                                          src="https://www.portacourts.com/dummy.png"
+                                          alt={post.author}
+                                        />
+                                      </div>
+                                      <div className="text">
+                                        <p className="f20 black-grey fw-600 pb-0 lh-sm mb-0">
+                                          {post.author}
+                                        </p>
+                                        <p className="text-grey mb-0">
+                                          {post.role}
+                                        </p>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
 
-                  {/* No Blogs Message */}
-                  {blogPost.length === 0 && (
+                      {/* Pagination Component */}
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                      />
+                    </>
+                  ) : (
+                    /* No Blogs Message */
                     <div className="col-12 text-center py-5">
                       <h3 className="text-grey">No blogs found</h3>
-                      <p className="text-grey">Check back later for new blog posts!</p>
+                      <p className="text-grey">
+                        {currentPage > 1 
+                          ? `No blogs found on page ${currentPage}.`
+                          : 'Check back later for new blog posts!'
+                        }
+                      </p>
                     </div>
                   )}
                 </>

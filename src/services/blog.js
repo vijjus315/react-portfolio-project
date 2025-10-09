@@ -52,13 +52,15 @@ const blogApiClient = axios.create({
 });
 
 /**
- * Fetch all blogs from the API
- * @returns {Promise<Object>} API response with blogs data
+ * Fetch blogs from the API with pagination support
+ * @param {number} page - Page number (default: 1)
+ * @param {number} limit - Number of blogs per page (default: 6)
+ * @returns {Promise<Object>} API response with blogs data and pagination info
  */
-export const getBlogs = async () => {
+export const getBlogs = async (page = 1, limit = 6) => {
   try {
-    console.log("📝 API: Fetching blogs via https://staging.portacourts.com/api/v1/blogs");
-    const response = await blogApiClient.get("/blogs");
+    console.log(`📝 API: Fetching blogs - Page: ${page}, Limit: ${limit}`);
+    const response = await blogApiClient.get(`/blogs?page=${page}&limit=${limit}`);
     console.log("📝 API: Blogs fetched successfully");
     return response.data;
   } catch (error) {
